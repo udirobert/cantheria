@@ -60,7 +60,13 @@ code { color: var(--canary); }
 /* ── hero (scene 1: pitch + live replay) ─── */
 .hero {
   min-height: calc(100vh - 52px); display: flex; flex-direction: column;
-  justify-content: center; padding: 48px 0 32px;
+  justify-content: center; padding: 48px 0 32px; position: relative;
+}
+.hero > * { position: relative; z-index: 1; }
+.glyphrain {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  mask-image: linear-gradient(#000 40%, transparent 96%);
+  -webkit-mask-image: linear-gradient(#000 40%, transparent 96%);
 }
 .eyebrow { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--canary); margin-bottom: 18px; }
 .hero h1 {
@@ -329,8 +335,9 @@ document.getElementById('app').innerHTML = `
 
 <div class="wrap">
 <section class="hero">
+  <canvas class="glyphrain" id="rain"></canvas>
   <div class="eyebrow">autonomous vulnerability discovery</div>
-  <h1>Flies canaries.<br><em>Only reports the ones that die.</em></h1>
+  <h1><span class="dl">Flies canaries.</span><br><em><span class="dl">Only reports the ones that die.</span></em></h1>
   <p class="lede">
     An open model <b>hypothesizes</b>; a sandbox <b>falsifies</b>. Only PoCs that
     reproduce, pass a benign control, and attribute to target code ship as findings.
@@ -455,6 +462,70 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       d.className = 'rpl ' + L.cls; d.innerHTML = L.html; rpEl.appendChild(d);
     }
   } else setTimeout(push, 700);
+})();
+
+// ── glyph rain (canvas-ui inspired): code glyphs falling behind the hero ──
+(function rain() {
+  const cv = document.getElementById('rain');
+  if (!cv || reduced) return;
+  const ctx = cv.getContext('2d');
+  const hero = cv.parentElement;
+  const glyphs = '{}[]()<>=;:&|+-*/%$#@~01'.split('');
+  const size = 14;
+  let W, H, cols, drops;
+  const resize = () => {
+    W = cv.width = hero.clientWidth;
+    H = cv.height = hero.clientHeight;
+    cols = Math.ceil(W / size);
+    drops = Array.from({length: cols}, () => -(Math.random() * H / size));
+  };
+  resize();
+  addEventListener('resize', resize);
+  let visible = true;
+  new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(hero);
+  let last = 0;
+  (function frame(t) {
+    requestAnimationFrame(frame);
+    if (!visible || t - last < 50) return;
+    last = t;
+    ctx.fillStyle = 'rgba(11,11,9,.14)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = size + 'px "IBM Plex Mono", monospace';
+    for (let i = 0; i < cols; i++) {
+      const y = drops[i] * size;
+      if (y > 0) {
+        ctx.fillStyle = Math.random() < .03
+          ? 'rgba(245,197,24,.55)' : 'rgba(245,197,24,.15)';
+        ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], i * size, y);
+      }
+      if (y > H && Math.random() > .975) drops[i] = 0;
+      else drops[i] += .45;
+    }
+  })(0);
+})();
+
+// ── decrypt reveal (canvas-ui inspired): headline scrambles then resolves ──
+(function decrypt() {
+  if (reduced) return;
+  const glyphs = '{}[]()<>=;:&|+-*/%$#@~01';
+  document.querySelectorAll('.dl').forEach((el, k) => {
+    const real = el.textContent;
+    const n = real.length;
+    const start = performance.now() + 250 + k * 420;
+    const tick = t => {
+      if (t < start) return requestAnimationFrame(tick);
+      const p = Math.min(1, (t - start) / 1100);
+      const settled = Math.floor(p * n);
+      let out = '';
+      for (let i = 0; i < n; i++) {
+        out += i < settled || real[i] === ' ' ? real[i]
+          : glyphs[(Math.random() * glyphs.length) | 0];
+      }
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
 })();
 
 // ── scroll reveal + funnel bars/count-ups ──
