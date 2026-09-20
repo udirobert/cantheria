@@ -89,6 +89,7 @@ def report_cmd(
     results: Path = typer.Argument(..., help="results.json from a scan"),
     out: Path = typer.Option(Path("reports")),
     enrich: bool = typer.Option(True, help="run triage + severity via SIE"),
+    html: Path | None = typer.Option(None, help="also write a self-contained HTML debrief"),
 ) -> None:
     data = json.loads(results.read_text())
     findings = [Finding.model_validate(f) for f in data["findings"]]
@@ -109,6 +110,11 @@ def report_cmd(
     typer.echo(f"{len(paths)} report(s) → {out}")
     for p in paths:
         typer.echo(f"  {p}/REPORT.md")
+    if html:
+        from cantheria.report_html import write_html
+
+        p = write_html(results, html, journal_path=results.parent / "journal.jsonl")
+        typer.echo(f"html debrief → {p}")
 
 
 @app.command()
