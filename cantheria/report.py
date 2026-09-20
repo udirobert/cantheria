@@ -124,13 +124,22 @@ def _markdown(f: Finding) -> str:
     )
     crash = ""
     if f.runs:
-        crash = ((f.runs[-1].stderr or f.runs[-1].stdout)[-2000:]) or "(no output)"
+        # runs[-1] is the benign-input control — the evidence a maintainer
+        # wants is the exploit run that actually failed.
+        exploit = next((r for r in f.runs if not r.ok), f.runs[0])
+        crash = ((exploit.stderr or exploit.stdout)[-2000:]) or "(no output)"
     repro = ""
     if f.poc:
+        expected = {
+            "nonzero_exit": "exits non-zero",
+            "signal": "dies on a signal",
+            "sanitizer_report": "prints a sanitizer report",
+            "assertion": "fails its safety assertion",
+        }.get(f.poc.expect, "fails as expected")
         repro = (
             f"```bash\n# from the repo root\nmkdir poc && cd poc\n"
             f"# <copy files from poc/ beside this report>\n"
-            f"{f.poc.entry}\n# expected: the program {f.poc.expect.replace('_', ' ')}s\n```"
+            f"{f.poc.entry}\n# expected: the program {expected}\n```"
         )
     return f"""# {f.title}
 
