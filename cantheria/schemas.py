@@ -57,6 +57,7 @@ class RunResult(BaseModel):
     )  # e.g. ["SIGSEGV", "ASAN:heap-buffer-overflow"]
     target_frames: list[str] = Field(default_factory=list)  # trace lines naming target files
     wall_s: float = 0.0
+    confinement: str = ""  # what the jail actually enforced, e.g. "seatbelt: deny network*"
 
 
 class PoC(BaseModel):
@@ -70,6 +71,11 @@ class PoC(BaseModel):
     files: dict[str, str] = Field(default_factory=dict)
     entry: str = "python poc.py"
     expect: str = "nonzero_exit"  # nonzero_exit | signal | sanitizer_report | assertion
+    # Control leg: a command that MUST exit 0 — same harness, benign input.
+    # If the control fails, the crash was the harness being broken, not the bug.
+    # OSS-Fuzz-Gen/AIxCC lesson: negative tests are what separate a finding
+    # from a failing build. Empty = no control leg run.
+    control: str = ""
 
 
 class Finding(BaseModel):
@@ -90,4 +96,13 @@ class Finding(BaseModel):
 
     @property
     def reportable(self) -> bool:
-        return self.verdict == Verdict.confirmed and self.confidence >= 0.5
+        """The kill chain's own answer: did this bug reproduce and attribute?
+
+        Deliberately *not* `and confidence >= x`. Confidence is assigned later,
+        by triage, and this property is consulted by hunt — which runs first.
+        Requiring it here means every confirmed finding is filtered out before
+        anything could score it, and the pipeline reports zero findings from a
+        repo it just crashed three times in. Worthiness is triage's call, and it
+        is made once, in one place: report.py quarantines on confidence.
+        """
+        return self.verdict == Verdict.confirmed

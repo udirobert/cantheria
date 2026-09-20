@@ -29,9 +29,11 @@ Three layers, in order of how much they buy you:
    still line up with the real file. Deletion changes what we're auditing;
    marking changes only who's allowed to talk.
 
-`fence()` is pure and deterministic. The PoC stage gets the *original* text: if
-a bug is real it must survive a model reading it honestly, and the PoC must run
-against the file as committed.
+`fence()` is pure and deterministic, and both prompts are fenced — including
+the PoC draft, which is the one that matters most: hypothesis output only ever
+reaches a report, but PoC output reaches a *subprocess*. The PoC runs against
+the file as committed, not as marked, so neutralising the prose around a sink
+can never hide the sink itself.
 """
 
 from __future__ import annotations

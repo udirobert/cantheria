@@ -169,6 +169,53 @@ class RepoIndex:
     def __init__(self, chunks: list[Chunk], vectors: np.ndarray) -> None:
         self.chunks = chunks
         self._vectors = vectors / (np.linalg.norm(vectors, axis=1, keepdims=True) + 1e-9)
+        # symbol name -> defining chunks. The cheap call graph: name equality,
+        # not resolution — collisions just mean an occasional extra context
+        # slice, which costs tokens, never correctness.
+        self._by_symbol: dict[str, list[Chunk]] = {}
+        for c in chunks:
+            if c.symbol != "<file>":
+                self._by_symbol.setdefault(c.symbol, []).append(c)
+
+    def related(self, chunk: Chunk, k: int = 4) -> list[Chunk]:
+        """Bounded caller/callee neighbourhood for one chunk.
+
+        Callees: symbols this chunk's text invokes, resolved to their
+        definitions. Callers: chunks whose text invokes this chunk's symbol.
+        Name-based on purpose — approximate reachability is enough to give the
+        hypothesis the preconditions and sinks one hop away. Ranked so same-dir
+        neighbours and shorter (more legible) snippets come first.
+        """
+        if chunk.symbol == "<file>":
+            symbol_re = None
+        else:
+            symbol_re = re.compile(rf"\b{re.escape(chunk.symbol)}\s*\(")
+
+        callees: list[Chunk] = []
+        for name, defs in self._by_symbol.items():
+            if name == chunk.symbol:
+                continue
+            if re.search(rf"\b{re.escape(name)}\s*\(", chunk.text):
+                callees.extend(d for d in defs if d.key != chunk.key)
+
+        callers = [
+            c
+            for c in self.chunks
+            if c.key != chunk.key and symbol_re is not None and symbol_re.search(c.text)
+        ]
+
+        def _rank(c: Chunk) -> tuple[int, int]:
+            same_dir = 0 if Path(c.path).parent == Path(chunk.path).parent else 1
+            return (same_dir, len(c.text))
+
+        out, seen = [], {chunk.key}
+        for c in sorted(callees, key=_rank) + sorted(callers, key=_rank):
+            if c.key not in seen:
+                seen.add(c.key)
+                out.append(c)
+            if len(out) >= k:
+                break
+        return out
 
     @classmethod
     async def build(cls, root: Path, sie: SIEClient, batch: int = 64) -> RepoIndex:

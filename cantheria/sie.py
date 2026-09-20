@@ -11,6 +11,8 @@ failure modes visible.
 
 from __future__ import annotations
 
+import asyncio
+import random
 from typing import Any
 
 import httpx
@@ -20,6 +22,24 @@ from cantheria.settings import settings
 
 class SIEError(RuntimeError):
     pass
+
+
+# Chat models on the managed deployment scale to zero: while no instance is
+# up the gateway answers 404, and a burst of concurrent requests against a
+# waking model draws 429s. Both are transient — retry with backoff instead of
+# burning a chunk on them. 402 (credits) and 4xx request faults stay fatal.
+_RETRYABLE = {404, 408, 409, 425, 429, 500, 502, 503, 504}
+_MAX_ATTEMPTS = 6
+
+
+def _retry_delay(resp: httpx.Response, attempt: int) -> float:
+    retry_after = resp.headers.get("retry-after")
+    if retry_after:
+        try:
+            return min(float(retry_after), 60.0)
+        except ValueError:
+            pass
+    return min(2.0**attempt + random.random(), 45.0)  # noqa: S311 — jitter, not crypto
 
 
 class SIEClient:
@@ -43,11 +63,22 @@ class SIEClient:
         await self._http.aclose()
 
     async def _post(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
-        resp = await self._http.post(path, json=payload)
-        if resp.status_code == 402:
-            raise SIEError("INSUFFICIENT_CREDITS — ping the Superlinked channel, they top up")
-        resp.raise_for_status()
-        return resp.json()
+        for attempt in range(_MAX_ATTEMPTS):
+            try:
+                resp = await self._http.post(path, json=payload)
+            except (httpx.ReadTimeout, httpx.ConnectTimeout, httpx.ConnectError):
+                if attempt == _MAX_ATTEMPTS - 1:
+                    raise
+                await asyncio.sleep(min(2.0**attempt + random.random(), 45.0))  # noqa: S311
+                continue
+            if resp.status_code == 402:
+                raise SIEError("INSUFFICIENT_CREDITS — ping the Superlinked channel, they top up")
+            if resp.status_code in _RETRYABLE and attempt < _MAX_ATTEMPTS - 1:
+                await asyncio.sleep(_retry_delay(resp, attempt))
+                continue
+            resp.raise_for_status()
+            return resp.json()
+        raise SIEError(f"unreachable — {_MAX_ATTEMPTS} attempts against {path} failed")
 
     async def embed(self, model: str, texts: list[str]) -> list[list[float]]:
         data = await self._post("/v1/embeddings", {"model": model, "input": texts})

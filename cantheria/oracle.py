@@ -101,6 +101,19 @@ class LocalOracle:
             finding.raw["dismiss_reason"] = "failure not attributable to target code"
             return finding
 
+        # Leg 4 (control): same harness + benign input must exit clean.
+        # A PoC that also "crashes" on benign input is a broken harness,
+        # not a bug — this is the cheapest false-positive killer there is.
+        if finding.poc.control.strip():
+            control, _ = await execute_poc(repo_root, finding.poc.files, finding.poc.control)
+            finding.runs.append(control)
+            if not control.ok:
+                finding.verdict = Verdict.dismissed
+                finding.raw["dismiss_reason"] = (
+                    "control run failed — harness is broken, not the target"
+                )
+                return finding
+
         finding.verdict = Verdict.confirmed
         return finding
 
