@@ -107,11 +107,19 @@ it stops trying. `cantheria status` checks wiring without spending.
 
 - **Not a kernel sandbox.** No seccomp, no namespaces, no VM. A PoC
   exploiting a local privilege escalation escapes. For hostile-target work,
-  run inside a VM or container with no credentials and no network.
+  run inside a VM or container with no credentials and no network. Moving
+  `clone`+prefetch inside the same jail on hosts with a container runtime is
+  the tracked next step — today the boundary is *execution*, and clone-side
+  RCE is handled with flags, not confinement.
 - **Not a data isolation layer.** The *child* sees no credentials; `cantheria`
   itself still runs as you, with your git config and your filesystem. Never point
   it at a repo whose contents you are not cleared to process, and expect nothing
   above the uid boundary to hold.
+- **A browser oracle widens the jail.** A planned falsification leg runs
+  repo-derived JS in a real browser — which is *not* network-jailed the way the
+  subprocess sandbox is. That leg ships only with its own egress control
+  (loopback-only origins, no ambient credentials in the profile), stated here
+  so it is designed in rather than discovered later.
 - **Confirmed does not mean exploitable.** The kill chain proves a
   reproducible failure attributable to target code. It does not prove impact;
   a human assigns severity, and the hackathon's reviewers decide what goes to

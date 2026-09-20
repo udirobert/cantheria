@@ -44,7 +44,7 @@ reading it happens on the host and *running* it happens in the jail.
 | source → model | host, fenced | nonce envelope the payload can't forge + prompt-injection carriers detected and *marked*, not deleted — the audit stays about the committed file |
 | PoC execution | **jail** | macOS seatbelt (network egress denied), env allowlist (`SIE_API_KEY` structurally unreachable), relocated `HOME`/`TMPDIR`, CPU/file/output limits, process-group kill on timeout — jail recorded per run |
 
-Cloning inside the jail too is the roadmap item — today the boundary assumes
+Cloning inside the jail too is a roadmap item — today the boundary assumes
 what `git` assumes: reading source is safe, running it is not. Full threat
 model in [SECURITY.md](SECURITY.md).
 
@@ -84,6 +84,37 @@ assert the carrier is detected in the chunk the model receives, the code is
 unmodified, the envelope can't be forged from inside the payload, and the kill
 chain still confirms the crash for real — three sandbox runs, traceback naming
 `planted/reader.py`. No test spends credits; live ones are marked and excluded.
+
+## Roadmap
+
+Ordered by leverage — lessons taken from the first real outing (4 confirmed
+first-party findings in a Rust+TS codebase, all PoCs currently
+`confirmed_manual`):
+
+1. **Disclosure to shipped fix.** The confirmed findings go to maintainers
+   through coordinated disclosure; a landed patch turns the case study into
+   the proof. Everything else is easier to talk about after.
+2. **A second oracle for non-crashing bugs.** The autonomy gap is not the
+   model's hypotheses — it is drafting PoCs for bug classes with no signal to
+   assert. Two already-proven manual patterns become pipeline legs: browser
+   PoCs (esbuild-bundle the target module, serve two origins, drive a real
+   browser at it) and Rust path-dep crates pinned to the workspace lockfile,
+   which compile offline against prefetched deps.
+3. **Multi-model hypothesis fan-out.** Parallel infer calls across models on
+   the same chunks; dedup happens downstream where it already does. Attacks
+   one-model blind spots; mostly a config change.
+4. **An impact leg.** A second-stage PoC that demonstrates consequence — the
+   SSRF actually returns fetched content, the unscoped write actually lands a
+   file. What a maintainer needs to prioritize a fix, and what a demo needs to
+   be believed.
+5. **Second and third targets.** Python and JS repos, where crashes are
+   easier to draft — answers "tool or one-repo demo" in the tool's favor.
+6. **CI/workflow as a scan surface.** `pull_request_target` + PR-head
+   checkout, script injection in workflow YAML, unpinned actions holding
+   tokens — how tokens actually get stolen from OSS, statically detectable,
+   and kill-chain-compatible.
+7. **Clone+prefetch inside the jail.** Container/bubblewrap backend on hosts
+   that have one — completes the trust boundary the table above draws.
 
 ## Layout
 
