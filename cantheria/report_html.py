@@ -131,6 +131,11 @@ h2 .count { color: var(--dim); font-weight: 400; letter-spacing: .1em; }
 .row .body { padding: 4px 20px 20px 48px; border-top: 1px dashed var(--line); }
 .row .body > * { margin-top: 16px; }
 .loc-line { font-size: 11.5px; color: var(--faint); }
+.prov { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 11px; }
+.pv-label { font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); }
+.pv-step { display: inline-flex; gap: 6px; align-items: baseline; }
+.pv-t { color: var(--faint); }
+.pv-arrow { color: var(--faint); }
 .detail { color: var(--dim); font-size: 13.5px; max-width: 720px; }
 
 .legs { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -198,6 +203,12 @@ const hyp = journal.filter(e => e.event === 'hypothesis' || e.event === 'hypothe
 const manualIds = new Set(journal.filter(e => e.event === 'confirmed_manual').map(e => e.finding && e.finding.id));
 const isManual = f => manualIds.has(f.id) || /hand-authored|browser-demonstrated|manual/i.test((f.raw && f.raw.note) || '');
 const eventTypes = [...new Set(journal.map(e => e.event))];
+// provenance: which journal events touched each finding — the honest
+// "how was this found" answer (model hypothesis → oracle/human proof).
+const provById = {};
+for (const e of journal) {
+  if (e.finding && e.finding.id) (provById[e.finding.id] ??= []).push(e);
+}
 
 document.getElementById('app').innerHTML = `
 <div class="topbar"><div class="wrap">
@@ -240,7 +251,7 @@ document.getElementById('app').innerHTML = `
 </div>
 
 <h2 id="findings">Confirmed findings <span class="count">· ${confirmed.length} survived the kill chain</span></h2>
-<p class="sec-sub">click a row to open its evidence — PoC output, reproduction legs, suggested fix</p>
+<p class="sec-sub">click a row to open its evidence — discovery path, PoC output, reproduction legs, suggested fix</p>
 ${confirmed.map((f, i) => findingRow(f, i === 0)).join('') || '<p class="sec-sub">none — the canaries lived.</p>'}
 
 <h2>Candidates <span class="count">· ${candidates.length} hypothesized, not yet proven</span></h2>
@@ -290,6 +301,25 @@ function evidence(f) {
   return `<div class="term">${t}</div>`;
 }
 
+function provenance(f) {
+  const evs = [...(provById[f.id] || [])];
+  // hypotheses get fresh finding ids, so also pull events about the same
+  // file — that's what the model actually contributed to this finding.
+  const file = f.location && f.location.file;
+  if (file) {
+    for (const e of journal) {
+      if (e.finding && e.finding.id !== f.id && e.finding.location &&
+          e.finding.location.file === file) evs.unshift(e);
+    }
+  }
+  if (!evs.length) return '';
+  const steps = evs.map(e => {
+    const ts = (e.ts || e.finding?.created_utc || '').replace('T', ' ').slice(11, 19);
+    return `<span class="pv-step"><span class="ev ${esc(e.event)}">${esc(e.event)}</span><span class="pv-t">${esc(ts)}</span></span>`;
+  }).join('<span class="pv-arrow">→</span>');
+  return `<div class="prov"><span class="pv-label">discovery</span>${steps}</div>`;
+}
+
 function findingRow(f, open, isCandidate) {
   const sev = SEV[f.severity] || 'var(--faint)';
   const manual = isManual(f);
@@ -306,6 +336,7 @@ function findingRow(f, open, isCandidate) {
     </summary>
     <div class="body">
       ${loc ? `<div class="loc-line">location · ${loc}</div>` : ''}
+      ${provenance(f)}
       <p class="detail">${esc(f.detail)}</p>
       ${legs(f)}
       ${evidence(f)}

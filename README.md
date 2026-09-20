@@ -44,6 +44,8 @@ cantheria status                     # key + model check, no credits spent
 cantheria scan <git-url> --out runs/proj --budget 300
 cantheria scan <git-url> --diff v1.2.0 # delta mode: only files changed vs base
 cantheria report runs/proj/results.json --out runs/proj/reports
+# extras: --html debrief.html  (self-contained report, works off file://)
+#         --sarif results.sarif (GitHub code scanning, VS Code, any SARIF IDE)
 ```
 
 Dependencies are prefetched before the hunt (`cargo fetch --locked`,
@@ -51,6 +53,15 @@ Dependencies are prefetched before the hunt (`cargo fetch --locked`,
 Chat models on the managed endpoint scale to zero — the first call can take a
 minute while the backend wakes; the client retries transient 404/429/5xx with
 backoff, so a cold start costs patience, not chunks.
+
+## Continuous scanning (GitHub Action)
+
+`action.yml` wraps the whole loop: scan → markdown/html/SARIF reports →
+upload to code scanning → artifacts. Drop
+[`examples/cantheria-scan.yml`](examples/cantheria-scan.yml) into a repo's
+`.github/workflows/`, set a `SIE_API_KEY` secret, and PRs get a `--diff`
+scan while a weekly cron sweeps the full tree. Confirmed findings land in
+the Security tab as code-scanning alerts.
 
 ## Safety posture
 

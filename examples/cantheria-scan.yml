@@ -1,0 +1,43 @@
+# Example workflow — continuous scanning with Cantheria.
+#
+# Copy to .github/workflows/cantheria.yml in the repo you want scanned.
+# Requires: a SIE_API_KEY secret (https://superlinked.com/cloud).
+#
+# PR mode scans only the diff (`--diff origin/$BASE`) — cheap, and matches
+# the "delta review" pattern that caught real-world bugs at AIxCC.
+# A weekly cron runs a full-repo sweep.
+
+name: cantheria
+on:
+  pull_request:
+  schedule:
+    - cron: "0 4 * * 1" # weekly, Monday 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  security-events: write # required for SARIF upload
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # needed for --diff
+
+      - name: Scan PR diff
+        if: github.event_name == 'pull_request'
+        uses: thisyearnofear/cantheria@main
+        with:
+          target: .
+          diff: origin/${{ github.base_ref }}
+          sie-api-key: ${{ secrets.SIE_API_KEY }}
+
+      - name: Full-repo sweep
+        if: github.event_name != 'pull_request'
+        uses: thisyearnofear/cantheria@main
+        with:
+          target: .
+          max-chunks: "400"
+          sie-api-key: ${{ secrets.SIE_API_KEY }}

@@ -113,6 +113,76 @@ def write_reports(findings: list[Finding], out_dir: Path) -> list[Path]:
     return paths
 
 
+_SARIF_LEVEL = {"critical": "error", "high": "error", "moderate": "warning", "medium": "warning"}
+
+
+def write_sarif(findings: list[Finding], out_path: Path, tool_version: str = "0.1.0") -> Path:
+    """SARIF 2.1.0 export — findings land in GitHub code scanning, VS Code,
+    and every IDE that reads the standard. Only confirmed, non-quarantined
+    findings are exported; candidates stay in the journal."""
+    keep = [f for f in findings if f.reportable and not f.raw.get("quarantined")]
+    rules = {}
+    for f in keep:
+        rules.setdefault(
+            f.vuln_class.value,
+            {
+                "id": f.vuln_class.value,
+                "name": f.vuln_class.value.replace("_", " ").title(),
+                "shortDescription": {"text": f.vuln_class.value.replace("_", " ")},
+            },
+        )
+    results = []
+    for f in keep:
+        loc = {}
+        if f.location:
+            loc = {
+                "locations": [
+                    {
+                        "physicalLocation": {
+                            "artifactLocation": {
+                                "uri": f.location.file,
+                                "uriBaseId": "SRCROOT",
+                            },
+                            **(
+                                {"region": {"startLine": f.location.line}}
+                                if f.location.line
+                                else {}
+                            ),
+                        }
+                    }
+                ]
+            }
+        results.append(
+            {
+                "ruleId": f.vuln_class.value,
+                "level": _SARIF_LEVEL.get(f.severity or "", "note"),
+                "message": {"text": f"{f.title}\n\n{f.detail}".strip()},
+                "partialFingerprints": {"cantheriaFindingId": f.id},
+                **loc,
+            }
+        )
+    sarif = {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [
+            {
+                "tool": {
+                    "driver": {
+                        "name": "Cantheria",
+                        "version": tool_version,
+                        "informationUri": "https://github.com/thisyearnofear/cantheria",
+                        "rules": list(rules.values()),
+                    }
+                },
+                "results": results,
+            }
+        ],
+    }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(sarif, indent=2))
+    return out_path
+
+
 def _markdown(f: Finding) -> str:
     loc = f.location
     where = (

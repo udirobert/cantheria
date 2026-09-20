@@ -1,0 +1,97 @@
+name: Cantheria
+description: >-
+  Autonomous vulnerability discovery — index a repo, hypothesize bug classes
+  with an open model, falsify with sandboxed PoCs, report only what survives
+  the kill chain. Emits SARIF for GitHub code scanning.
+author: thisyearnofear
+branding:
+  icon: search
+  color: yellow
+
+inputs:
+  target:
+    description: "Repo URL (cloned) or local path to scan"
+    required: true
+  diff:
+    description: "Base ref for diff-mode scan (e.g. origin/main). Empty = full scan."
+    required: false
+    default: ""
+  max-chunks:
+    description: "Max chunks to hunt over"
+    required: false
+    default: "200"
+  repro:
+    description: "Reproductions required to confirm"
+    required: false
+    default: "3"
+  sie-api-key:
+    description: "Superlinked SIE API key (store as a secret)"
+    required: true
+  cantheria-ref:
+    description: "Git ref of cantheria to run"
+    required: false
+    default: "main"
+
+outputs:
+  findings:
+    description: "Number of confirmed findings"
+    value: ${{ steps.tally.outputs.findings }}
+  sarif:
+    description: "Path to the SARIF report"
+    value: ${{ steps.tally.outputs.sarif }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install uv + Python
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Install cantheria
+      shell: bash
+      run: uv tool install "git+https://github.com/thisyearnofear/cantheria@${{ inputs.cantheria-ref }}"
+
+    - name: Scan
+      shell: bash
+      env:
+        SIE_API_KEY: ${{ inputs.sie-api-key }}
+      run: |
+        args=(scan "${{ inputs.target }}" --out "$RUNNER_TEMP/cantheria-out" \
+          --max-chunks "${{ inputs.max-chunks }}" --repro "${{ inputs.repro }}")
+        if [ -n "${{ inputs.diff }}" ]; then args+=(--diff "${{ inputs.diff }}"); fi
+        cantheria "${args[@]}"
+
+    - name: Reports (markdown + html + sarif)
+      shell: bash
+      run: |
+        cantheria report "$RUNNER_TEMP/cantheria-out/results.json" \
+          --out "$RUNNER_TEMP/cantheria-out/reports" --no-enrich \
+          --html "$RUNNER_TEMP/cantheria-out/debrief.html" \
+          --sarif "$RUNNER_TEMP/cantheria-out/results.sarif"
+
+    - name: Tally
+      id: tally
+      shell: bash
+      run: |
+        n=$(python3 -c "import json; print(sum(1 for f in json.load(open('$RUNNER_TEMP/cantheria-out/results.json'))['findings'] if f['verdict']=='confirmed'))")
+        echo "findings=$n" >> "$GITHUB_OUTPUT"
+        echo "sarif=$RUNNER_TEMP/cantheria-out/results.sarif" >> "$GITHUB_OUTPUT"
+
+    - name: Upload SARIF to code scanning
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ steps.tally.outputs.sarif }}
+
+    - name: Upload artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cantheria-reports
+        path: |
+          ${{ runner.temp }}/cantheria-out/reports
+          ${{ runner.temp }}/cantheria-out/debrief.html
+          ${{ runner.temp }}/cantheria-out/results.json
+          ${{ runner.temp }}/cantheria-out/journal.jsonl
+        if-no-files-found: ignore

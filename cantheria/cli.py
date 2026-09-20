@@ -90,6 +90,7 @@ def report_cmd(
     out: Path = typer.Option(Path("reports")),
     enrich: bool = typer.Option(True, help="run triage + severity via SIE"),
     html: Path | None = typer.Option(None, help="also write a self-contained HTML debrief"),
+    sarif: Path | None = typer.Option(None, help="also write a SARIF 2.1.0 export"),
 ) -> None:
     data = json.loads(results.read_text())
     findings = [Finding.model_validate(f) for f in data["findings"]]
@@ -115,6 +116,11 @@ def report_cmd(
 
         p = write_html(results, html, journal_path=results.parent / "journal.jsonl")
         typer.echo(f"html debrief → {p}")
+    if sarif:
+        from cantheria.report import write_sarif
+
+        p = write_sarif(findings, sarif)
+        typer.echo(f"sarif → {p}")
 
 
 @app.command()
