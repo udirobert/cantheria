@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets & local config — never committed
+.env
+.env.local
+*.pem
+*.key
+*_rsa
+credentials.json
+
+# Scan output: journals, cached vectors, findings, generated PoCs.
+# These carry untrusted target-repo text and PoC payloads; they are evidence,
+# not source. Keep them out of git and out of the secrets baseline.
+runs/
+reports/
+*.npy
+*.jsonl
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

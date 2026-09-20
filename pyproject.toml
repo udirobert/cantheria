@@ -1,0 +1,49 @@
+[project]
+name = "cantheria"
+version = "0.1.0"
+description = "Autonomous OSS vulnerability discovery — sift a codebase, fly the canary, keep what kills"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "pydantic>=2.0.0",
+    "httpx>=0.25.0",
+    "typer>=0.12.0",
+    "numpy>=1.26",
+]
+
+[project.scripts]
+cantheria = "cantheria.cli:app"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.5.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["cantheria*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = [
+    "live: hits the real SIE API (spends credits) — excluded from commit/CI runs",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "S"]
+ignore = ["S101", "S603", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "E501"]

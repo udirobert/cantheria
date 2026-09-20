@@ -1,0 +1,52 @@
+# Ported from elcaro's config — same bars, adapted for what Cantheria
+# generates: LLM-authored PoC files full of high-entropy junk strings, and
+# vendor checkouts of targets under runs/.
+repos:
+  # ── Secrets detection ────────────────────────────────────────────────────────
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: detect-secrets
+        args:
+          - --baseline
+          - .secrets.baseline
+          # Findings/journals/pocs live under runs/ and carry random payload
+          # strings; scanning them would train us to blind-skip the hook.
+          - --exclude-files
+          - '(^runs/|^\.venv/|uv\.lock$|\.secrets\.baseline$|\.npy$)'
+
+  # ── Ruff — lint + format ─────────────────────────────────────────────────────
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.8  # keep in sync with the dev-installed ruff version
+    hooks:
+      - id: ruff
+        name: ruff lint
+        args: [--fix]
+      - id: ruff-format
+        name: ruff format
+
+  # ── General file hygiene ─────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]         # journal/index artifacts must never be committed
+        exclude: '(^runs/|uv\.lock$)'
+      - id: detect-private-key
+
+  # ── Tests must pass at commit time ───────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (offline suite)
+        entry: uv run pytest -q -m "not live"
+        language: system
+        pass_filenames: false
+        always_run: true
