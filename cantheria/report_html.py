@@ -28,6 +28,19 @@ _CSS = """
   --ok: #86d075; --fail: #ff5a45;
   --radius: 10px;
 }
+[data-theme="light"] {
+  --bg: #f4f1e6; --panel: #fbf9f0; --panel2: #efe9d6; --line: #d9d2b8;
+  --ink: #211d12; --dim: #6d6550; --faint: #a39a80;
+  --canary: #8f6f00; --canary-soft: rgba(143,111,0,.12); --canary-dim: #b3900f;
+  --crit: #cf3a24; --high: #c26a10; --med: #a8870a; --low: #2f7d4f;
+  --ok: #3d8b34; --fail: #cf3a24;
+}
+/* terminals stay dark in light mode — terminals are terminals */
+.term, .replay, .trace {
+  --line: #29271d; --faint: #5d5947; --dim: #97917c; --ink: #ece7d6;
+  --panel2: #1a1913; --canary: #f5c518; --canary-dim: #9a8317;
+  --crit: #ff5a45; --high: #ff9e45; --ok: #86d075; --fail: #ff5a45;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { background: var(--bg); scroll-behavior: smooth; }
 body {
@@ -48,7 +61,8 @@ code { color: var(--canary); }
 /* ── top bar ─────────────────────────────── */
 .topbar {
   position: sticky; top: 0; z-index: 10;
-  backdrop-filter: blur(12px); background: rgba(11,11,9,.82);
+  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
   border-bottom: 1px solid var(--line);
 }
 .topbar .wrap { display: flex; align-items: center; gap: 22px; height: 52px; }
@@ -56,6 +70,12 @@ code { color: var(--canary); }
 .topbar nav { margin-left: auto; display: flex; gap: 18px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
 .topbar nav a { color: var(--dim); }
 .topbar nav a:hover { color: var(--ink); }
+.themebtn {
+  background: none; border: 1px solid var(--line); border-radius: 99px;
+  color: var(--dim); font: inherit; font-size: 12px; width: 26px; height: 26px;
+  cursor: pointer; line-height: 1; padding: 0;
+}
+.themebtn:hover { color: var(--canary); border-color: var(--canary-dim); }
 
 /* ── hero (scene 1: pitch + live replay) ─── */
 .hero {
@@ -63,10 +83,10 @@ code { color: var(--canary); }
   justify-content: center; padding: 48px 0 32px; position: relative;
 }
 .hero > * { position: relative; z-index: 1; }
-.glyphrain {
+.field {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  mask-image: linear-gradient(#000 40%, transparent 96%);
-  -webkit-mask-image: linear-gradient(#000 40%, transparent 96%);
+  mask-image: linear-gradient(#000 55%, transparent 97%);
+  -webkit-mask-image: linear-gradient(#000 55%, transparent 97%);
 }
 .eyebrow { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--canary); margin-bottom: 18px; }
 .hero h1 {
@@ -115,6 +135,7 @@ code { color: var(--canary); }
 .scrollcue a { color: var(--dim); }
 .scrollcue a:hover { color: var(--canary); }
 .scrollcue .ar { animation: bob 1.6s ease-in-out infinite; display: inline-block; }
+.scrollcue .rlegend { margin-left: auto; font-size: 10px; letter-spacing: .05em; text-transform: none; color: var(--faint); }
 @keyframes bob { 50% { transform: translateY(4px); } }
 
 /* the method — collapsed by default, progressive disclosure */
@@ -330,12 +351,13 @@ document.getElementById('app').innerHTML = `
   <nav>
     <a href="#method">method</a><a href="#case">case study</a>
     <a href="#findings">findings</a><a href="#journal">journal</a>
+    <button class="themebtn" id="themebtn" title="toggle light/dark">◐</button>
   </nav>
 </div></div>
 
 <div class="wrap">
 <section class="hero">
-  <canvas class="glyphrain" id="rain"></canvas>
+  <canvas class="field" id="field"></canvas>
   <div class="eyebrow">autonomous vulnerability discovery</div>
   <h1><span class="dl">Flies canaries.</span><br><em><span class="dl">Only reports the ones that die.</span></em></h1>
   <p class="lede">
@@ -352,6 +374,7 @@ document.getElementById('app').innerHTML = `
   </div>
   <div class="scrollcue">
     <a href="#case">the case study</a><span class="ar">↓</span>
+    <span class="rlegend">the field behind you — one dot ≈ ${Math.max(1, Math.round(chunksN / 380))} indexed chunks · ${candidates.length} flare as the beam passes · ${confirmed.length} stay lit</span>
   </div>
 </section>
 
@@ -415,6 +438,11 @@ ${candidates.map(f => findingRow(f, false, true)).join('')}
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// ── theme: persisted, system-aware ──
+const root = document.documentElement;
+root.dataset.theme = localStorage.getItem('cantheria-theme') ||
+  (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
 // ── hero replay: stream the real journal, verbatim ──
 (function replay() {
   const rpEl = document.getElementById('rp');
@@ -464,45 +492,81 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   } else setTimeout(push, 700);
 })();
 
-// ── glyph rain (canvas-ui inspired): code glyphs falling behind the hero ──
-(function rain() {
-  const cv = document.getElementById('rain');
+// ── the sweep: the background IS the scan ──
+// A radar beam rotates over a field of dots — each dot ≈ a slice of the
+// indexed codebase. Candidates flare amber as the beam passes and decay;
+// confirmed findings stay lit. Honest data, not decoration.
+(function sweep() {
+  const cv = document.getElementById('field');
   if (!cv || reduced) return;
   const ctx = cv.getContext('2d');
   const hero = cv.parentElement;
-  const glyphs = '{}[]()<>=;:&|+-*/%$#@~01'.split('');
-  const size = 14;
-  let W, H, cols, drops;
+  const TAU = Math.PI * 2;
+  const N = 380, nCand = Math.min(candidates.length, 24), nFin = confirmed.length;
+  let seed = 20260;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  let W, H, cx, cy, R, dots;
   const resize = () => {
     W = cv.width = hero.clientWidth;
     H = cv.height = hero.clientHeight;
-    cols = Math.ceil(W / size);
-    drops = Array.from({length: cols}, () => -(Math.random() * H / size));
+    cx = W * .5; cy = H * .48;
+    R = Math.hypot(W, H) * .62;
+    seed = 20260; // reseed — same field layout on every resize
+    dots = Array.from({length: N}, (_, i) => ({
+      r: Math.sqrt(rnd()) * R,
+      a: rnd() * TAU,
+      tag: i < nFin ? 2 : i < nFin + nCand ? 1 : 0,
+      heat: 0,
+    }));
   };
   resize();
   addEventListener('resize', resize);
-  let visible = true;
+  let visible = true, beam = -Math.PI / 2;
   new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(hero);
+  const pal = () => root.dataset.theme === 'light'
+    ? {base: '96,86,52', hot: '168,135,10', cand: '194,106,16', fin: '143,111,0'}
+    : {base: '150,142,110', hot: '245,197,24', cand: '255,158,69', fin: '245,197,24'};
   let last = 0;
   (function frame(t) {
     requestAnimationFrame(frame);
-    if (!visible || t - last < 50) return;
+    if (!visible || t - last < 40) return;
     last = t;
-    ctx.fillStyle = 'rgba(11,11,9,.14)';
-    ctx.fillRect(0, 0, W, H);
-    ctx.font = size + 'px "IBM Plex Mono", monospace';
-    for (let i = 0; i < cols; i++) {
-      const y = drops[i] * size;
-      if (y > 0) {
-        ctx.fillStyle = Math.random() < .03
-          ? 'rgba(245,197,24,.55)' : 'rgba(245,197,24,.15)';
-        ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], i * size, y);
-      }
-      if (y > H && Math.random() > .975) drops[i] = 0;
-      else drops[i] += .45;
+    const P = pal();
+    beam += .0065;
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = `rgba(${P.base},.07)`;
+    ctx.lineWidth = 1;
+    for (let rr = R * .25; rr <= R; rr += R * .25) {
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, TAU); ctx.stroke();
+    }
+    ctx.fillStyle = `rgba(${P.hot},.05)`;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R, beam - .16, beam); ctx.fill();
+    ctx.strokeStyle = `rgba(${P.hot},.17)`;
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(beam) * R, cy + Math.sin(beam) * R); ctx.stroke();
+    const pulse = .5 + .5 * Math.sin(t / 420);
+    for (const d of dots) {
+      let da = (d.a - beam) % TAU;
+      if (da > Math.PI) da -= TAU; else if (da < -Math.PI) da += TAU;
+      da = Math.abs(da);
+      if (da < .16) d.heat = Math.max(d.heat, 1 - da / .16);
+      d.heat *= .96;
+      const x = cx + Math.cos(d.a) * d.r, y = cy + Math.sin(d.a) * d.r;
+      if (x < -4 || x > W + 4 || y < -4 || y > H + 4) continue;
+      let col = P.base, a = .10 + d.heat * .45, s = 1.5;
+      if (d.tag === 1) { col = P.cand; a = .12 + d.heat * .8; }
+      if (d.tag === 2) { col = P.fin; a = .4 + .35 * pulse + d.heat * .25; s = 2.4; }
+      ctx.fillStyle = `rgba(${col},${Math.min(1, a)})`;
+      ctx.beginPath(); ctx.arc(x, y, s, 0, TAU); ctx.fill();
     }
   })(0);
 })();
+
+// theme toggle (after render — button lives in the template)
+document.getElementById('themebtn').addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+  localStorage.setItem('cantheria-theme', root.dataset.theme);
+});
 
 // ── decrypt reveal (canvas-ui inspired): headline scrambles then resolves ──
 (function decrypt() {
@@ -686,7 +750,7 @@ def render_html(results: dict, journal: list[dict] | None = None) -> str:
     payload["journal"] = journal or []
     blob = json.dumps(payload, default=str).replace("</", "<\\/")
     return f"""<!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en" data-theme="dark"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cantheria · {payload.get("repo", "scan")} debrief</title>
