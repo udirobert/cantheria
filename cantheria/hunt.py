@@ -61,6 +61,11 @@ Rules:
   `cargo test -p <crate>`, `rustc --test h.rs && ./h`. Pick whatever actually
   executes the vulnerable code — for Rust, a tiny `#[path="../repo/...rs"]`
   module include or `cargo test` on ONE small crate beats a full build.
+- Rust/TS dependencies are ALREADY FETCHED and `CARGO_NET_OFFLINE=1`: a tiny
+  crate you write with `[dependencies] foo = { path = "../repo/crates/foo" }`
+  compiles offline in seconds, and any crates.io dep in the target's
+  Cargo.lock resolves from the local cache. Prefer that over reimplementing
+  the function — the oracle only trusts frames from real target code.
 - PoC must be self-contained, non-interactive, no network, finish in seconds.
 - It must fail (crash / nonzero / sanitizer hit) IF THE BUG IS REAL, and run
   clean otherwise. No fake crashes: exiting nonzero unconditionally, or
