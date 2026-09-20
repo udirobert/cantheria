@@ -57,8 +57,11 @@ code { color: var(--canary); }
 .topbar nav a { color: var(--dim); }
 .topbar nav a:hover { color: var(--ink); }
 
-/* ── hero ────────────────────────────────── */
-.hero { padding: 84px 0 44px; }
+/* ── hero (scene 1: pitch + live replay) ─── */
+.hero {
+  min-height: calc(100vh - 52px); display: flex; flex-direction: column;
+  justify-content: center; padding: 48px 0 32px;
+}
 .eyebrow { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--canary); margin-bottom: 18px; }
 .hero h1 {
   font-family: "Archivo", monospace; font-weight: 800;
@@ -68,9 +71,60 @@ code { color: var(--canary); }
 .hero .lede { color: var(--dim); max-width: 600px; margin-top: 18px; font-size: 15px; }
 .hero .lede b { color: var(--ink); font-weight: 600; }
 
+/* replay terminal — streams the real journal */
+.replay {
+  margin-top: 34px; border: 1px solid var(--line); border-radius: var(--radius);
+  background: #070705; overflow: hidden;
+  box-shadow: 0 24px 60px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(245,197,24,.04);
+}
+.rp-bar {
+  display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+  border-bottom: 1px solid var(--line); font-size: 10px;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--faint);
+}
+.rp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--panel2); border: 1px solid var(--line); }
+.rp-dot:first-child { background: var(--canary); border-color: var(--canary); opacity: .7; }
+.rp-bar .rp-title { margin-left: 8px; }
+.rp-bar .rp-live { margin-left: auto; color: var(--canary-dim); }
+.rp-lines {
+  padding: 14px 16px; height: 218px; overflow: hidden;
+  font-size: 12px; line-height: 1.75;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.rpl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--dim); opacity: 0; animation: rpin .2s forwards; }
+.rpl .rv { font-weight: 700; }
+.rpl.sys { color: var(--faint); }
+.rpl .rv.confirmed, .rpl .rv.confirmed_manual { color: var(--canary); }
+.rpl .rv.dismissed, .rpl .rv.fence_hit { color: var(--fail); }
+.rpl .rv.hypothesis, .rpl .rv.hypothesis_only { color: var(--dim); }
+.rpl.fin { color: var(--canary); font-weight: 700; }
+.rpl .cur { display: inline-block; width: 7px; height: 13px; margin-left: 4px; vertical-align: -2px; background: var(--canary); animation: blink 1s steps(1) infinite; }
+@keyframes rpin { to { opacity: 1; } }
+@keyframes blink { 50% { opacity: 0; } }
+
+.scrollcue {
+  margin-top: 30px; font-size: 11px; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--faint); display: flex; align-items: center; gap: 10px;
+}
+.scrollcue a { color: var(--dim); }
+.scrollcue a:hover { color: var(--canary); }
+.scrollcue .ar { animation: bob 1.6s ease-in-out infinite; display: inline-block; }
+@keyframes bob { 50% { transform: translateY(4px); } }
+
+/* the method — collapsed by default, progressive disclosure */
+details.method { margin: 8px 0 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+details.method summary {
+  list-style: none; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 14px; padding: 16px 20px;
+}
+details.method summary::-webkit-details-marker { display: none; }
+details.method summary .t-label { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); }
+details.method summary .t-sub { font-size: 11px; color: var(--faint); }
+details.method[open] > summary .chev { transform: rotate(90deg); color: var(--canary); }
+
 .killchain {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-  margin-top: 40px;
+  padding: 0 20px 20px;
 }
 .kc {
   border: 1px solid var(--line); border-radius: var(--radius);
@@ -89,12 +143,39 @@ code { color: var(--canary); }
 .divider::before, .divider::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
 .divider b { color: var(--canary); font-weight: 600; }
 
-/* ── stats band ──────────────────────────── */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-.stat { background: var(--panel); padding: 18px; }
-.stat .n { font-family: "Archivo", monospace; font-size: 32px; font-weight: 800; }
-.stat .n.canary { color: var(--canary); }
-.stat .k { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-top: 4px; }
+/* ── the funnel (scene 2: how it was found) ── */
+.funnel { margin-top: 8px; }
+.fstage { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: center; padding: 12px 0; }
+.f-n { font-family: "Archivo", monospace; font-size: 34px; font-weight: 800; text-align: right; }
+.fstage.fin .f-n { color: var(--canary); }
+.f-track { position: relative; height: 40px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.f-bar {
+  position: absolute; inset: 0 auto 0 0; width: 0;
+  background: linear-gradient(90deg, rgba(245,197,24,.05), rgba(245,197,24,.16));
+  border-right: 1px solid var(--canary-dim);
+  transition: width 1.1s cubic-bezier(.2,.7,.2,1);
+}
+.fstage.mid .f-bar { background: linear-gradient(90deg, rgba(245,197,24,.02), rgba(245,197,24,.07)); }
+.fstage.fin .f-bar { background: linear-gradient(90deg, rgba(245,197,24,.25), rgba(245,197,24,.5)); border-right-color: var(--canary); }
+.f-lab {
+  position: relative; z-index: 1; height: 100%; display: flex; align-items: center;
+  gap: 12px; padding: 0 14px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+}
+.f-lab .f-k { color: var(--ink); font-weight: 600; }
+.f-lab .f-s { color: var(--faint); letter-spacing: .04em; text-transform: none; }
+.fstage.fin .f-lab .f-k { color: var(--canary); }
+.f-go { display: inline-block; margin-top: 10px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
+.f-note { color: var(--faint); font-size: 11.5px; margin-top: 14px; }
+
+/* ── scroll reveal ───────────────────────── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .55s ease, transform .55s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .f-bar { transition: none; }
+  .scrollcue .ar, .rpl .cur { animation: none; }
+  .rpl { opacity: 1; animation: none; }
+}
 
 /* ── sections ────────────────────────────── */
 h2 { font-family: "Archivo", monospace; font-size: 12px; font-weight: 800; letter-spacing: .3em; text-transform: uppercase; color: var(--canary); margin: 56px 0 18px; }
@@ -230,6 +311,12 @@ const provById = {};
 for (const e of journal) {
   if (e.finding && e.finding.id) (provById[e.finding.id] ??= []).push(e);
 }
+const chunksN = data.chunks_indexed || 0;
+const hypTotal = hyp || (candidates.length + confirmed.length);
+// sandbox_runs only counts scan-executed PoCs — manual PoCs ran through the
+// same sandbox but outside that counter, so fall back to the runs ledger.
+const pocRuns = data.sandbox_runs ||
+  data.findings.reduce((a, f) => a + (f.runs || []).length, 0);
 
 document.getElementById('app').innerHTML = `
 <div class="topbar"><div class="wrap">
@@ -241,36 +328,51 @@ document.getElementById('app').innerHTML = `
 </div></div>
 
 <div class="wrap">
-<section class="hero" id="method">
+<section class="hero">
   <div class="eyebrow">autonomous vulnerability discovery</div>
   <h1>Flies canaries.<br><em>Only reports the ones that die.</em></h1>
   <p class="lede">
-    Cantheria indexes an open-source codebase, lets an open model
-    <b>hypothesize</b> bug classes per chunk, then tries to <b>falsify</b>
-    each one with a generated proof-of-concept in a sandbox. A finding only
-    ships when it survives the whole kill chain — everything else stays in
-    the journal.
+    An open model <b>hypothesizes</b>; a sandbox <b>falsifies</b>. Only PoCs that
+    reproduce, pass a benign control, and attribute to target code ship as findings.
   </p>
+  <div class="replay">
+    <div class="rp-bar">
+      <span class="rp-dot"></span><span class="rp-dot"></span><span class="rp-dot"></span>
+      <span class="rp-title">journal replay · ${esc(data.repo)}</span>
+      <span class="rp-live">● actual scan</span>
+    </div>
+    <div class="rp-lines" id="rp"></div>
+  </div>
+  <div class="scrollcue">
+    <a href="#case">the case study</a><span class="ar">↓</span>
+  </div>
+</section>
+
+<details class="method" id="method">
+  <summary>${CHEV}<span class="t-label">the method</span><span class="t-sub">— the four legs a finding must survive before it's called confirmed</span></summary>
   <div class="killchain">
     <div class="kc"><div class="num">01</div><div class="t">mechanical PoC</div><div class="d">crash, sanitizer report, or failing safety assertion — never a vibe</div></div>
     <div class="kc"><div class="num">02</div><div class="t">reproduces</div><div class="d">N consecutive runs fail the same way, same signature</div></div>
     <div class="kc"><div class="num">03</div><div class="t">control passes</div><div class="d">the same harness with benign input must exit clean</div></div>
     <div class="kc"><div class="num">04</div><div class="t">attributes</div><div class="d">a real frame of target code in the trace, not harness noise</div></div>
   </div>
-</section>
+</details>
 
 <div class="divider" id="case"><span>case study · <b>${esc(data.repo)}</b></span></div>
 
-<div class="stats">
-  <div class="stat"><div class="n canary">${confirmed.length}</div><div class="k">confirmed</div></div>
-  <div class="stat"><div class="n">${candidates.length}</div><div class="k">candidates held</div></div>
-  <div class="stat"><div class="n">${esc(data.chunks_indexed ?? '—')}</div><div class="k">chunks embedded</div></div>
-  <div class="stat"><div class="n">${hyp}</div><div class="k">hypotheses</div></div>
-  <div class="stat"><div class="n">${data.sandbox_runs}</div><div class="k">sandbox runs</div></div>
-  <div class="stat"><div class="n">${data.llm_calls}</div><div class="k">llm calls</div></div>
-  <div class="stat"><div class="n">${fenceN}</div><div class="k">fence hits</div></div>
-  <div class="stat"><div class="n">${advisories.length}</div><div class="k">dep advisories</div></div>
-</div>
+<section class="funnel reveal">
+  <div class="fstage"><span class="f-n" data-n="${chunksN}">0</span>
+    <div class="f-track"><div class="f-bar"></div>
+      <div class="f-lab"><span class="f-k">chunks indexed</span><span class="f-s">first-party source, embedded</span></div></div></div>
+  <div class="fstage mid"><span class="f-n" data-n="${hypTotal}">0</span>
+    <div class="f-track"><div class="f-bar"></div>
+      <div class="f-lab"><span class="f-k">hypotheses inferred</span><span class="f-s">${esc(data.llm_calls)} llm calls · ${pocRuns} PoC executions</span></div></div></div>
+  <div class="fstage fin"><span class="f-n" data-n="${confirmed.length}">0</span>
+    <div class="f-track"><div class="f-bar"></div>
+      <div class="f-lab"><span class="f-k">confirmed</span><span class="f-s">repro ×N · control pass · target frame</span></div></div></div>
+  <a class="f-go" href="#findings">see the survivors ↓</a>
+  <p class="f-note">also in the record: ${candidates.length} candidates held (not proven) · ${fenceN} sandbox fence hits · ${advisories.length} dependency advisories — a separate evidence class, below</p>
+</section>
 
 <h2 id="findings">Confirmed findings <span class="count">· ${confirmed.length} survived the kill chain — first-party code</span></h2>
 <p class="sec-sub">click a row to open its evidence — discovery path, PoC output, reproduction legs, suggested fix</p>
@@ -303,6 +405,88 @@ ${candidates.map(f => findingRow(f, false, true)).join('')}
   hand-authored PoCs — the journal records which is which.
 </footer>
 </div>`;
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ── hero replay: stream the real journal, verbatim ──
+(function replay() {
+  const rpEl = document.getElementById('rp');
+  if (!rpEl) return;
+  const evTitle = e => e.finding ? (e.finding.title || '') :
+    (e.chunk ? (e.chunk.file || e.chunk) : (e.note || e.detail || ''));
+  const lines = [
+    {cls: 'sys', html: `$ cantheria scan ${esc(data.repo)}`},
+    {cls: 'sys', html: `index  · ${Number(chunksN).toLocaleString()} chunks embedded`},
+  ];
+  const isHyp = e => e.event === 'hypothesis' || e.event === 'hypothesis_only';
+  let seq = journal;
+  if (journal.length > 24) {
+    const must = journal.filter(e => !isHyp(e)).length;
+    const hypsN = journal.length - must;
+    const step = Math.max(1, Math.ceil(hypsN / Math.max(4, 24 - must)));
+    let hi = 0;
+    seq = journal.filter(e => isHyp(e) ? (hi++ % step === 0) : true);
+  }
+  for (const e of seq) {
+    const ts = (e.ts || (e.finding && e.finding.created_utc) || '').replace('T', ' ').slice(11, 19);
+    lines.push({cls: '', ev: e.event,
+      html: `<span style="color:var(--faint)">${esc(ts)}</span> <span class="rv ${esc(e.event)}">${esc(e.event)}</span> ${esc(String(evTitle(e)).slice(0, 68))}`});
+  }
+  lines.push({cls: 'fin', ev: 'fin',
+    html: `▸ ${confirmed.length} finding${confirmed.length === 1 ? '' : 's'} survived the kill chain`});
+  let i = 0;
+  const push = () => {
+    const L = lines[i];
+    const d = document.createElement('div');
+    d.className = 'rpl ' + L.cls;
+    d.innerHTML = L.html;
+    rpEl.appendChild(d);
+    if (++i < lines.length) {
+      const delay = L.cls === 'sys' ? 380 :
+        (/confirmed|dismissed|fence/.test(L.ev || '') ? 620 : 140);
+      setTimeout(push, delay);
+    } else {
+      d.innerHTML += '<span class="cur"></span>';
+    }
+  };
+  if (reduced) {
+    for (const L of lines) {
+      const d = document.createElement('div');
+      d.className = 'rpl ' + L.cls; d.innerHTML = L.html; rpEl.appendChild(d);
+    }
+  } else setTimeout(push, 700);
+})();
+
+// ── scroll reveal + funnel bars/count-ups ──
+document.querySelectorAll('h2, .sec-sub, .row, .trace, .f-note, .f-go').forEach(el => el.classList.add('reveal'));
+const fNums = [...document.querySelectorAll('.f-n')];
+const maxN = Math.max(...fNums.map(el => +el.dataset.n || 0), 1);
+const countUp = (el, n) => {
+  if (reduced || n < 10) { el.textContent = n.toLocaleString(); return; }
+  const t0 = performance.now();
+  const tick = t => {
+    const p = Math.min(1, (t - t0) / 950);
+    el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+};
+const io = new IntersectionObserver(entries => {
+  for (const en of entries) {
+    if (!en.isIntersecting) continue;
+    en.target.classList.add('in');
+    if (en.target.classList.contains('funnel')) {
+      document.querySelectorAll('.fstage').forEach(st => {
+        const n = +st.querySelector('.f-n').dataset.n || 0;
+        st.querySelector('.f-bar').style.width =
+          Math.max(5, Math.round(Math.log10(Math.max(n, 1)) / Math.log10(maxN) * 100)) + '%';
+      });
+      fNums.forEach(el => countUp(el, +el.dataset.n || 0));
+    }
+    io.unobserve(en.target);
+  }
+}, {threshold: .12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 function legs(f) {
   const runs = f.runs || [];
