@@ -152,6 +152,10 @@ h2 .count { color: var(--dim); font-weight: 400; letter-spacing: .1em; }
 .term .err { color: var(--fail); }
 .fix { border-left: 2px solid var(--canary-dim); padding: 2px 14px; color: var(--dim); font-size: 13px; }
 .fix b { color: var(--ink); font-weight: 600; display: block; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 4px; }
+.adv { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.adv:last-of-type { border-bottom: 0; }
+.adv-id { font-size: 12px; font-weight: 600; }
+.adv-sum { color: var(--dim); font-size: 12.5px; margin-top: 2px; }
 
 /* ── journal trace ───────────────────────── */
 .trace { border: 1px solid var(--line); border-radius: var(--radius); background: #080806; overflow: hidden; }
@@ -203,6 +207,23 @@ const hyp = journal.filter(e => e.event === 'hypothesis' || e.event === 'hypothe
 const manualIds = new Set(journal.filter(e => e.event === 'confirmed_manual').map(e => e.finding && e.finding.id));
 const isManual = f => manualIds.has(f.id) || /hand-authored|browser-demonstrated|manual/i.test((f.raw && f.raw.note) || '');
 const eventTypes = [...new Set(journal.map(e => e.event))];
+const advisories = data.advisories || [];
+// group advisories per package@version — aws-lc-sys with 5 GHSAs is one
+// remediation, not five rows.
+const advGroups = new Map();
+for (const a of advisories) {
+  const k = `${a.ecosystem}|${a.package}|${a.version}`;
+  if (!advGroups.has(k)) advGroups.set(k, {...a, items: []});
+  advGroups.get(k).items.push(a);
+}
+const SEV_ORDER = ['critical','high','moderate','low'];
+for (const g of advGroups.values()) {
+  const sevs = g.items.map(i => i.severity).filter(Boolean);
+  g.severity = sevs.sort((x,y) => SEV_ORDER.indexOf(x)-SEV_ORDER.indexOf(y))[0] || null;
+}
+const prefetchedN = typeof data.prefetched === 'string'
+  ? (data.prefetched ? data.prefetched.split(',').filter(Boolean).length : 0)
+  : (data.prefetched || []).length;
 // provenance: which journal events touched each finding — the honest
 // "how was this found" answer (model hypothesis → oracle/human proof).
 const provById = {};
@@ -248,11 +269,17 @@ document.getElementById('app').innerHTML = `
   <div class="stat"><div class="n">${data.sandbox_runs}</div><div class="k">sandbox runs</div></div>
   <div class="stat"><div class="n">${data.llm_calls}</div><div class="k">llm calls</div></div>
   <div class="stat"><div class="n">${fenceN}</div><div class="k">fence hits</div></div>
+  <div class="stat"><div class="n">${advisories.length}</div><div class="k">dep advisories</div></div>
 </div>
 
-<h2 id="findings">Confirmed findings <span class="count">· ${confirmed.length} survived the kill chain</span></h2>
+<h2 id="findings">Confirmed findings <span class="count">· ${confirmed.length} survived the kill chain — first-party code</span></h2>
 <p class="sec-sub">click a row to open its evidence — discovery path, PoC output, reproduction legs, suggested fix</p>
 ${confirmed.map((f, i) => findingRow(f, i === 0)).join('') || '<p class="sec-sub">none — the canaries lived.</p>'}
+
+${advisories.length ? `
+<h2>Supply chain <span class="count">· ${advisories.length} known advisories in dependencies</span></h2>
+<p class="sec-sub">different evidence class — lockfile versions matched against OSV, not novel bugs proven here</p>
+${[...advGroups.values()].map(g => advisoryRow(g)).join('')}` : ''}
 
 <h2>Candidates <span class="count">· ${candidates.length} hypothesized, not yet proven</span></h2>
 <p class="sec-sub">real hypotheses the pipeline declined to confirm — triage material, not reports</p>
@@ -341,6 +368,33 @@ function findingRow(f, open, isCandidate) {
       ${legs(f)}
       ${evidence(f)}
       ${f.patch_hint ? `<div class="fix"><b>suggested fix</b>${esc(f.patch_hint)}</div>` : ''}
+    </div>
+  </details>`;
+}
+
+function advisoryRow(g) {
+  const sev = SEV[g.severity] || 'var(--faint)';
+  const items = g.items.map(a => {
+    const cve = (a.aliases || []).find(x => /^CVE-/.test(x));
+    return `<div class="adv">
+      <div class="adv-id"><a href="${esc(a.url)}">${esc(cve || a.id)}</a>${cve && a.id !== cve ? ` <span style="color:var(--faint)">(${esc(a.id)})</span>` : ''}</div>
+      <div class="adv-sum">${esc(a.summary || 'no summary published')}</div>
+    </div>`;
+  }).join('');
+  return `<details class="row" style="--sev:${sev}">
+    <summary>
+      ${CHEV}<span class="dot"></span>
+      <span class="title">${esc(g.package)}<span style="color:var(--faint)">@${esc(g.version)}</span></span>
+      <span class="meta">
+        <span class="pill">${esc(g.ecosystem)}</span>
+        <span class="pill">${g.items.length} advisor${g.items.length > 1 ? 'ies' : 'y'}</span>
+        ${g.severity ? `<span class="pill sev">${esc(g.severity)}</span>` : ''}
+      </span>
+    </summary>
+    <div class="body">
+      <div class="loc-line">matched in <code>${esc(g.lockfile)}</code></div>
+      ${items}
+      ${g.fixed ? `<div class="fix"><b>remediation</b>upgrade to ${esc(g.fixed)} or later</div>` : ''}
     </div>
   </details>`;
 }

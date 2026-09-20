@@ -71,6 +71,7 @@ def scan_cmd(
         "fence_hits": [h.as_dict() for h in result.fence_hits],
         "findings": json.loads(json.dumps([f.model_dump(mode="json") for f in result.findings])),
         "prefetched": result.prefetched,
+        "advisories": result.advisories,
     }
     out.mkdir(parents=True, exist_ok=True)
     (out / "results.json").write_text(json.dumps(payload, indent=2))
@@ -78,6 +79,8 @@ def scan_cmd(
     if result.merged:
         typer.echo(f"  ({result.merged} duplicate report(s) folded into their twin — see dedup.py)")
     typer.echo(f"  deps prefetched: {result.prefetched or 'none'}")
+    if result.advisories:
+        typer.echo(f"  supply chain: {len(result.advisories)} known advisor(ies) in lockfiles")
     typer.echo(f"  sandbox confinement: {describe_confinement()}")
     for line in summarize(result.fence_hits).splitlines():
         typer.echo(f"  fence: {line}")

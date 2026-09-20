@@ -16,6 +16,8 @@ import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import httpx
+
 from cantheria.dedup import dedup
 from cantheria.fence import FenceHit
 from cantheria.hunt import HuntBudget, hunt_chunk
@@ -25,6 +27,7 @@ from cantheria.oracle import LocalOracle
 from cantheria.schemas import Finding
 from cantheria.settings import EMBED_MODEL
 from cantheria.sie import SIEClient
+from cantheria.supplychain import check_advisories, parse_lockfiles
 
 # Detection surface only — these strings are searched FOR, never executed.
 SINK_HINTS = (
@@ -236,6 +239,7 @@ class ScanResult:
     fence_hits: list[FenceHit] = field(default_factory=list)
     merged: int = 0  # duplicate reports avoided, not bugs removed
     prefetched: str = ""  # dep ecosystems fetched for sandboxed builds
+    advisories: list[dict] = field(default_factory=list)  # OSV hits in lockfiles
 
 
 async def scan(
@@ -274,6 +278,15 @@ async def scan(
     # Fetch-only commands — no build.rs, no postinstall, see _prefetch.
     prefetched = _prefetch(repo_root)
 
+    # Supply-chain leg: lockfiles → OSV. Known advisories, kept apart from
+    # kill-chain findings — different evidence class entirely.
+    advisories: list[dict] = []
+    if pkgs := parse_lockfiles(repo_root):
+        try:
+            advisories = await check_advisories(pkgs)
+        except (TimeoutError, httpx.HTTPError):
+            advisories = []
+
     sie = SIEClient()
     journal = Journal(out_dir / "journal.jsonl")
     result = ScanResult(
@@ -281,6 +294,7 @@ async def scan(
         budget=budget or HuntBudget(),
         journal_path=journal.path,
         prefetched=prefetched,
+        advisories=advisories,
     )
     try:
         cache = out_dir / "index"
