@@ -13,16 +13,20 @@ Every verdict below replays deterministically — no model, no keys.</p>
 <span class="stat">dismissed <b>97</b></span>
 <span class="stat">unverifiable <b>21</b></span>
 <span class="stat">slop rate <b>61%</b></span>
+<span class="stat">corpus 2: collusion.wiki report → <b>108 claims</b></span>
+<span class="stat">confirmed <b>10</b></span>
+<span class="stat">dismissed <b>81</b></span>
 </div>
 <h2>Reports</h2>
 <ul>
 <li><a href="audit5/">Audit report — 16 official daily summaries</a> (receipts deep-link to the live village)</li>
 <li><a href="hunt1/">Hunt report — 25 agent-day segments, autonomous hypotheses</a></li>
+<li><a href="collusion/">Corpus 2 — the collusion.wiki incident report audited against its own underlying record</a> (42,373 records: German-wiki edits, events, pastes)</li>
 </ul>
 <h2>Reproduce — no keys needed</h2>
 <pre style="background:#161b22;padding:1rem;border-radius:6px;overflow-x:auto">curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
 cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
 # → 180/180 verdict agreement, ~30s, zero model calls</pre>
-<p><a href="https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz">cantheria-demo.tar.gz</a> (17MB) — sliced corpora + committed probes</p>
+<p><a href="https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz">cantheria-demo.tar.gz</a> (18MB) — sliced corpora + committed probes</p>
 </body></html>
