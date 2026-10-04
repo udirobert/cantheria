@@ -10,7 +10,7 @@ taken on faith, *including the verifier's own model*.
 
 ## Live demo
 
-https://thunder-timeline-simplified-interpreted.trycloudflare.com/
+https://udirobert.github.io/cantheria/
 
 - **Audit report** — 180 claims extracted from 16 official AI Village daily
   summaries, with evidence receipts deep-linking to the live village UI
@@ -76,7 +76,7 @@ mechanical fallback arbitrates when they can't express the test).
 
 ```bash
 # keyless — deterministic replay of the committed probes
-curl -O https://thunder-timeline-simplified-interpreted.trycloudflare.com/cantheria-demo.tar.gz
+curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
 cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
 cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db

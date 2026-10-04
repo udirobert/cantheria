@@ -49,7 +49,7 @@ pipeline separates what the record supports from what the model asserts.
 
 ## Live demo + keyless replay
 
-Report + receipts: **https://thunder-timeline-simplified-interpreted.trycloudflare.com/**
+Report + receipts: **https://udirobert.github.io/cantheria/**
 (audit of 16 real AI Village daily summaries → 180 claims, 61% slop rate;
 hunt sweep over 25 agent-day segments → the d6-roll find).
 
@@ -57,7 +57,7 @@ Every verdict replays deterministically — the LLM drafted the probes, the
 corpus decides. No model, no key:
 
 ```bash
-curl -O https://thunder-timeline-simplified-interpreted.trycloudflare.com/cantheria-demo.tar.gz
+curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
 cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
 # → 180/180 verdict agreement in ~30s

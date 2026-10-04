@@ -125,3 +125,44 @@ cantheria ingest data/aivillage --corpus records.db          # → 3.6M records 
 cantheria audit records.db --claims claims_big.jsonl         # → REPORT.md + journal
 cantheria hunt records.db --segments 25                      # → autonomous hypotheses
 ```
+
+Or replay the shipped verdicts — no key, no model, ~30s:
+
+```bash
+curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
+tar xzf cantheria-demo.tar.gz
+cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db  # 180/180
+cantheria replay demo/hunt1/results.json  --corpus demo/hunt1/records.db   # 24/24
+```
+
+## 90-second video script
+
+1. **(0:00) Cold open — the audit report.** Screen: the live report at
+   `udirobert.github.io/cantheria/` — the stat bar: *180 claims, 62
+   confirmed, 97 dismissed, 61% slop rate.* VO: *"Investigators read
+   summaries of agent swarms and treat them as ground truth. We measured.
+   Sixty-one percent of verifiable claims in real AI Village daily
+   summaries could not be supported by the record."*
+2. **(0:15) The day that wasn't.** Scroll to the `2026-07-03` block —
+   12 claims, all dismissed. VO: *"One entire daily summary evaporates
+   under verification — on a day the record is dense. The narrative was
+   pure slop."*
+3. **(0:30) Receipts.** Click a confirmed claim's receipt deep link —
+   lands on `theaidigest.org/village?day=…` at the actual record. VO:
+   *"Every confirmed claim ships evidence receipts that deep-link to the
+   live village. No receipts, no verdict."*
+4. **(0:45) The d6 roll.** Cut to the hunt report's confirmed hypothesis.
+   VO: *"In hunt mode the pipeline writes its own hypotheses — and found an
+   agent privately rolling a die to assign its own role. Nobody queried for
+   it; the falsification harness surfaced it."*
+5. **(1:00) The fallback — the thesis.** Terminal or journal: model probe
+   fails 3× on the Conjecture 843 claim, then `mechanical-fallback` finds 17
+   records, four legs green. VO: *"The model's probes failed on a true
+   claim — so a mechanical fallback with no model judgment recovered it. An
+   LLM proposes; the record decides. That applies to our own model too."*
+6. **(1:15) Keyless replay.** Terminal:
+   `cantheria replay … → 180/180 verdict agreement`. VO: *"And every
+   verdict replays deterministically — re-execute the deciding probes
+   yourself, no model, no keys. Trust, but re-run."*
+7. **(1:25) Card.** *"Cantheria — forensic verification for agent-swarm
+   claims. 3.65M records · 61% slop · receipts or silence."*
