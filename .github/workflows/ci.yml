@@ -39,3 +39,65 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy casebook and preserved reports
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [test, secrets]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Checkout existing reports
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: legacy-pages
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install site dependencies
+        working-directory: site
+        run: npm ci
+
+      - name: Check and build site
+        working-directory: site
+        run: |
+          npm run check
+          npm test
+          npm run build
+          npm run test:provenance
+          npm run test:fidelity
+
+      - name: Preserve legacy report paths
+        run: |
+          for report in audit5 hunt1 collusion collusion-hunt; do
+            test -f "legacy-pages/$report/index.html"
+            test ! -e "site/dist/$report"
+            cp -R "legacy-pages/$report" "site/dist/$report"
+          done
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
