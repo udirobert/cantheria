@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "id": "private-die",
+  "title": "The Private Die",
+  "question": "What happened beyond the public summary?",
+  "deck": "A hunt-mode hypothesis about a private die roll, tested against the record. The announcement is verified; what followed is not in evidence.",
+  "publication": "reviewed",
+  "corpus": "aivillage",
+  "run": {
+    "id": "hunt1",
+    "sourceArtifact": "runs/village/hunt1/results.json",
+    "capturedAt": "2026-10-04T05:16:10.559830Z"
+  },
+  "claim": {
+    "id": "94beae7e87a8",
+    "text": "The agent initiated a computer session to roll a d6 privately to determine their role for Day 338.",
+    "sourceLabel": "Hunt segment Opus 4.5 (Claude Code):2026-03-05 (autonomous hypothesis, no source document)",
+    "sourceUrl": null,
+    "sourceExcerpt": null
+  },
+  "recordedVerdict": "confirmed",
+  "review": {
+    "label": "Reviewed: announcement verified; completion and Day-338 role outcome exceed the receipt.",
+    "supported": [
+      "An agent (Opus 4.5, Claude Code) announced an intent to roll a d6 privately and start a computer session to determine its role for the day."
+    ],
+    "unresolved": [
+      "Whether a computer session was actually initiated beyond the announcement \u2014 the single receipt row is the announcement itself.",
+      "Whether any die roll occurred or determined a role for Day 338 \u2014 the winning receipt excerpt contains no 'Day 338' and no outcome."
+    ],
+    "assumptions": [
+      "The committed probe's expect ({min_rows: 1}) tests for the announcement row, not for session initiation or a completed roll.",
+      "Attribution passes on a generic subject ('agent'); the named agent comes from the receipt row, not the claim."
+    ]
+  },
+  "checks": [
+    {
+      "id": "grounding",
+      "label": "Grounding",
+      "status": "passed",
+      "detail": "ok \u2014 1 rows, 2/2 citations resolve"
+    },
+    {
+      "id": "attribution",
+      "label": "Attribution",
+      "status": "passed",
+      "detail": "ok"
+    },
+    {
+      "id": "replication",
+      "label": "Replication",
+      "status": "passed",
+      "detail": "ok"
+    },
+    {
+      "id": "control",
+      "label": "Negative control",
+      "status": "passed",
+      "detail": "ok \u2014 control window clean"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-draft-1",
+      "label": "Drafted probe \u2014 attempt 1",
+      "origin": "model",
+      "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content\n FROM records r\n WHERE r.rowid IN (SELECT rowid FROM records_fts WHERE records_fts MATCH '\"d6 roll\" AND \"privately\" AND \"Day 338\"')\n   AND r.kind = 'event'\n   AND r.ts >= '2026-03-05T18:01:56Z'\n   AND r.ts < '2026-03-05T18:01:58Z'\n LIMIT 50",
+      "expect": {
+        "min_rows": 1,
+        "must_contain": [
+          "d6 roll",
+          "privately",
+          "Day 338"
+        ],
+        "must_not": [],
+        "distinct_field": "agent_id",
+        "min_distinct": 1
+      },
+      "result": {
+        "status": "failed",
+        "rows": 0,
+        "detail": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: d6 roll; must_contain missing: Day 338; distinct(agent_id)=0 < 1"
+      },
+      "receiptIds": []
+    },
+    {
+      "id": "step-draft-2",
+      "label": "Drafted probe \u2014 attempt 2",
+      "origin": "model",
+      "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content\n FROM records r\n WHERE r.rowid IN (SELECT rowid FROM records_fts WHERE records_fts MATCH 'd6 roll' AND 'privately' AND 'Day 338')\n   AND r.kind = 'chat'\n   AND r.agent_id IN ('GPT-5.1', 'GPT-5', 'GPT-5.2', 'GPT-5.4')\n   AND r.ts >= '2026-03-05T18:01:56Z'\n   AND r.ts < '2026-03-05T18:01:58Z'\n LIMIT 50",
+      "expect": {
+        "min_rows": 1,
+        "must_contain": [
+          "d6 roll",
+          "privately",
+          "Day 338",
+          "initiated a computer session"
+        ],
+        "must_not": [],
+        "distinct_field": "agent_id",
+        "min_distinct": 1
+      },
+      "result": {
+        "status": "failed",
+        "rows": 0,
+        "detail": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: initiated a computer session; must_contain missing: d6 roll; distinct(agent_id)=0 < 1"
+      },
+      "receiptIds": []
+    },
+    {
+      "id": "step-draft-3",
+      "label": "Drafted probe \u2014 attempt 3",
+      "origin": "model",
+      "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content\n FROM records r\n WHERE r.rowid IN (SELECT rowid FROM records_fts WHERE records_fts MATCH 'd6 roll' AND 'privately' AND 'Day 338')\n   AND r.agent_id = 'GPT-5.1'\n   AND r.kind IN ('chat', 'event')\n   AND r.ts >= '2026-03-05T18:01:56Z'\n   AND r.ts < '2026-03-05T18:01:58Z'\n LIMIT 50",
+      "expect": {
+        "min_rows": 1,
+        "must_contain": [
+          "initiated a computer session",
+          "d6 roll",
+          "privately",
+          "Day 338"
+        ],
+        "must_not": [],
+        "distinct_field": "agent_id",
+        "min_distinct": 1
+      },
+      "result": {
+        "status": "failed",
+        "rows": 0,
+        "detail": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: initiated a computer session; must_contain missing: d6 roll; distinct(agent_id)=0 < 1"
+      },
+      "receiptIds": []
+    },
+    {
+      "id": "step-committed-probe",
+      "label": "Committed probe \u2014 mechanical fallback",
+      "origin": "mechanical",
+      "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND r.rowid IN (SELECT rowid FROM records_fts WHERE records_fts MATCH '\"privately\" AND \"roll\"') AND r.ts >= '2026-03-05T18:01:56.009079+00:00' AND r.ts <= '2026-03-05T18:01:57.049265+00:00' AND (r.agent_id = 'agent' OR r.content LIKE '%agent%') LIMIT 50",
+      "expect": {
+        "min_rows": 1
+      },
+      "result": {
+        "status": "passed",
+        "rows": 1,
+        "detail": "No recorded outcome."
+      },
+      "receiptIds": [
+        "aivillage:e50274fa-34fb-4616-9b02-3b9b3188acab"
+      ]
+    },
+    {
+      "id": "step-control",
+      "label": "Negative control \u2014 same probe, disjoint window",
+      "origin": "control",
+      "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND r.rowid IN (SELECT rowid FROM records_fts WHERE records_fts MATCH '\"privately\" AND \"roll\"') AND r.ts >= '2026-02-26T18:01:54.968893+00:00' AND r.ts <= '2026-02-26T18:01:56.009079+00:00' AND (r.agent_id = 'agent' OR r.content LIKE '%agent%') LIMIT 50",
+      "expect": {
+        "min_rows": 1
+      },
+      "result": {
+        "status": "failed",
+        "rows": 0,
+        "detail": "Control window clean \u2014 no match. rows 0 < min_rows 1; 0 rows \u2014 no evidence"
+      },
+      "receiptIds": []
+    }
+  ],
+  "receipts": [
+    {
+      "id": "aivillage:e50274fa-34fb-4616-9b02-3b9b3188acab",
+      "agent": "Opus 4.5 (Claude Code)",
+      "timestamp": "2026-03-05T18:01:57.049265",
+      "kind": "event",
+      "excerpt": "[AGENT_TALK] Exciting new goal! Time to roll my d6 privately. Let me start my computer session to determine my role for the day.",
+      "sourceUrl": "https://theaidigest.org/village?day=242&time=1772733717049",
+      "annotations": [
+        {
+          "exact": "Time to roll my d6 privately",
+          "prefix": "[AGENT_TALK] Exciting new goal! ",
+          "suffix": ". Let me start my computer session",
+          "label": "announced intent — roll not shown as completed"
+        },
+        {
+          "exact": "Let me start my computer session to determine my role for the day",
+          "prefix": "Time to roll my d6 privately. ",
+          "suffix": ".",
+          "label": "stated plan — no session-start record cited"
+        }
+      ]
+    }
+  ],
+  "reproduction": {
+    "commands": [
+      "cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db"
+    ],
+    "artifactUrl": null,
+    "limitations": [
+      "Replay re-executes the committed probe against a sliced corpus, not the full 3.6M-record village DB.",
+      "Replay reproduces the recorded checks; it does not establish the unresolved clauses above."
+    ]
+  }
+}

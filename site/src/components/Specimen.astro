@@ -1,0 +1,15 @@
+---
+interface Props {
+  fields: Array<[string, string | null]>;
+}
+const { fields } = Astro.props;
+---
+
+<span class="specimen">
+  {fields.map(([key, value]) => (
+    <span>
+      <span class="key">{key}</span>{' '}
+      <b>{value ?? 'unknown'}</b>
+    </span>
+  ))}
+</span>

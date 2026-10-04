@@ -1,0 +1,18 @@
+---
+interface Props {
+  text: string;
+  label?: string;
+  filename?: string;
+}
+const { text, label = 'Copy', filename } = Astro.props;
+---
+
+<span class="copytext js-only">
+  <button class="text-btn" type="button" data-copy={text}>{label}</button>
+  {filename && (
+    <button class="text-btn" type="button" data-download={text} data-filename={filename}>
+      Download
+    </button>
+  )}
+  <span class="copy-status" role="status" aria-live="polite" hidden></span>
+</span>

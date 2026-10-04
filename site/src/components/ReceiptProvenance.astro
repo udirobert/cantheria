@@ -1,0 +1,42 @@
+---
+import type { CaseFile } from '../data/case';
+
+interface Props {
+  receipt: CaseFile['receipts'][number];
+  corpus: string;
+  sourceArtifact: string;
+  publication: CaseFile['publication'];
+  compact?: boolean;
+}
+const { receipt, corpus, sourceArtifact, publication, compact = false } = Astro.props;
+---
+
+{
+  receipt.sourceUrl ? (
+    <p class="src">
+      <a href={receipt.sourceUrl}>Public source record</a> · <span class="mono">{receipt.id}</span>
+    </p>
+  ) : publication === 'fixture' ? (
+    <p class="src provenance">
+      <span class="prov-label">Layout specimen — no real provenance</span> ·{' '}
+      <span class="mono">{receipt.id}</span> (synthetic id)
+    </p>
+  ) : compact ? (
+    <p class="src provenance provenance-compact">
+      <span class="prov-label">Corpus-internal reference</span> · record <span class="mono">{receipt.id}</span>
+    </p>
+  ) : (
+    <div class="src provenance">
+      <p class="prov-label">Corpus-internal reference</p>
+      <p>
+        corpus <span class="mono">{corpus}</span> · record <span class="mono">{receipt.id}</span>
+      </p>
+      <p>
+        Recorded run artifact <span class="mono">{sourceArtifact}</span>
+      </p>
+      <p class="prov-note">
+        Use this record ID to locate the excerpt within the corpus. No public web link is supplied.
+      </p>
+    </div>
+  )
+}

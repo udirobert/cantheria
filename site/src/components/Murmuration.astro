@@ -1,0 +1,47 @@
+---
+import MotionToggle from './MotionToggle.astro';
+
+const accent: Record<number, string> = { 5: 'var(--teal)', 11: 'var(--brick)', 17: 'var(--teal)', 24: 'var(--brick)' };
+const birds = Array.from({ length: 34 }, (_, i) => {
+  const t = i / 33;
+  const x = 24 + t * 690;
+  const y = 118 + Math.sin(t * Math.PI * 2.4) * 46 + Math.sin(t * Math.PI * 7.3) * 12;
+  return {
+    x: Math.round(x * 10) / 10,
+    y: Math.round(y * 10) / 10,
+    r: Math.round(Math.sin(i * 2.17) * 16),
+    s: i === 13 ? 1.7 : Math.round((0.7 + Math.abs(Math.sin(i * 1.31)) * 0.55) * 100) / 100,
+    c: i === 13 ? 'var(--canary)' : accent[i] ?? 'var(--ink)',
+    d: (i % 7) * 0.7,
+  };
+});
+---
+
+<figure class="artifact murmuration" data-motion>
+  <figcaption class="artifact-cap">
+    <span class="cap-main">Illustrative murmuration — not recorded agent movement.</span>
+    <span class="cap-sub">The index below contains the actual published cases.</span>
+    <MotionToggle />
+  </figcaption>
+  <svg viewBox="0 0 740 250" fill="none" role="img" aria-label="Illustrative flock of ink wing-strokes moving in bands, with one canary-yellow bird" xmlns="http://www.w3.org/2000/svg">
+    {
+      birds.map((b) => (
+        <g
+          class="wing"
+          style={`--d:${b.d}s`}
+          transform={`translate(${b.x} ${b.y}) rotate(${b.r}) scale(${b.s})`}
+        >
+          <path
+            d="M-9 3 Q-3.5 -6.5 0 -0.5 Q3.5 -6.5 9 3"
+            stroke={b.c}
+            stroke-width={b.s > 1.4 ? 2.4 : 1.7}
+            stroke-linecap="round"
+            fill="none"
+          />
+        </g>
+      ))
+    }
+    <path class="murm-band" d="M-10 180 Q180 60 380 130 Q560 190 760 90" stroke="var(--hairline)" stroke-width="1" stroke-dasharray="2 7" fill="none" />
+    <path class="murm-band" d="M-10 130 Q220 200 420 110 Q600 40 760 150" stroke="var(--hairline)" stroke-width="1" stroke-dasharray="2 8" fill="none" />
+  </svg>
+</figure>

@@ -13,6 +13,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from .report import _public_source_uri
+
 _CSS = """
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
@@ -71,7 +73,13 @@ def _receipt_links(claim: dict, db_path: Path | str | None) -> list[str]:
             pass
     return [
         f"<li><code>{_esc(r)}</code>"
-        + (f' — <a href="{_esc(links[r])}">{_esc(links[r])}</a>' if r in links else "")
+        + (
+            f' — <a href="{_esc(links[r])}">{_esc(links[r])}</a>'
+            if r in links and _public_source_uri(links[r])
+            else " — <span>corpus-internal reference</span>"
+            if r in links
+            else " — <span>no public source link supplied</span>"
+        )
         + "</li>"
         for r in ids
     ]
@@ -89,12 +97,17 @@ def _claim_html(c: dict, db_path: Path | str | None) -> str:
         rl = _receipt_links(c, db_path)
         if rl:
             receipts = f'<ul class="receipts">{"".join(rl)}</ul>'
-    reason = raw.get("dismiss_reason") or raw.get("note") or raw.get("backend_error") or ""
-    return f"""<div class="claim {verdict}">
+    if verdict == "confirmed":
+        reason = raw.get("note")
+        reason_label = "note"
+    else:
+        reason = raw.get("dismiss_reason") or raw.get("note") or raw.get("backend_error") or ""
+        reason_label = "reason"
+    return f"""<div class="claim {_esc(verdict)}">
 <div class="text">{_esc(c.get("text", ""))}</div>
 <div class="meta"><span class="tag">{_esc(verdict)}</span> {_esc(c.get("kind", ""))} · source {_esc(c.get("source_doc", ""))} · probe origin <b>{_esc(raw.get("probe_origin", "model"))}</b></div>
 {f'<div class="legs">{leg_bits}</div>' if legs else ""}
-{f'<div class="meta">reason: {_esc(reason)}</div>' if reason else ""}
+{f'<div class="meta">{reason_label}: {_esc(reason)}</div>' if reason else ""}
 {receipts}
 </div>"""
 
@@ -109,6 +122,11 @@ def write_audit_html(
     verdicts = Counter(c.get("verdict") for c in claims)
     decided = verdicts.get("confirmed", 0) + verdicts.get("dismissed", 0)
     slop = verdicts.get("dismissed", 0) / decided if decided else 0.0
+    failing = (
+        f"{verdicts.get('dismissed', 0)}/{decided} ({slop:.0%})"
+        if decided
+        else "N/A (0 decidable claims)"
+    )
 
     sections: list[str] = []
     for verdict, label in (
@@ -132,12 +150,16 @@ def write_audit_html(
 <span class="stat">confirmed <b>{verdicts.get("confirmed", 0)}</b></span>
 <span class="stat">dismissed <b>{verdicts.get("dismissed", 0)}</b></span>
 <span class="stat">unverifiable <b>{verdicts.get("unverifiable", 0)}</b></span>
-<span class="stat">slop rate <b>{slop:.0%}</b></span>
+<span class="stat">flaky <b>{verdicts.get("flaky", 0)}</b></span>
+<span class="stat">claims failing mechanical verification <b>{failing}</b></span>
 <span class="stat">cost <b>{result.get("llm_calls", "?")} calls / {result.get("probe_runs", "?")} probes</b></span>
 </div>
-<blockquote>An LLM proposes; the record decides. Every confirmed claim lists the
-records its probe matched — each receipt deep-links to the live village UI.
-Unverifiable claims were quarantined rather than force-verified.</blockquote>
+<blockquote>An LLM proposes; the record decides. Confirmed means the recorded
+mechanical checks passed; it does not establish every clause of the narrative.
+Unverifiable claims were quarantined rather than force-verified. Public source
+links are shown where supplied; other receipts retain their corpus record IDs.
+Decidable means confirmed or dismissed. Unverifiable and flaky outcomes are
+excluded. A failed probe does not establish that the original claim is false.</blockquote>
 {"".join(sections)}
 <div class="meta">generated {__import__("datetime").datetime.now().isoformat(timespec="seconds")} · cantheria swarm pipeline</div>
 </body></html>"""

@@ -1,0 +1,14 @@
+---
+import { STATUS_TOKENS } from '../lib/status';
+
+interface Props {
+  status: string;
+}
+const { status } = Astro.props;
+const token = STATUS_TOKENS[status as keyof typeof STATUS_TOKENS] ?? { word: status, symbol: '?' };
+---
+
+<span class={`st st-${status}`}>
+  <span class="sym" aria-hidden="true">{token.symbol}</span>
+  <span class="word">{token.word}</span>
+</span>

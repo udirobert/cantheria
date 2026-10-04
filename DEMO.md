@@ -27,7 +27,9 @@ happened."
   → 97 dismissed (the record could not support them)
   → 21 unverifiable (quarantined — no mechanical probe can decide them)
 
-slop rate: 61% of decidable claims failed verification
+claims failing mechanical verification: 61% of decidable claims
+  (97/159 — quarantined claims are excluded, not counted as failures:
+   no mechanical probe could decide them)
 cost: 513 model calls, 935 read-only probe executions
 ```
 
@@ -47,15 +49,16 @@ public incident report.
 108 claims extracted from the report
   → 10 confirmed (record-backed receipts)
   → 81 dismissed (mechanically unsupportable as stated)
-  → 17 quarantined (unverifiable / backend-flaky)
+  → 16 unverifiable + 1 flaky (quarantined / unstable — no reliable verdict)
 
-89% of decidable claims failed mechanical verification
+claims failing mechanical verification: 89% of decidable claims
+  (81/91 — same denominator rule as corpus 1)
 ```
 
-Confirmed claims include the Playwright `route.fulfill` hostname-rewrite
-bypass, SSH tunnels via Pinggy/Serveo/localhost.run/localtunnel, agents
-restricted to GET-only requests, and the moderator manually deleting agent
-posts for six weeks — each with receipts. The point isn't that the report
+Recorded confirmations include bypass-related evidence, tunnel-related
+claims, GET-only restrictions, and moderator cleanup. The featured bypass
+case distinguishes the observed outcome from unresolved mechanism wording.
+The point isn't that the report
 is sloppy — it's careful work — but that *any* narrative, human- or
 model-written, deserves the same receipts-or-silence standard.
 
@@ -67,8 +70,10 @@ One daily summary produced twelve claims. **All twelve failed
 verification** — the rent figures, the roleplay personas, the "consensus
 vote," the "unauthorized handout.html." We checked it's not a data gap:
 that day has 825 chats, 1,993 events, 1,213 memories, and 23,114 turns in
-the corpus. The record is dense; the summary just isn't true. This is what
-pure slop looks like when you actually measure it.
+the corpus. The record is dense; these probes did not establish the
+summary's claims. Retrieval failure is not proof that they are false — but
+this is what an unsupported narrative looks like when you actually measure
+it.
 
 ### 2. The thing nobody was looking for — hunt mode
 
@@ -76,35 +81,54 @@ pure slop looks like when you actually measure it.
 busiest agent-day segments, then puts its own hypotheses through the same
 chain. Across 25 segments it autonomously surfaced and confirmed:
 
+Recorded hypothesis (verbatim):
+
 > **An agent initiated a private computer session to roll a d6 to
 > determine its own role for Day 338.**
 
 Evidence: an `AGENT_TALK` event from Opus 4.5 (Claude Code) —
 *"Time to roll my d6 privately. Let me start my computer session to
 determine my role for the day."* — confirmed with a clean control window.
-An agent silently randomizing its own role is exactly the kind of emergent
-behavior a transcript dashboard will never flag, because nobody wrote a
-query for it.
+To be exact: the receipt *is* the announcement — the record shows the
+agent saying it, not a session-start record or a completed roll, and the
+featured case says so beside the verdict. This is a lead about possible
+private role selection, not proof of a completed roll.
 
 ### 3. Why the verifier can't trust its own model — the fallback
 
 The daily summary claims Claude Opus 5 "disproved Conjecture 843 at
-[2026-08-31 11:18:34 PT] using an elegant 24-odd-cycle partition." The
-record says only: *"🎯 Graffiti conjecture 843 … is FALSE."*
+[2026-08-31 11:18:34 PT] using an elegant 24-odd-cycle partition," later
+"formally verified with 47,780 checks EXIT 0."
 
-The model-drafted probes failed three times — it demanded the summary's
-embellishments ("disproved," "24-odd-cycle," "47,780 checks") all co-occur
-in one record, and once crashed on unquoted FTS syntax. Then the
-**mechanical fallback** took over: no model judgment, just the claim's
-rarest co-occurring vocabulary in non-summary records plus a
-timezone-normalized window. Result: **17 matching records**, all four
-evidence legs green, 7 receipts with live deep links.
+The model-drafted probes failed three times: one over-constrained draft
+demanded the summary's embellishments co-occur in a single row and found
+nothing; two were rejected outright — `sqlite: no such column: odd`,
+unquoted hyphens in the FTS expression, a bad *draft*, not a verdict on
+the claim. Then the **mechanical fallback** took over: no model judgment,
+just the claim's date and number co-occurring in non-summary records plus
+a timezone-normalized window. Result: **17 rows matched the narrowed
+probe**, all four evidence legs green, 12 receipts with deep links in
+`REPORT.md`.
+
+And the honest part: the lead receipt quotes the announcement in full —
+timestamp, counterexample (icosahedral Goldberg GP(2,2), 240 vertices),
+certificate (12 disjoint pentagons + 12 disjoint 15-cycles, independence
+number 108 vs the conjectured 112) — but the other 16 matches are agent
+memory headers carrying only the date and the number. The probe
+establishes that *something about Conjecture 843 happened at that time*.
+The receipt describes 12 pentagons plus 12 fifteen-cycles — 24 odd cycles —
+but the probe did not validate that construction. The 47,780-check
+verification remains source-summary wording without a supplied receipt.
+`confirmed` scopes to what the probe tested —
+the featured case prints the qualification beside the verdict.
 
 That's the thesis running in production: the LLM proposed a test, the
 record falsified the *probe* (not the claim), and a dumber-but-honest
-mechanism recovered the truth. 6 of 7 confirmations in the pilot audit
-came through the fallback — if we'd trusted the model's probes as oracle,
-the "slop rate" would have been a fabrication of our own pipeline.
+mechanism recovered an inspectable announcement without establishing every
+detail of the source claim. **6 of the 7 confirmations** in that pilot
+audit came through the fallback — if we'd trusted the model's probes as
+the oracle, the failure rate itself would have been a fabrication of our
+own pipeline.
 
 ### 4. Calibrated honesty — the quarantine
 
@@ -124,8 +148,9 @@ Same SIFT engine as the vuln-scan pipeline, different canary:
 - **Falsify** — each claim gets a read-only probe and four legs:
   grounding (rows exist, citations resolve), attribution (binds the
   claimed agent/time), replication (independent corroboration), and
-  **control** — the same probe on a disjoint window must *differ*, giving
-  an actual false-positive check no narrative audit has today
+  **control** — when drafted, a disjoint query must not satisfy the same
+  expectations: a negative-control check, not a calibrated
+  false-positive-rate measure
 - **Triage** — verdicts + receipts + deep links in `REPORT.md`;
   everything, including the failures, stays in an append-only journal
 
@@ -137,8 +162,8 @@ documents enter the model fenced, never as instructions.
 
 - Not a summarizer — it *audits* summaries
 - Not RAG — answers come with executable receipts or don't ship
-- Not a trajectory dashboard — it produces verdicts with a control-leg
-  false-positive rate, not plots
+- Not a trajectory dashboard — it produces verdicts with a negative-control
+  discrimination check, not plots
 - Not a chatbot — the model's own probes are treated as falsifiable drafts,
   and a mechanical fallback arbitrates when they can't express the test
 
@@ -150,43 +175,52 @@ cantheria audit records.db --claims claims_big.jsonl         # → REPORT.md + j
 cantheria hunt records.db --segments 25                      # → autonomous hypotheses
 ```
 
-Or replay the shipped verdicts — no key, no model, ~4s:
+Or replay the shipped verdicts — no key, no model, seconds:
 
 ```bash
 curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
 cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db  # 180/180
 cantheria replay demo/hunt1/results.json  --corpus demo/hunt1/records.db   # 24/24
+cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
 ```
+
+Pilot audit3 (24/24) is verified and staged **locally** at
+`presentation/inputs/cantheria-demo.tar.gz` — a four-run package targeted
+at the next release (e.g. v1.0.1), not published yet. It is not in a fresh
+clone; extract it into a separate working directory before replaying.
 
 ## 90-second video script
 
-1. **(0:00) Cold open — the audit report.** Screen: the live report at
-   `udirobert.github.io/cantheria/` — the stat bar: *180 claims, 62
-   confirmed, 97 dismissed, 61% slop rate.* VO: *"Investigators read
-   summaries of agent swarms and treat them as ground truth. We measured.
-   Sixty-one percent of verifiable claims in real AI Village daily
-   summaries could not be supported by the record."*
-2. **(0:15) The day that wasn't.** Scroll to the `2026-07-03` block —
-   12 claims, all dismissed. VO: *"One entire daily summary evaporates
-   under verification — on a day the record is dense. The narrative was
-   pure slop."*
-3. **(0:30) Receipts.** Click a confirmed claim's receipt deep link —
-   lands on `theaidigest.org/village?day=…` at the actual record. VO:
-   *"Every confirmed claim ships evidence receipts that deep-link to the
-   live village. No receipts, no verdict."*
-4. **(0:45) The d6 roll.** Cut to the hunt report's confirmed hypothesis.
-   VO: *"In hunt mode the pipeline writes its own hypotheses — and found an
-   agent privately rolling a die to assign its own role. Nobody queried for
-   it; the falsification harness surfaced it."*
-5. **(1:00) The fallback — the thesis.** Terminal or journal: model probe
-   fails 3× on the Conjecture 843 claim, then `mechanical-fallback` finds 17
-   records, four legs green. VO: *"The model's probes failed on a true
-   claim — so a mechanical fallback with no model judgment recovered it. An
-   LLM proposes; the record decides. That applies to our own model too."*
-6. **(1:15) Keyless replay.** Terminal:
-   `cantheria replay … → 180/180 verdict agreement`. VO: *"And every
-   verdict replays deterministically — re-execute the deciding probes
-   yourself, no model, no keys. Trust, but re-run."*
-7. **(1:25) Card.** *"Cantheria — forensic verification for agent-swarm
-   claims. 3.65M records · 61% slop · receipts or silence."*
+Recording still pending — this storyboard targets the current static routes
+(`/` Canary plate and case list, `/bench/`, `/cases/private-die/`,
+`/cases/conjecture-843/`, `/cases/across-the-wire/`, `/reproduce/`,
+`/identity/`). The replay beat uses actual terminal output — no staged or
+mocked footage.
+
+1. **(0:00–0:12) Cold open — home.** Canary plate + claim/receipt spread on
+   the homepage. VO: *"Agent swarms leave records. Their summaries are
+   hypotheses. Cantheria tests what those stories actually establish."*
+2. **(0:12–0:25) The evidence index.** Bench page + case list. VO: *"We
+   audited 180 AI Village summary claims and 108 collusion-report claims.
+   97/159 and 81/91 decidable claims failed mechanical verification. That
+   is not a falsehood rate."*
+3. **(0:25–0:40) The Private Die.** Case opening + the announcement
+   receipt. VO: *"A recorded confirmation found an agent announcing a
+   private d6 roll. The receipt does not show a completed roll."*
+4. **(0:40–1:03) Conjecture 843.** FlightMap over the failed model drafts,
+   the mechanical fallback, and the lead receipt. VO: *"Three
+   model-drafted tests failed. A mechanical fallback retrieved an
+   announcement about Conjecture 843. It did not validate the
+   mathematics."*
+5. **(1:03–1:17) Across the Wire.** Case opening + provenance block.
+   VO: *"Bypass-related outcomes have corroborating records. The specific
+   mechanism remains beyond the winning receipts. This case uses
+   corpus-internal references."*
+6. **(1:17–1:26) Re-run the probes.** Reproduce page + actual terminal
+   replay showing 180/180 verdict agreement. VO: *"Replay the committed
+   checks without a model or API key. Agreement tests reproducibility, not
+   every source claim."*
+7. **(1:26–1:30) Card.** Identity mark + closing question. VO: *"An LLM
+   proposes; the record decides. Who checks the story your agents tell
+   you?"*

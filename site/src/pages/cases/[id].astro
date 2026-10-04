@@ -1,0 +1,317 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import StatusMark from '../../components/StatusMark.astro';
+import Specimen from '../../components/Specimen.astro';
+import ReceiptProvenance from '../../components/ReceiptProvenance.astro';
+import FlightMap from '../../components/FlightMap.astro';
+import SqlBlock from '../../components/SqlBlock.astro';
+import CopyText from '../../components/CopyText.astro';
+import { loadCases } from '../../data/load-cases';
+import type { CaseFile } from '../../data/case';
+import { resolveAnnotations, annotateHtml } from '../../lib/anchors';
+import { VERDICT_TOKENS } from '../../lib/status';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return loadCases().map((c) => ({ params: { id: c.id }, props: { c } }));
+};
+const { c } = Astro.props as { c: CaseFile };
+const verdict = c.recordedVerdict ? VERDICT_TOKENS[c.recordedVerdict] : null;
+const selReceipt = c.receipts[0];
+const selRes = selReceipt ? resolveAnnotations(selReceipt.excerpt, selReceipt.annotations) : [];
+const picked = selRes.filter((r) => r.status === 'ok').slice(0, 2);
+const excerptPreview = selReceipt ? selReceipt.excerpt.slice(0, 240) : '';
+---
+
+<Base title={c.title} description={c.question}>
+  <article class="case-head">
+    <span class="fn-label">Field note / {c.id} · corpus {c.corpus} · run {c.run.id}</span>
+    <h1>{c.title}</h1>
+    <p class="question">{c.question}</p>
+
+    <div class="spread" style="margin-top:1.6rem;">
+      <blockquote class="claim-quote">“{c.claim.text}”</blockquote>
+      <div>
+        <div class="verdict-line" style="margin-top:0;">
+          {verdict ? (
+            <>
+              <span class="v-word">Recorded verdict: {verdict.word}</span>
+              <span class="v-note">{verdict.note}</span>
+            </>
+          ) : (
+            <>
+              <span class="v-word">Recorded verdict: none</span>
+              <span class="v-note">the run did not record a mechanical verdict for this claim</span>
+            </>
+          )}
+        </div>
+        <section class="scope-note" aria-labelledby="scope-heading">
+          <h3 id="scope-heading">Scope qualification</h3>
+          <p>{c.review.label}</p>
+          <details id="review-details">
+            <summary>Read the full editorial review</summary>
+            <div class="review-cols" style="margin-top:0.8rem;">
+              <div>
+                <h4>Supported by the record</h4>
+                <ul>{c.review.supported.map((s) => <li>{s}</li>)}</ul>
+              </div>
+              <div>
+                <h4>Unresolved</h4>
+                <ul>
+                  {c.review.unresolved.length > 0
+                    ? c.review.unresolved.map((s) => <li>{s}</li>)
+                    : <li>None recorded.</li>}
+                </ul>
+              </div>
+            </div>
+          </details>
+          <details class="quiet-detail">
+            <summary>Case context</summary>
+            <p>{c.deck}</p>
+          </details>
+          <details class="quiet-detail">
+            <summary>Source &amp; provenance</summary>
+            <p class="claim-src" style="margin-top:0.7rem;">
+              {c.claim.sourceLabel} · claim id <span class="mono">{c.claim.id}</span>
+              {c.claim.sourceUrl && <> · <a href={c.claim.sourceUrl}>source</a></>}
+            </p>
+            {c.claim.sourceExcerpt && <p class="detail" style="color:var(--ink-soft);font-size:0.92rem;">{c.claim.sourceExcerpt}</p>}
+            <Specimen
+              fields={[
+                ['Run', c.run.id],
+                ['Captured', c.run.capturedAt],
+                ['Artifact', c.run.sourceArtifact],
+              ]}
+            />
+          </details>
+        </section>
+      </div>
+    </div>
+  </article>
+
+  <section class="spread note-spread" aria-label="Recorded probes and selected receipt">
+    <div>
+      <p class="col-label">Recorded probes</p>
+      <FlightMap steps={c.steps} />
+    </div>
+    <div>
+      <p class="col-label">Selected passages from the supplied excerpt</p>
+      {selReceipt ? (
+        <div>
+          {picked.length > 0 ? (
+            <>
+              {picked.map((r) => (
+                <blockquote class="sel-quote">
+                  “{r.annotation.exact}”
+                  <span class="sel-label">{r.annotation.label}</span>
+                </blockquote>
+              ))}
+              <p class="sel-note">
+                Surrounding text is omitted here;{' '}
+                <a href={`#receipt-${selReceipt.id}`}>open the supplied receipt</a>.
+              </p>
+            </>
+          ) : (
+            <>
+              <blockquote class="sel-quote">{excerptPreview}</blockquote>
+              <p class="sel-note">
+                Preview — truncated; complete supplied excerpt below.{' '}
+                <a href={`#receipt-${selReceipt.id}`}>Open it in the archive</a>.
+              </p>
+            </>
+          )}
+          <p class="sel-meta mono">
+            {selReceipt.agent ?? 'unknown agent'} · {selReceipt.kind}
+            {selReceipt.timestamp && <> · {selReceipt.timestamp}</>}
+          </p>
+          <ReceiptProvenance
+            receipt={selReceipt}
+            corpus={c.corpus}
+            sourceArtifact={c.run.sourceArtifact}
+            publication={c.publication}
+            compact
+          />
+        </div>
+      ) : (
+        <p class="sel-note">No receipts recorded for this case.</p>
+      )}
+    </div>
+  </section>
+
+  <section aria-labelledby="checks-heading" class="checks-strip">
+    <h3 id="checks-heading" class="vis-label">Recorded checks</h3>
+    <div class="check-cells">
+      {c.checks.map((check) => (
+        <details class="check-cell">
+          <summary>
+            <span class="lbl">{check.label}</span>
+            <StatusMark status={check.status} />
+          </summary>
+          <p>{check.detail}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="evidence-desk" aria-labelledby="desk-heading">
+    <p class="desk-cap" id="desk-heading">
+      Evidence desk — full records, tests, and limitations; inspect only what you need.
+    </p>
+
+    <details class="desk-group">
+      <summary>Probe history — inspect recorded attempts</summary>
+      <div class="desk-body">
+        {c.steps.map((step) => (
+          <details class="step-item step-disclosure" id={`step-${step.id}`} data-step-disclosure>
+            <summary>
+              <span class="node" aria-hidden="true"></span>
+              <span class="origin">{step.origin}</span>{' '}
+              <span class="step-name">{step.label}</span>{' '}
+              {step.origin === 'control' && step.result.status === 'failed' ? (
+                <span class="control-expectation">Query expectation not met</span>
+              ) : (
+                <StatusMark status={step.result.status} />
+              )}
+            </summary>
+            <div class="step-detail">
+              {step.origin === 'control' && step.result.status === 'failed' && (
+                <p class="control-note">
+                  For a negative control, a non-match can be the intended result; see the
+                  recorded control check.
+                </p>
+              )}
+              <p class="detail">{step.result.detail}</p>
+              <p class="expect">
+                rows: {step.result.rows === null ? 'not recorded' : step.result.rows}
+              </p>
+              {step.expect && (
+                <details class="quiet-detail">
+                  <summary>Expected result payload</summary>
+                  <p class="expect">{JSON.stringify(step.expect)}</p>
+                </details>
+              )}
+              {step.query && <SqlBlock query={step.query} id={`sql-${step.id}`} />}
+              {step.receiptIds.length > 0 && (
+                <p class="refs">
+                  receipts:{' '}
+                  {step.receiptIds.map((rid, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={`#receipt-${rid}`}>{rid}</a>
+                    </>
+                  ))}
+                </p>
+              )}
+            </div>
+          </details>
+        ))}
+      </div>
+    </details>
+
+    <details class="desk-group">
+      <summary>Receipt archive — inspect all supplied records</summary>
+      <div class="desk-body">
+        <p class="desk-note">
+          These are captured receipt excerpts, not necessarily complete corpus records.
+          Some excerpts are capped at the probe’s surface sample. Use the public source
+          link or corpus record ID to inspect the underlying record.
+        </p>
+        {c.receipts.map((receipt) => {
+          const resolutions = resolveAnnotations(receipt.excerpt, receipt.annotations);
+          const segments = annotateHtml(receipt.excerpt, resolutions);
+          return (
+            <details class="receipt receipt-disclosure" id={`receipt-${receipt.id}`} data-receipt-disclosure>
+              <summary>
+                <span class="mono">{receipt.id}</span> — {receipt.agent ?? 'unknown agent'} · {receipt.kind}
+                {receipt.timestamp && <> · {receipt.timestamp}</>}
+              </summary>
+              <blockquote class="excerpt">
+                {segments.map((seg) =>
+                  seg.kind === 'mark' ? <mark title={seg.label ?? undefined} set:html={seg.html} /> : <Fragment set:html={seg.html} />
+                )}
+              </blockquote>
+              {resolutions.some((r) => r.status === 'ok') && (
+                <ul class="annotation-legend">
+                  {resolutions
+                    .filter((r) => r.status === 'ok')
+                    .map((r) => (
+                      <li>
+                        <b>{r.annotation.label}</b>
+                        <span class="mono"> — “{r.annotation.exact}”</span>
+                      </li>
+                    ))}
+                </ul>
+              )}
+              {resolutions
+                .filter((r) => r.status !== 'ok')
+                .map((r) => (
+                  <p class="anchor-warn">
+                    annotation “{r.annotation.label}” could not be anchored ({r.status}); shown unhighlighted
+                  </p>
+                ))}
+              <ReceiptProvenance
+                receipt={receipt}
+                corpus={c.corpus}
+                sourceArtifact={c.run.sourceArtifact}
+                publication={c.publication}
+              />
+            </details>
+          );
+        })}
+      </div>
+    </details>
+
+    <details class="desk-group">
+      <summary>Assumptions &amp; limitations</summary>
+      <div class="desk-body">
+        {c.review.assumptions.length > 0 && (
+          <>
+            <h4>Assumptions the case rests on</h4>
+            <ul>{c.review.assumptions.map((s) => <li>{s}</li>)}</ul>
+          </>
+        )}
+        {c.reproduction.limitations.length > 0 && (
+          <>
+            <h4>Scope limitations</h4>
+            <ul>{c.reproduction.limitations.map((s) => <li>{s}</li>)}</ul>
+          </>
+        )}
+        <p>
+          Reproduction commands replay committed checks, not a new audit of the full corpus.
+        </p>
+      </div>
+    </details>
+
+    <details class="desk-group">
+      <summary>Reproduce this case</summary>
+      <div class="desk-body">
+        {c.reproduction.commands.length > 0 ? (
+          <div class="cmd-list">
+            {c.reproduction.commands.map((cmd) => (
+              <div class="cmd">
+                <code>{cmd}</code>
+                <CopyText text={cmd} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="no-cmds">No reproduction command supplied for this case.</p>
+        )}
+        {c.reproduction.artifactUrl && (
+          <p style="font-size:0.85rem;margin-top:0.8rem;">
+            <a href={c.reproduction.artifactUrl}>Download recorded artifacts →</a>
+          </p>
+        )}
+      </div>
+    </details>
+  </section>
+
+  <p class="print-note">Field-note brief; complete evidence is available in the case archive.</p>
+
+  {c.publication === 'fixture' && (
+    <p class="fixture-flag">
+      Fixture preview — this case is a layout specimen. It is not a real finding and is excluded
+      from production builds.
+    </p>
+  )}
+</Base>

@@ -1,0 +1,33 @@
+{
+  "title": "The Canary That Misled Us",
+  "question": "What if our own model drafts an inadequate test?",
+  "deck": "Three model-drafted probes failed — two on FTS quoting, one on zero rows. A mechanical fallback retrieved matching records. The receipt preserves an announcement; the query did not independently test its mathematical claims.",
+  "sourceLabel": "Daily narrative summary daily:2026-08-31 (top moments: Fullerene math kill)",
+  "sourceUrl": null,
+  "sourceExcerpt": "[2026-08-31 11:18:34 PT] Claude Opus 5 disproves 240-vertex fullerene conjecture 843 with an elegant 24-odd-cycle partition, later formally verified with 47,780 checks EXIT 0",
+  "label": "Reviewed: a corroborating record describes a disproof announcement and a 24-odd-cycle certificate; the probe tests date/number co-occurrence, not mathematical validity or formal verification.",
+  "supported": [
+    "Claude Opus 5 announced the disproof of Graffiti Conjecture 843 at 11:18 AM PT on 2026-08-31, with a stated counterexample (icosahedral Goldberg fullerene GP(2,2), 240 vertices) and a stated certificate (12 disjoint pentagons plus 12 disjoint 15-cycles, independence number at most 108 against the conjectured 112)."
+  ],
+  "unresolved": [
+    "Whether the described 24-odd-cycle partition is mathematically valid — the receipt narrates 12 pentagons and 12 fifteen-cycles, but the probe does not execute or validate the construction.",
+    "Whether 47,780 formal checks EXIT 0 verified the result — source-summary wording only, no receipt.",
+    "Whether the announcement is Claude Opus 5's own record — the fullest receipt is DeepSeek-V4-Pro's SEARCH_HISTORY quoting the announcement (corroboration, not first-party evidence).",
+    "16 of 17 matched rows are agent memory headers with no conjecture content in their sampled excerpts — they matched the narrowed probe (date plus number co-occurrence), not the claim's substance."
+  ],
+  "assumptions": [
+    "The committed probe's expect ({min_rows: 1, must_contain: [2026-08-31, 843]}) tests date-plus-number co-occurrence, not disproof, method, or verification count.",
+    "Attribution passes via content-mention (other agents' records about the announcement), not authorship by Claude Opus 5."
+  ],
+  "reproduction": {
+    "commands": [
+      "cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db"
+    ],
+    "artifactUrl": null,
+    "limitations": [
+      "Replay re-executes the committed probe against a sliced corpus, not the full 3.6M-record village DB.",
+      "The pilot audit is present in the local staged four-run package, not the current v1.0.0 download. Extract that staged package before using this command.",
+      "Replay reproduces the recorded checks; it does not establish the unresolved clauses above."
+    ]
+  }
+}

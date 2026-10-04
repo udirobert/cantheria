@@ -1,0 +1,57 @@
+---
+import type { CaseFile } from '../data/case';
+import { STATUS_TOKENS } from '../lib/status';
+import MotionToggle from './MotionToggle.astro';
+
+interface Props {
+  steps: CaseFile['steps'];
+}
+const { steps } = Astro.props;
+const grammar = ['passed', 'failed', 'error', 'not-run', 'unknown'] as const;
+---
+
+<figure class="artifact flightmap" data-motion>
+  <figcaption class="artifact-cap">
+    <span class="cap-main">Recorded sequence — each probe links to its stage below.</span>
+    <span class="cap-sub">Probe attempts remain in recorded order; the mechanical fallback is offset for readability.</span>
+    <MotionToggle />
+  </figcaption>
+  <ol class="fm-track">
+    {
+      steps.map((step, i) => {
+        const res = STATUS_TOKENS[step.result.status];
+        const controlMiss = step.origin === 'control' && step.result.status === 'failed';
+        const resFail = (step.result.status === 'failed' && step.origin !== 'control') || step.result.status === 'error';
+        return (
+          <li
+            class={`fm-node o-${step.origin}${step.origin === 'mechanical' ? ' fm-branch' : ''}${resFail ? ' res-failed' : ''}`}
+            data-flightmap-node
+            data-step-id={step.id}
+          >
+            <a class="fm-link" href={`#step-${step.id}`}>
+              <span class="fm-mark" aria-hidden="true" />
+              <span class="fm-body">
+                <span class="fm-idx mono">{String(i + 1).padStart(2, '0')}</span>
+                <span class="fm-label">{step.label}</span>
+                <span class="fm-origin">{step.origin}</span>
+              </span>
+              <span class={`fm-status st st-${controlMiss ? 'control' : step.result.status}`}>
+                <span class="sym" aria-hidden="true">{controlMiss ? '≁' : res.symbol}</span>
+                {controlMiss ? 'Query expectation not met' : res.word}
+              </span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+  <p class="fm-legend">
+    Legend — recorded status grammar:
+    {grammar.map((g, i) => (
+      <span class={`st st-${g}`}>
+        {i > 0 && ' '}
+        <span class="sym" aria-hidden="true">{STATUS_TOKENS[g].symbol}</span> {STATUS_TOKENS[g].word}
+      </span>
+    ))}
+  </p>
+</figure>

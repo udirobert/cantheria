@@ -17,6 +17,22 @@ import sqlite3
 from collections import Counter
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
+
+
+def _public_source_uri(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        u = urlsplit(value)
+    except ValueError:
+        return False
+    return (
+        u.scheme in ("http", "https")
+        and bool(u.hostname)
+        and u.username is None
+        and u.password is None
+    )
 
 
 def _receipts(claim: dict, db_path: Path | str | None) -> list[str]:
@@ -43,7 +59,17 @@ def _receipts(claim: dict, db_path: Path | str | None) -> list[str]:
                 conn.close()
         except sqlite3.Error:
             pass
-    return [f"`{rid}`" + (f" — {links[rid]}" if rid in links else "") for rid in ids]
+    return [
+        f"`{rid}`"
+        + (
+            f" — {links[rid]}"
+            if rid in links and _public_source_uri(links[rid])
+            else " — corpus-internal reference"
+            if rid in links
+            else ""
+        )
+        for rid in ids
+    ]
 
 
 def _section(title: str, lines: list[str]) -> str:
@@ -67,9 +93,13 @@ def _claim_lines(c: dict, db_path: Path | str | None) -> list[str]:
         if receipts:
             lines.append("- receipts:")
             lines.extend(f"  - {r}" for r in receipts)
-    reason = raw.get("dismiss_reason") or raw.get("note") or raw.get("backend_error")
-    if reason:
-        lines.append(f"- reason: {reason}")
+    if c.get("verdict") == "confirmed":
+        if raw.get("note"):
+            lines.append(f"- note: {raw['note']}")
+    else:
+        reason = raw.get("dismiss_reason") or raw.get("note") or raw.get("backend_error")
+        if reason:
+            lines.append(f"- reason: {reason}")
     hist = raw.get("probe_history") or []
     if hist:
         lines.append(f"- probe attempts logged: {len(hist)} (see journal.jsonl)")
@@ -86,6 +116,11 @@ def write_audit_report(
     verdicts = Counter(c.get("verdict") for c in claims)
     decided = verdicts.get("confirmed", 0) + verdicts.get("dismissed", 0)
     slop = verdicts.get("dismissed", 0) / decided if decided else 0.0
+    failing = (
+        f"{verdicts.get('dismissed', 0)}/{decided} ({slop:.0%})"
+        if decided
+        else "N/A (0 decidable claims)"
+    )
 
     parts = [
         "# Swarm audit report\n",
@@ -95,8 +130,11 @@ def write_audit_report(
             + ", ".join(f"{k} {v}" for k, v in sorted(verdicts.items()))
         ),
         "",
-        f"**Decided:** {decided}  **Slop rate:** {slop:.0%} "
-        "(dismissed / decided — claims the record could not support)",
+        f"**Decided:** {decided}  **Claims failing mechanical verification:** {failing}",
+        (
+            "*Decidable means confirmed or dismissed. Unverifiable and flaky outcomes are "
+            "excluded. A failed probe does not establish that the original claim is false.*"
+        ),
         "",
         (
             f"**Cost:** {result.get('llm_calls', '?')} model calls, "
@@ -104,10 +142,12 @@ def write_audit_report(
         ),
         "",
         (
-            "> An LLM proposes; the record decides. `unverifiable` claims were "
-            "quarantined — they assert something no mechanical probe can check. "
-            "`confirmed` claims carry receipts; every row below resolves to a "
-            "record in the corpus."
+            "> An LLM proposes; the record decides. `unverifiable` means the "
+            "pipeline did not mechanically decide the claim. "
+            "`confirmed` claims carry receipts; confirmed means the recorded "
+            "mechanical checks passed — it does not establish every clause of "
+            "the narrative. Public source links are shown where supplied; other "
+            "receipts retain their corpus record IDs."
         ),
         "",
     ]

@@ -61,19 +61,27 @@ citation depth, not breadth), `collusion` (wiki dump), `swarmtraces`
 
 ## The kill chain
 
-A claim is `confirmed` only when all four legs hold:
+A recorded `confirmed` verdict means the committed probe passed the
+implemented checks. Reports expose each check separately; a control may be
+`not run`. This is not proof of every clause in a narrative. Other outcomes
+and failed drafts remain in the journal.
 
-1. **Grounding** — the probe returns rows; every citation resolves to a
-   real `record_id`. Most LLM investigation claims die here.
-2. **Attribute** — matched rows bind the claimed agent(s) and time
-   window. Attribution was METR's heaviest lift; here it's mechanical.
-3. **Replicate** — pattern claims need ≥K independent matches (distinct
-   agents/days/threads); singular events need corroboration in ≥2 record
-   kinds (e.g. chat narration *and* a matching turn/event).
-4. **Control** — the same probe over a disjoint window/agent must NOT
-   match at a comparable rate. A probe that "finds" the pattern
-   everywhere proves nothing — same lesson as the benign-input control
-   run: it kills the false-positive, not the claim alone.
+1. **Grounding** — the probe returns rows. If citations are supplied, at
+   least one must resolve; the report shows the resolved count. This is not
+   an exhaustive citation-validity guarantee. Most LLM investigation claims
+   die here.
+2. **Attribute** — matched rows bind the claimed subject, author-or-mention,
+   and time window where specified. Attribution was METR's heaviest lift;
+   here it's mechanical.
+3. **Replicate** — pattern and coordination claims have minimum matched-row
+   counts. Distinctness or corroboration requirements apply only when
+   encoded in the committed probe expectations; repeated rows alone are not
+   independent evidence.
+4. **Control** — when drafted, a disjoint query over a disjoint
+   window/agent must not satisfy the same expectations. A probe that
+   "finds" the pattern everywhere proves nothing — same lesson as the
+   benign-input control run: this is a negative-control discrimination
+   check, not a calibrated false-positive-rate measure.
 
 Verdicts: `candidate` → `confirmed` \| `flaky` \| `dismissed` \|
 `unverifiable`. Interpretive claims ("the agents were frustrated") are
@@ -109,7 +117,8 @@ seatbelt needed — the probe can't write anything but its result.
 **Audit** — `cantheria audit --corpus records.db --claims summaries.jsonl`:
 decompose a document into atomic claims, probe each, report the
 verified/falsified split. The flagship demo: an audit of the dataset's
-own LLM-generated summaries — a measured slop rate, with receipts.
+own LLM-generated summaries — a measured claims-failing-verification
+rate, with receipts.
 
 **Hunt** — `cantheria hunt --corpus records.db`: hypothesize per
 segment (collusion, info-spread, misreported actions, record gaps),

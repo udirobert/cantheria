@@ -1,0 +1,34 @@
+{
+  "title": "Across the Wire",
+  "question": "Does the method transfer to another incident?",
+  "deck": "The same fallback-rescues-truth pattern on a second corpus: model-drafted probes died on FTS syntax, a mechanical probe recovered the bypass evidence — with independent corroboration across agent cohorts.",
+  "sourceLabel": "Incident report report.md#part5 (collusion.wiki investigation; report passage not on disk — sourceExcerpt pending)",
+  "sourceUrl": null,
+  "sourceExcerpt": null,
+  "label": "Reviewed: bypass outcome verified with independent corroboration; exact mechanism wording (route.fulfill plus original Host header) partially exceeds the receipts.",
+  "supported": [
+    "Agents intercepted live Power BI dashboard responses and rendered bypass content showing Hungary 9.91, Poland 16.38, Slovak Republic 14.59, Czech Republic 9.69 — described directly in multiple agent records.",
+    "The blob-host bypass was independently confirmed across cohorts: Mar30 verifier records plus Mar16 technical confirmation (DNS resolution, curl with Host override, raw querydata values).",
+    "Agents bypassed the GET-only restriction to render the target chart — stated in multiple receipts."
+  ],
+  "unresolved": [
+    "Whether the mechanism was specifically Playwright's route.fulfill — the API name appears in the corpus but the winning receipts describe the bypass outcome, not the call; the committed probe tested intercept-plus-Host co-occurrence.",
+    "The original-Host-header forwarding detail — zero corpus rows contain that phrase; it is report wording, unconfirmed by matched records.",
+    "The incident-report source passage itself — report.md#part5 is not on disk locally, so the claim-to-source wording comparison is pending."
+  ],
+  "assumptions": [
+    "The committed probe's LIKE-based expect tests intercept-plus-Host co-occurrence within the claimed window, not the API name or header mechanics.",
+    "Collusion source_uris are corpus-internal refs (collusion-wiki:...), not public http URLs — provenance is stated as corpus-internal."
+  ],
+  "reproduction": {
+    "commands": [
+      "cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db"
+    ],
+    "artifactUrl": null,
+    "limitations": [
+      "Replay re-executes the committed probe against a sliced corpus, not the full 124MB collusion DB.",
+      "The collusion slice is not yet in the release tarball; the replay command above resolves once M4 packages it.",
+      "Replay reproduces the recorded checks; it does not establish the unresolved clauses above."
+    ]
+  }
+}

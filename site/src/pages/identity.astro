@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import CanaryMark from '../components/CanaryMark.astro';
+import StatusMark from '../components/StatusMark.astro';
+
+const swatches: Array<[string, string, string]> = [
+  ['Ivory paper', '#f3f0e7', 'primary field'],
+  ['Ink', '#20251f', 'text, rules, marks'],
+  ['Canary', '#e6bc34', 'identity, selection, flight path'],
+  ['Teal', '#2e6f63', 'passed checks only'],
+  ['Brick', '#a8402e', 'failed checks only'],
+  ['Slate', '#5d6670', 'unknown, not run, muted'],
+];
+---
+
+<Base title="Identity" description="Cantheria identity sheet — mark, typography, palette, and status grammar.">
+  <section class="hero" style="padding-bottom:1rem;">
+    <p class="kicker">Identity sheet</p>
+    <h1 style="font-size:clamp(2rem,4.5vw,3.4rem);">Field journal, <em style="color:var(--canary-text)">precision instrument</em></h1>
+    <p class="lede">
+      Natural-history editorial warmth over forensic exactitude. Status is always carried by
+      words and symbols — never by color alone.
+    </p>
+  </section>
+
+  <div class="id-grid">
+    <div class="id-card">
+      <h3>The mark</h3>
+      <div class="mark-stage">
+        <CanaryMark size={120} />
+      </div>
+      <p style="font-size:0.85rem;color:var(--ink-soft);margin-top:0.8rem;">
+        An original geometric canary: a spine stroke, a wing of parallel strokes, and a tail.
+        The same strokes recur as probe-path branches and excerpt brackets — the feather
+        becomes a trace.
+      </p>
+    </div>
+
+    <div class="id-card type-sample">
+      <h3>Typography</h3>
+      <p class="display">Newsreader <em>display italic</em></p>
+      <p class="ui">
+        Source Sans 3 carries interface and explanatory prose — quiet, legible, and warm enough
+        to sit beside the serif.
+      </p>
+      <p class="mono-sample">IBM Plex Mono · record ids · timestamps · SQL · 2026-10-04T00:00Z</p>
+      <p style="font-size:0.75rem;color:var(--slate);margin-top:0.8rem;">
+        Self-hosted via Fontsource, latin subsets — Newsreader 400/500 with italics,
+        Source Sans 3 400/600/700, IBM Plex Mono 400/500. All three faces are SIL Open Font
+        License; license notices ship in <a href={`${import.meta.env.BASE_URL}licenses/FONTS.txt`}>public/licenses/FONTS.txt</a>.
+      </p>
+    </div>
+
+    <div class="id-card">
+      <h3>Palette</h3>
+      <div class="swatch-grid">
+        {swatches.map(([name, hex, use]) => (
+          <div>
+            <div class="swatch" style={`background:${hex};`}></div>
+            <p class="swatch-label">{name}<br />{hex}<br />{use}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="id-card">
+      <h3>Status grammar</h3>
+      <div class="status-samples grammar-plate">
+        <StatusMark status="passed" />
+        <StatusMark status="failed" />
+        <StatusMark status="error" />
+        <StatusMark status="not-run" />
+        <StatusMark status="unknown" />
+      </div>
+      <p style="font-size:0.85rem;color:var(--ink-soft);margin-top:1rem;">
+        Passed, failed, not run, and unknown are distinct states and are never merged. A
+        silent canary does not automatically mean a false claim.
+      </p>
+    </div>
+  </div>
+</Base>

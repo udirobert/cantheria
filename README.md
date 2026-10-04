@@ -32,17 +32,23 @@ corpus ──▶ S  segment: normalize sources → `records`; slice into
            receipts + the journal of everything rejected)
 ```
 
-A claim is `confirmed` only when all four legs hold — anything less stays a
-candidate in the journal:
+A recorded `confirmed` verdict means the committed probe passed the
+implemented checks. Reports expose each check separately; a control may be
+`not run`. This is not proof of every clause in a narrative. Other outcomes
+and failed drafts remain in the journal.
 
-1. **Grounding** — the probe returns rows; every citation resolves to a real
-   `record_id`. Most LLM investigation claims die here.
-2. **Attribute** — matched rows bind the claimed agent(s) and time window.
-3. **Replicate** — pattern claims need ≥K independent matches; singular
-   events need corroboration in ≥2 record kinds.
-4. **Control** — the same probe on a disjoint window must NOT match at a
-   comparable rate. A probe that finds the pattern everywhere proves
-   nothing — it measures the false-positive rate, not just the claim.
+1. **Grounding** — the probe returns rows. If citations are supplied, at
+   least one must resolve; the report shows the resolved count. This is not
+   an exhaustive citation-validity guarantee.
+2. **Attribute** — matched rows bind the claimed subject, author-or-mention,
+   and time window where specified.
+3. **Replicate** — pattern and coordination claims have minimum matched-row
+   counts. Distinctness or corroboration requirements apply only when
+   encoded in the committed probe expectations; repeated rows alone are not
+   independent evidence.
+4. **Control** — when drafted, a disjoint query must not satisfy the same
+   expectations. This is a negative-control discrimination check, not a
+   calibrated false-positive-rate measure.
 
 `interpretive` claims are quarantined `unverifiable` by construction — the
 pipeline separates what the record supports from what the model asserts.
@@ -50,9 +56,10 @@ pipeline separates what the record supports from what the model asserts.
 ## Live demo + keyless replay
 
 Report + receipts: **https://udirobert.github.io/cantheria/**
-(audit of 16 real AI Village daily summaries → 180 claims, 61% slop rate;
-hunt sweep over 25 agent-day segments → the d6-roll find; corpus 2 — the
-collusion.wiki incident report audited against its own 42k-record dataset).
+(audit of 16 real AI Village daily summaries → 180 claims, 61% of decidable
+claims failed verification; hunt sweep over 25 agent-day segments → the
+d6-roll find; corpus 2 — the collusion.wiki incident report audited
+against its own 42k-record dataset).
 
 Every verdict replays deterministically — the LLM drafted the probes, the
 corpus decides. No model, no key:
@@ -61,7 +68,9 @@ corpus decides. No model, no key:
 curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
 cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
-# → 180/180 verdict agreement in ~30s
+# → 180/180 verdict agreement in seconds
+cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db            # 24/24
+cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
 ```
 
 ## Quick start — swarm forensics

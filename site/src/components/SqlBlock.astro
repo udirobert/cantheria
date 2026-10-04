@@ -1,0 +1,20 @@
+---
+import { codeToHtml } from 'shiki';
+import { canaryHouseTheme } from '../lib/shiki-theme';
+import CopyText from './CopyText.astro';
+
+interface Props {
+  query: string;
+  id: string;
+}
+const { query, id } = Astro.props;
+const html = await codeToHtml(query, { lang: 'sql', theme: canaryHouseTheme });
+---
+
+<details class="sql-block" id={id}>
+  <summary>Recorded query — exact SQL</summary>
+  <div class="sql-view" set:html={html} />
+  <div class="sql-actions">
+    <CopyText text={query} label="Copy query" filename={`${id}.sql`} />
+  </div>
+</details>

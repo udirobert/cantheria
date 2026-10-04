@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import Murmuration from '../components/Murmuration.astro';
+import { loadCases, includeFixtures } from '../data/load-cases';
+import { VERDICT_TOKENS } from '../lib/status';
+
+const base = import.meta.env.BASE_URL;
+const cases = loadCases();
+const corpora = [...new Set(cases.map((c) => c.corpus))].sort();
+const verdicts = [...new Set(cases.map((c) => c.recordedVerdict ?? 'none'))].sort();
+---
+
+<Base title="Evidence bench" description="Search the published Cantheria case inventory.">
+  <section class="hero" style="padding-bottom:1rem;">
+    <div>
+    <p class="kicker">Evidence bench</p>
+    <h1 style="font-size:clamp(2.4rem,6vw,4.5rem);">Published <em>case</em> inventory</h1>
+    <p class="lede">
+      This index covers published case files{includeFixtures ? ', plus the layout specimen shown for preview' : ''} —
+      it is not a search of the full corpus. Without JavaScript, the complete list below
+      remains readable.
+    </p>
+    </div>
+  </section>
+
+  <Murmuration />
+
+  {
+    cases.length > 0 ? (
+      <>
+        <form class="bench-form" data-bench-form role="search" aria-label="Filter published cases">
+          <div class="field">
+            <label for="bench-q">Search text</label>
+            <input id="bench-q" name="q" type="search" placeholder="words in title or question" />
+          </div>
+          <div class="field">
+            <label for="bench-corpus">Corpus</label>
+            <select id="bench-corpus" name="corpus">
+              <option value="">All corpora</option>
+              {corpora.map((co) => <option value={co}>{co}</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="bench-verdict">Recorded verdict</label>
+            <select id="bench-verdict" name="verdict">
+              <option value="">All verdicts</option>
+              {verdicts.map((v) => (
+                <option value={v}>{v === 'none' ? 'No recorded verdict' : VERDICT_TOKENS[v as keyof typeof VERDICT_TOKENS]?.word ?? v}</option>
+              ))}
+            </select>
+          </div>
+        </form>
+        <p class="bench-count" data-bench-count aria-live="polite"></p>
+        <div class="case-list">
+          {cases.map((c, i) => (
+            <a
+              class="folio-entry"
+              href={`${base}cases/${c.id}/`}
+              data-case-row
+              data-search={`${c.title} ${c.question} ${c.claim.text}`}
+              data-corpus={c.corpus}
+              data-verdict={c.recordedVerdict ?? 'none'}
+            >
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <span>
+                <h3>{c.title}</h3>
+                <p class="q">{c.question}</p>
+              </span>
+              <span class="meta">
+                {c.recordedVerdict ? (
+                  <span class={`verdict-tag v-${c.recordedVerdict}`}>{VERDICT_TOKENS[c.recordedVerdict].word}</span>
+                ) : (
+                  <span class="verdict-tag v-none">No recorded verdict</span>
+                )}
+                <span>{c.corpus}</span>
+                {c.publication === 'fixture' && <span class="specimen-tag">Layout specimen</span>}
+              </span>
+            </a>
+          ))}
+        </div>
+        {includeFixtures && (
+          <p class="fixture-flag">Fixture preview includes specimen entries excluded from production.</p>
+        )}
+      </>
+    ) : (
+      <div class="empty-state">
+        <h3>Reviewed case files are being prepared.</h3>
+        <p>
+          The bench lists only published case files. Until the first reviewed case ships, the
+          underlying reports remain public:
+        </p>
+        <ul>
+          <li><a href="https://udirobert.github.io/cantheria/audit5/">Audit 5 report →</a></li>
+          <li><a href="https://udirobert.github.io/cantheria/hunt1/">Hunt 1 report →</a></li>
+          <li><a href="https://udirobert.github.io/cantheria/collusion/">Collusion report →</a></li>
+        </ul>
+      </div>
+    )
+  }
+</Base>

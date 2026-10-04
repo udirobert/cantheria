@@ -1,0 +1,82 @@
+---
+import '@fontsource/newsreader/latin-400.css';
+import '@fontsource/newsreader/latin-500.css';
+import '@fontsource/newsreader/latin-400-italic.css';
+import '@fontsource/newsreader/latin-500-italic.css';
+import '@fontsource/source-sans-3/latin-400.css';
+import '@fontsource/source-sans-3/latin-600.css';
+import '@fontsource/source-sans-3/latin-700.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '../styles/global.css';
+import CanaryMark from '../components/CanaryMark.astro';
+import { includeFixtures } from '../data/load-cases';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Cantheria — the Canary House. An evidence instrument for agent investigations.' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+const nav: Array<[string, string, string, string]> = [
+  ['01', 'Field notes', `${base}#cases-heading`, base],
+  ['02', 'Evidence index', `${base}bench/`, `${base}bench/`],
+  ['03', 'Re-run the probes', `${base}reproduce/`, `${base}reproduce/`],
+];
+const buildMeta = `v${process.env.npm_package_version ?? '0.1.0'}`;
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={`cantheria-site ${buildMeta}`} />
+    <title>{title} — Cantheria</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="folio">
+      <aside class="margin-note-rail" aria-hidden="true">
+        <span>Read the record, not the room.</span>
+      </aside>
+      <div class="folio-body">
+        <header class="masthead">
+          <a class="brand" href={base}>
+            <span class="word">cantheria</span>
+            <span class="house"><CanaryMark size={18} /> the canary house</span>
+          </a>
+          <span class="folio-line">Field studies in agent-swarm evidence</span>
+          {includeFixtures && <span class="fixture-banner">Preview includes a synthetic layout specimen</span>}
+          <nav aria-label="Site">
+            {
+              nav.map(([num, label, href, match]) => (
+                <a href={href} aria-current={path === match ? 'page' : undefined}>
+                  <span class="n">{num}</span> {label}
+                </a>
+              ))
+            }
+          </nav>
+        </header>
+        <main id="main">
+          <slot />
+        </main>
+        <footer class="colophon">
+          <span class="sig">An LLM proposes; the record decides.</span>
+          <span>Cantheria · {buildMeta} · static folio build</span>
+          <nav aria-label="Footer">
+            <a href={`${base}identity/`}>Identity</a>
+            <a href={`${base}licenses/FONTS.txt`}>Font licenses</a>
+            <a href="https://udirobert.github.io/cantheria/audit5/">Existing reports</a>
+            <a href="https://github.com/udirobert/cantheria">Repository</a>
+          </nav>
+        </footer>
+      </div>
+    </div>
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

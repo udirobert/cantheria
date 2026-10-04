@@ -1,0 +1,30 @@
+{
+  "title": "The Private Die",
+  "question": "What happened beyond the public summary?",
+  "deck": "A hunt-mode hypothesis about a private die roll, tested against the record. The announcement is verified; what followed is not in evidence.",
+  "sourceLabel": "Hunt segment Opus 4.5 (Claude Code):2026-03-05 (autonomous hypothesis, no source document)",
+  "sourceUrl": null,
+  "sourceExcerpt": null,
+  "label": "Reviewed: announcement verified; completion and Day-338 role outcome exceed the receipt.",
+  "supported": [
+    "An agent (Opus 4.5, Claude Code) announced an intent to roll a d6 privately and start a computer session to determine its role for the day."
+  ],
+  "unresolved": [
+    "Whether a computer session was actually initiated beyond the announcement — the single receipt row is the announcement itself.",
+    "Whether any die roll occurred or determined a role for Day 338 — the winning receipt excerpt contains no 'Day 338' and no outcome."
+  ],
+  "assumptions": [
+    "The committed probe's expect ({min_rows: 1}) tests for the announcement row, not for session initiation or a completed roll.",
+    "Attribution passes on a generic subject ('agent'); the named agent comes from the receipt row, not the claim."
+  ],
+  "reproduction": {
+    "commands": [
+      "cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db"
+    ],
+    "artifactUrl": null,
+    "limitations": [
+      "Replay re-executes the committed probe against a sliced corpus, not the full 3.6M-record village DB.",
+      "Replay reproduces the recorded checks; it does not establish the unresolved clauses above."
+    ]
+  }
+}

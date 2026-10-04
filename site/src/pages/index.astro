@@ -1,0 +1,187 @@
+---
+import Base from '../layouts/Base.astro';
+import CanaryPlate from '../components/CanaryPlate.astro';
+import MotionToggle from '../components/MotionToggle.astro';
+import ReceiptProvenance from '../components/ReceiptProvenance.astro';
+import { loadCases } from '../data/load-cases';
+import { resolveAnnotations, annotateHtml } from '../lib/anchors';
+import { VERDICT_TOKENS } from '../lib/status';
+
+const base = import.meta.env.BASE_URL;
+const cases = loadCases();
+const reviewed = cases.filter((c) => c.publication === 'reviewed');
+const primary =
+  reviewed.find((c) => c.id === 'private-die') ??
+  reviewed[0] ??
+  cases.find((c) => c.publication === 'fixture');
+const firstReceipt = primary?.receipts[0];
+const receiptRes = firstReceipt ? resolveAnnotations(firstReceipt.excerpt, firstReceipt.annotations) : [];
+const receiptSegs = firstReceipt ? annotateHtml(firstReceipt.excerpt, receiptRes) : [];
+const verdict = primary?.recordedVerdict ? VERDICT_TOKENS[primary.recordedVerdict] : null;
+---
+
+<Base title="The Canary House">
+  <section class="hero house-opening">
+    <div>
+      <p class="kicker">CANTHERIA / THE CANARY HOUSE</p>
+      <h1>
+        <span class="l1">A house for</span>
+        <span class="l2">inconvenient</span>
+        <span class="l3">evidence.</span>
+      </h1>
+      <p class="lede">
+        Agents tell stories. We send small, executable tests into the record — and keep
+        what they actually establish.
+      </p>
+      <p class="thesis">An LLM proposes; the record decides.</p>
+      <p class="caution">A failed search is not proof of a false claim.</p>
+      <div class="hero-links">
+        {primary && (
+          <a href={`${base}cases/${primary.id}/`}>Follow this claim through the record ↗</a>
+        )}
+        <a class="tiny" href={`${base}reproduce/`}>Inspect the reproducibility recipe</a>
+      </div>
+    </div>
+    <figure class="plate artifact" data-motion data-motion-once="true">
+      <CanaryPlate />
+      <figcaption>
+        Canary study / original illustration
+        <span class="sub">An illustration, not a map of corpus activity</span>
+        <MotionToggle />
+      </figcaption>
+    </figure>
+  </section>
+
+  <svg class="flight-thread artifact" data-motion data-motion-once="true" aria-hidden="true" viewBox="0 0 400 60">
+    <path class="thread" pathLength="1" d="M380 8 Q300 40 210 30 Q120 20 40 44" stroke="var(--canary-deep)" stroke-width="1.8" fill="none" />
+    <path class="thread-head" d="M34 40 L46 44 L36 50" stroke="var(--canary-deep)" stroke-width="1.8" fill="none" />
+  </svg>
+
+  {
+    primary ? (
+      <section class="field-note" aria-labelledby="primary-note">
+        <span class="fn-label">Open field note{primary.publication === 'fixture' ? ' · layout specimen, not a real finding' : ''}</span>
+        <h2 id="primary-note">{primary.title}</h2>
+        <div class="spread">
+          <div>
+            <p class="col-label">The claim</p>
+            <blockquote class="claim-quote">“{primary.claim.text}”</blockquote>
+            <p class="claim-src">
+              {primary.claim.sourceLabel} · claim id <span class="mono">{primary.claim.id}</span>
+            </p>
+            <div class="verdict-line">
+              {verdict ? (
+                <>
+                  <span class="v-word">Recorded verdict: {verdict.word}</span>
+                  <span class="v-note">{verdict.note}</span>
+                </>
+              ) : (
+                <span class="v-word">Recorded verdict: none</span>
+              )}
+            </div>
+          </div>
+          <div>
+            <p class="col-label">The receipt</p>
+            {firstReceipt ? (
+              <>
+                <blockquote class="receipt-quote">
+                  {receiptSegs.map((seg) =>
+                    seg.kind === 'mark' ? <mark title={seg.label ?? undefined} set:html={seg.html} /> : <Fragment set:html={seg.html} />
+                  )}
+                </blockquote>
+                {receiptRes.some((r) => r.status === 'ok') && (
+                  <ul class="annotation-legend">
+                    {receiptRes.filter((r) => r.status === 'ok').map((r) => (
+                      <li>
+                        <b>{r.annotation.label}</b>
+                        <span class="mono"> — “{r.annotation.exact}”</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {receiptRes.filter((r) => r.status !== 'ok').map((r) => (
+                  <p class="anchor-warn">
+                    annotation “{r.annotation.label}” could not be anchored ({r.status}); shown unhighlighted
+                  </p>
+                ))}
+                <ReceiptProvenance
+                  receipt={firstReceipt}
+                  corpus={primary.corpus}
+                  sourceArtifact={primary.run.sourceArtifact}
+                  publication={primary.publication}
+                />
+              </>
+            ) : (
+              <p class="empty-state" style="padding:1.4rem;">No receipt recorded for this case.</p>
+            )}
+          </div>
+        </div>
+        <div class="margin-review">
+          <h3>Editorial review · {primary.review.label}</h3>
+          <div class="review-cols">
+            <div>
+              <h4>Supported by the record</h4>
+              <ul>
+                {primary.review.supported.slice(0, 2).map((s) => <li>{s}</li>)}
+              </ul>
+            </div>
+            <div>
+              <h4>Unresolved</h4>
+              <ul>
+                {primary.review.unresolved.slice(0, 2).map((s) => <li>{s}</li>)}
+              </ul>
+            </div>
+          </div>
+          <a class="more-review" href={`${base}cases/${primary.id}/`}>Full field note and complete review ↗</a>
+        </div>
+      </section>
+    ) : (
+      <section class="field-note">
+        <div class="empty-state" id="preparing">
+          <h3>Reviewed case files are being prepared.</h3>
+          <p>
+            No published case files have been released yet. The evidence pipeline is unchanged
+            and already public — you can inspect the existing reports and artifacts while
+            reviewed cases are being clause-checked against their receipts.
+          </p>
+          <ul>
+            <li><a href="https://udirobert.github.io/cantheria/audit5/">Audit 5 report →</a></li>
+            <li><a href="https://udirobert.github.io/cantheria/hunt1/">Hunt 1 report →</a></li>
+            <li><a href="https://udirobert.github.io/cantheria/collusion/">Collusion report →</a></li>
+            <li><a href="https://github.com/udirobert/cantheria">Source and releases →</a></li>
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="contents" aria-labelledby="cases-heading">
+    <div class="c-head" id="cases-heading">
+      <span class="no">№</span>
+      <h2>Field investigations</h2>
+      <span class="note">
+        {reviewed.length > 0
+          ? 'Reviewed published cases' + (cases.length > reviewed.length ? ', plus a layout specimen' : '')
+          : 'Published case files appear here once reviewed'}
+      </span>
+    </div>
+    {
+      cases.map((c, i) => (
+        <a class="folio-entry" href={`${base}cases/${c.id}/`}>
+          <span class="num">{String(i + 1).padStart(2, '0')}</span>
+          <span>
+            <h3>{c.title}</h3>
+            <p class="q">{c.question}</p>
+          </span>
+          <span class="meta">
+            <span class={`verdict-tag v-${c.recordedVerdict ?? 'none'}`}>
+              Recorded: {c.recordedVerdict ? VERDICT_TOKENS[c.recordedVerdict].word : 'No recorded verdict'}
+            </span>
+            <span>{c.corpus}</span>
+            {c.publication === 'fixture' && <span class="specimen-tag">Layout specimen</span>}
+          </span>
+        </a>
+      ))
+    }
+  </section>
+</Base>

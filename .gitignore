@@ -28,6 +28,12 @@ reports/
 *.npy
 *.jsonl
 
+# Derived presentation inputs — replay slices + staged demo tarball.
+# Rebuildable from results.json + corpus via `cantheria slice-corpus`;
+# sha256 hashes recorded in presentation/EVIDENCE_BASELINE.md.
+presentation/inputs/*.db
+presentation/inputs/*.tar.gz
+
 # Tooling caches
 .pytest_cache/
 .ruff_cache/
