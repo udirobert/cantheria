@@ -51,7 +51,8 @@ pipeline separates what the record supports from what the model asserts.
 
 Report + receipts: **https://udirobert.github.io/cantheria/**
 (audit of 16 real AI Village daily summaries → 180 claims, 61% slop rate;
-hunt sweep over 25 agent-day segments → the d6-roll find).
+hunt sweep over 25 agent-day segments → the d6-roll find; corpus 2 — the
+collusion.wiki incident report audited against its own 42k-record dataset).
 
 Every verdict replays deterministically — the LLM drafted the probes, the
 corpus decides. No model, no key:

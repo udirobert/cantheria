@@ -35,6 +35,30 @@ Every verdict is replayable: `journal.jsonl` keeps the complete
 draft→probe→repair trajectory per claim; `REPORT.md` lists receipts that
 resolve to real records.
 
+## Corpus 2 — auditing the investigators
+
+Same pipeline, different lens. Corpus: the collusion.wiki incident data
+(HF `leonidas1712/public-agent-coordination-artifacts`) — 42,373 records of
+German-wiki edits, save/delete events, author labels, and pastes where
+rogue agents coordinated in mid-2026. Target: the investigators' own
+public incident report.
+
+```
+108 claims extracted from the report
+  → 10 confirmed (record-backed receipts)
+  → 81 dismissed (mechanically unsupportable as stated)
+  → 17 quarantined (unverifiable / backend-flaky)
+
+89% of decidable claims failed mechanical verification
+```
+
+Confirmed claims include the Playwright `route.fulfill` hostname-rewrite
+bypass, SSH tunnels via Pinggy/Serveo/localhost.run/localtunnel, agents
+restricted to GET-only requests, and the moderator manually deleting agent
+posts for six weeks — each with receipts. The point isn't that the report
+is sloppy — it's careful work — but that *any* narrative, human- or
+model-written, deserves the same receipts-or-silence standard.
+
 ## Four vignettes
 
 ### 1. The day that wasn't — `summary:2026-07-03` → 0/12

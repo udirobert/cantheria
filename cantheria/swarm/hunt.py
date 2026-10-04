@@ -365,6 +365,14 @@ def _needle_counts(db_path: Path | str, needles: list[str]) -> dict[str, int]:
                         "SELECT COUNT(*) FROM records_fts WHERE records_fts MATCH ?",
                         (f'"{n}"',),
                     ).fetchone()[0]
+                    if counts[n] == 0:
+                        # FTS tokenization misses substrings of compound
+                        # tokens (ZZZ inside LangTestZZZ3) — LIKE decides
+                        counts[n] = conn.execute(
+                            "SELECT COUNT(*) FROM records"
+                            " WHERE content LIKE ? OR thread LIKE ? OR agent_id LIKE ?",
+                            (f"%{n}%", f"%{n}%", f"%{n}%"),
+                        ).fetchone()[0]
                 except sqlite3.Error:
                     pass
         finally:
@@ -407,8 +415,9 @@ def _normalize_expect(claim: Claim, expect: dict, db_path: Path | str | None = N
 
 
 def _pair_cooccur(db_path: Path | str, a: str, b: str) -> int:
-    """Non-summary records containing both terms — rare pairs that only
-    co-occur inside summaries are the audited document echoing itself."""
+    """Non-summary records containing both terms (FTS count — fast, used
+    for ranking). Rare pairs that only co-occur inside summaries are the
+    audited document echoing itself."""
     try:
         conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=10)
         try:
@@ -417,6 +426,25 @@ def _pair_cooccur(db_path: Path | str, a: str, b: str) -> int:
                 " AND r.rowid IN (SELECT rowid FROM records_fts"
                 " WHERE records_fts MATCH ?)",
                 (f'"{a}" AND "{b}"',),
+            ).fetchone()[0]
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return 0
+
+
+def _pair_cooccur_like(db_path: Path | str, a: str, b: str) -> int:
+    """The same check with substring semantics — FTS5 treats 'ZZZ' inside
+    'LangTestZZZ3' as a single token and misses it; LIKE does not. One
+    seqscan per candidate, so only used to verify ranked pairs."""
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=10)
+        try:
+            return conn.execute(
+                "SELECT COUNT(*) FROM records r WHERE r.kind != 'summary'"
+                " AND (r.content LIKE ? OR r.thread LIKE ? OR r.agent_id LIKE ?)"
+                " AND (r.content LIKE ? OR r.thread LIKE ? OR r.agent_id LIKE ?)",
+                tuple(f"%{t}%" for t in (a, a, a, b, b, b)),
             ).fetchone()[0]
         finally:
             conn.close()
@@ -440,23 +468,28 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
     if not hits:
         return None
     terms = hits[:1]
-    best: tuple[int, list[str]] | None = None
-    for a, b in combinations(hits[:8], 2):
-        n = _pair_cooccur(db_path, a, b)
-        if n and (best is None or n < best[0]):
-            best = (n, [a, b])
-    if best:
-        terms = best[1]
+    ranked = sorted(
+        (n, a, b) for a, b in combinations(hits[:8], 2) if (n := _pair_cooccur(db_path, a, b))
+    )
+    # verify the best-ranked pairs under substring semantics — FTS ranks
+    # fast, but its tokenization misses terms embedded in compound names
+    for _, a, b in ranked[:3]:
+        if _pair_cooccur_like(db_path, a, b):
+            terms = [a, b]
+            break
 
     def esc(s: str) -> str:
         return s.replace("'", "''")
 
-    match = " AND ".join(f'"{t}"' for t in terms)
-    clauses = [
-        "r.kind != 'summary'",
-        "r.rowid IN (SELECT rowid FROM records_fts"  # noqa: S608
-        f" WHERE records_fts MATCH '{match}')",
+    # LIKE, not MATCH: the claim's vocabulary may be a substring of a
+    # compound token (ZZZ inside LangTestZZZ3, an agent handle, a page
+    # title). Substring semantics is what the claim asserts.
+    term_clauses = [
+        f"(r.content LIKE '%{esc(t)}%' OR r.thread LIKE '%{esc(t)}%'"
+        f" OR r.agent_id LIKE '%{esc(t)}%')"
+        for t in terms
     ]
+    clauses = ["r.kind != 'summary'", *term_clauses]
     lo, hi = (claim.window or {}).get("start"), (claim.window or {}).get("end")
     if lo and hi:
         # day-level claims surface as narrow windows (e.g. "6/19" → a 2h
@@ -515,6 +548,11 @@ async def audit_claim(
     """One claim through the evidence chain, with the repair loop the PoC
     pipeline proved out. Returns the claim — verdict carries the result."""
     if claim.verdict is Verdict.unverifiable or budget.spent:
+        if claim.verdict is Verdict.candidate:
+            # budget ran out before this claim was ever tested — candidate
+            # is a transient state, not a terminal verdict
+            claim.verdict = Verdict.unverifiable
+            claim.raw["note"] = "budget exhausted before a probe could run"
         journal.log(claim, claim.verdict.value)
         return claim
 

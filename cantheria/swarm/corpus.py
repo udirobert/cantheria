@@ -38,11 +38,13 @@ CREATE INDEX IF NOT EXISTS idx_records_ts    ON records(ts_unix);
 CREATE INDEX IF NOT EXISTS idx_records_corpus_kind ON records(corpus, kind);
 """
 
-# External-content FTS5: indexes records.content without duplicating the
-# text (the corpus table owns the bytes; the fts table owns only the index).
+# External-content FTS5: indexes records.content + records.thread without
+# duplicating the text (the corpus table owns the bytes; the fts table owns
+# only the index). thread is indexed because record *names* — wiki page
+# titles, room names — carry evidence the body never repeats.
 FTS_SCHEMA = """
 CREATE VIRTUAL TABLE IF NOT EXISTS records_fts
-USING fts5(content, content='records', content_rowid='rowid');
+USING fts5(content, thread, content='records', content_rowid='rowid');
 """
 
 COLS = (
@@ -136,8 +138,8 @@ class Corpus:
         with self._conn:
             self._conn.executescript(FTS_SCHEMA)
             cur = self._conn.execute(
-                "INSERT INTO records_fts(rowid, content)"  # noqa: S608 — clause arg is internal
-                f" SELECT rowid, content FROM records WHERE {where}"
+                "INSERT INTO records_fts(rowid, content, thread)"  # noqa: S608 — clause arg is internal
+                f" SELECT rowid, content, thread FROM records WHERE {where}"
             )
             return cur.rowcount
 

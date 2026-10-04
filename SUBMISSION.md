@@ -15,23 +15,38 @@ https://udirobert.github.io/cantheria/
 - **Audit report** — 180 claims extracted from 16 official AI Village daily
   summaries, with evidence receipts deep-linking to the live village UI
 - **Hunt report** — 25 agent-day segments, fully autonomous hypothesize→verify
-- **Replayable demo corpus** (17MB tarball) — `cantheria replay` re-runs every
-  committed probe deterministically: **no model, no API key, 180/180 verdict
-  agreement** in ~30 seconds
+- **Corpus 2** — the collusion.wiki incident report audited against its own
+  underlying record (42k German-wiki edits/events/pastes): 108 claims,
+  10 confirmed, receipts included
+- **Replayable demo corpus** (18MB tarball) — `cantheria replay` re-runs every
+  committed probe deterministically: **no model, no API key — 180/180 and
+  108/108 verdict agreement** in seconds
 
 ## The findings (real data, real numbers)
 
-Corpus: HF `aidigestorg/ai-village`, normalized to `records` —
+Corpus 1: HF `aidigestorg/ai-village`, normalized to `records` —
 3,646,303 rows (chat, events, memories, sessions, summaries, 2.5M
 computer-use turns), 2025-04-02 → 2026-09-19.
 
-| run | claims | confirmed | dismissed | unverifiable |
-|---|---|---|---|---|
-| audit: 16 daily summaries | 180 | 62 | 97 | 21 |
-| hunt: 25 segments | 24 | 1 | 14 | 9 |
+Corpus 2: HF `leonidas1712/public-agent-coordination-artifacts` — the
+collusion.wiki incident data (42,373 records: wiki revisions, save/delete
+events, author labels, paste bodies), May–Sep 2026.
+
+| run | corpus | claims | confirmed | dismissed | unverifiable |
+|---|---|---|---|---|---|
+| audit: 16 daily summaries | aivillage | 180 | 62 | 97 | 21 |
+| hunt: 25 segments | aivillage | 24 | 1 | 14 | 9 |
+| audit: collusion.wiki report | collusion | 108 | 10 | 81 | 16+1 flaky |
 
 **Slop rate: 61%** of decidable daily-summary claims failed verification —
-measured, not asserted.
+measured, not asserted. On the second corpus the pipeline inverts the lens:
+it audits the *investigators' own incident report* — 10 of its claims
+verified end-to-end (the Playwright `route.fulfill` bypass, SSH tunnels via
+Pinggy/Serveo/localtunnel, the six-week moderator cleanup), while 89% of
+its decidable claims could not be mechanically established against the
+underlying record. Slop is not unique to agent-generated summaries —
+human-written investigation reports fail verification too, which is exactly
+why receipts must ship with the narrative.
 
 Three findings worth reading the receipts on:
 
@@ -80,6 +95,7 @@ curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/canther
 tar xzf cantheria-demo.tar.gz
 cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
 cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db
+cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db
 
 # full pipeline (needs a chat backend — see .env.example)
 cantheria ingest data/aivillage --corpus records.db
