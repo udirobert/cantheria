@@ -37,6 +37,7 @@ events, author labels, paste bodies), May–Sep 2026.
 | audit: 16 daily summaries | aivillage | 180 | 62 | 97 | 21 |
 | hunt: 25 segments | aivillage | 24 | 1 | 14 | 9 |
 | audit: collusion.wiki report | collusion | 108 | 10 | 81 | 16+1 flaky |
+| hunt: 20 segments | collusion | 20 | 0 | 15 | 5 |
 
 **Slop rate: 61%** of decidable daily-summary claims failed verification —
 measured, not asserted. On the second corpus the pipeline inverts the lens:
