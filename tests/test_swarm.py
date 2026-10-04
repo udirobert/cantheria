@@ -358,3 +358,36 @@ async def test_fallback_probe_also_dismisses_fabrication(corpus, tmp_path):
         claim, corpus, _BadSIE(), LocalOracle(), Journal(tmp_path / "j4.jsonl"), SwarmBudget()
     )
     assert claim.verdict is Verdict.dismissed
+
+
+@pytest.mark.asyncio
+async def test_replay_reproduces_verdicts_on_slice(corpus, tmp_path):
+    """The keyless-verification story: slice a corpus to the rows a run
+    depended on, and every verdict replays identically with no model."""
+    from cantheria.swarm.replay import replay, slice_corpus
+
+    db = Corpus(corpus)
+    db.build_fts()
+    db.close()
+
+    claim = _claim(
+        kind=ClaimKind.event,
+        probe=Probe(
+            query=(
+                "SELECT record_id, agent_id, ts, content FROM records "
+                "WHERE content LIKE '%s3cr3t-fl4g%'"
+            ),
+            expect={"min_rows": 1},
+        ),
+    )
+    claim = await LocalOracle().validate(claim, corpus)
+    assert claim.verdict is Verdict.confirmed
+
+    result = {"claims": [json.loads(claim.model_dump_json())]}
+    slice_db = tmp_path / "slice.db"
+    n = slice_corpus(corpus, result, slice_db)
+    assert n >= 2  # the two flag-bearing records
+
+    claims, mismatches = await replay(result, slice_db)
+    assert not mismatches
+    assert claims[0].verdict is Verdict.confirmed

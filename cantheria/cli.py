@@ -360,7 +360,53 @@ def audit_report_cmd(
     dest = out or results.parent / "REPORT.md"
     db = corpus or Path(result.get("corpus", ""))
     write_audit_report(result, dest, db if db.exists() else None)
+    if dest.suffix == ".md":
+        from cantheria.swarm.report_html import write_audit_html
+
+        write_audit_html(result, dest.with_suffix(".html"), db if db.exists() else None)
     typer.echo(f"report → {dest}")
+
+
+@app.command("replay")
+def replay_cmd(
+    results: Path = typer.Argument(..., help="results.json from `cantheria audit`"),
+    corpus: Path = typer.Option(..., help="records.db to re-verify against"),
+) -> None:
+    """Re-run every committed probe deterministically — no model, no keys.
+
+    The thesis made literal: the LLM drafted the probes, but the verdicts
+    must reproduce mechanically or they never meant anything."""
+    from cantheria.swarm.replay import replay
+
+    result = json.loads(results.read_text())
+    claims, mismatches = asyncio.run(replay(result, corpus))
+    from collections import Counter
+
+    counts = Counter(c.verdict.value for c in claims)
+    typer.echo(f"{len(claims)} claims replayed → {dict(counts)}")
+    typer.echo(f"verdict agreement: {len(claims) - len(mismatches)}/{len(claims)}")
+    for claim, recorded in mismatches:
+        typer.echo(
+            f"  MISMATCH {claim.id[:12]}: recorded={recorded.value} "
+            f"replayed={claim.verdict.value} — {claim.text[:90]}"
+        )
+    if mismatches:
+        raise typer.Exit(code=1)
+
+
+@app.command("slice-corpus")
+def slice_corpus_cmd(
+    corpus: Path = typer.Argument(..., help="full records.db"),
+    results: Path = typer.Option(..., help="results.json whose evidence to keep"),
+    out: Path = typer.Option(..., help="path for the sliced records.db"),
+) -> None:
+    """Extract just the rows a run's verdicts depend on — the ship-able
+    corpus for `cantheria replay`."""
+    from cantheria.swarm.replay import slice_corpus
+
+    result = json.loads(results.read_text())
+    n = slice_corpus(corpus, result, out)
+    typer.echo(f"{n} records → {out}")
 
 
 if __name__ == "__main__":
