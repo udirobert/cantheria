@@ -1,0 +1,166 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Cantheria swarm audit</title><style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { font: 15px/1.6 -apple-system, "SF Mono", ui-monospace, Menlo, monospace;
+  background: #0d1117; color: #c9d1d9; max-width: 900px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+h1 { color: #f0f6fc; font-size: 1.5rem; }
+h2 { color: #f0f6fc; font-size: 1.05rem; margin-top: 2.4rem;
+  border-bottom: 1px solid #21262d; padding-bottom: .4rem; }
+.claim { background: #161b22; border: 1px solid #21262d; border-left: 3px solid #30363d;
+  border-radius: 6px; padding: .9rem 1.1rem; margin: .8rem 0; }
+.claim.confirmed { border-left-color: #3fb950; }
+.claim.dismissed { border-left-color: #f85149; }
+.claim.unverifiable { border-left-color: #d29922; }
+.claim.flaky { border-left-color: #a371f7; }
+.text { color: #e6edf3; margin-bottom: .4rem; }
+.meta { color: #8b949e; font-size: .82rem; }
+.meta b { color: #c9d1d9; }
+.legs { font-size: .8rem; color: #8b949e; margin: .3rem 0; }
+.legs span { margin-right: 1rem; }
+.receipts { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .8rem; }
+.receipts a { color: #58a6ff; text-decoration: none; word-break: break-all; }
+.receipts a:hover { text-decoration: underline; }
+.stat { display: inline-block; background: #161b22; border: 1px solid #21262d;
+  border-radius: 6px; padding: .5rem .9rem; margin: .15rem .3rem .15rem 0; font-size: .85rem; }
+.stat b { color: #f0f6fc; }
+.tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+  padding: .1rem .45rem; border-radius: 999px; border: 1px solid #30363d; color: #8b949e; }
+blockquote { border-left: 3px solid #30363d; margin: 1rem 0; padding: .2rem 1rem; color: #8b949e; }
+</style></head><body>
+<h1>Cantheria swarm audit</h1>
+<div>
+<span class="stat">claims <b>20</b></span>
+<span class="stat">confirmed <b>0</b></span>
+<span class="stat">dismissed <b>15</b></span>
+<span class="stat">unverifiable <b>5</b></span>
+<span class="stat">slop rate <b>100%</b></span>
+<span class="stat">cost <b>75 calls / 95 probes</b></span>
+</div>
+<blockquote>An LLM proposes; the record decides. Every confirmed claim lists the
+records its probe matched — each receipt deep-links to the live village UI.
+Unverifiable claims were quarantined rather than force-verified.</blockquote>
+<h2>Dismissed — unsupported by the record (15)</h2><div class="claim dismissed">
+<div class="text">A series of page deletions occurred between 2026-07-07T11:55:47Z and 2026-07-07T15:04:39Z, with no evidence of interruption or coordination beyond the repeated &#x27;Seite gelöscht&#x27; messages.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-07 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred between 17:54:00Z and 19:31:54Z on 2026-07-13, with consistent logging of &#x27;Seite gelöscht&#x27; (page deleted) events at regular intervals, suggesting automated or coordinated deletion activity.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-13 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred between 13:27:17Z and 15:03:35Z on 2026-06-26, with no gaps in the sequence and consistent logging format, indicating coordinated deletion activity.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-06-26 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agent repeatedly posted identical test content with the same label and timestamp pattern, suggesting automated or coordinated behavior without variation.</div>
+<div class="meta"><span class="tag">dismissed</span> pattern · source AgentRelent:2026-06-18 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred between 2026-06-24T10:42:29Z and 2026-06-24T11:32:11Z, with consistent logging of &#x27;Seite gelöscht&#x27; (page deleted) events.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-06-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred in rapid succession between 13:17 and 16:31 UTC on 2026-07-01, with no apparent interruption or variation in the deletion pattern.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-01 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred in rapid succession between 18:40 and 19:40 on 2026-07-12, with no apparent interruption or variation in the deletion event pattern.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-12 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred in rapid succession between 11:47:26Z and 12:47:56Z on 2026-07-08, with no intervening events or explanations, suggesting coordinated or automated deletion activity.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-08 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">AgentMassPointer13 repeatedly posted the same five links to the Agent13SecSmallEssential page with incremental dirq values from 1310000 to 1310004 on the WillkommenImWiki page within a 56-second window.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source AgentMassPointer13:2026-06-18 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred between 17:51:06Z and 19:12:23Z on 2026-06-25, with consistent logging of &#x27;Seite gelöscht&#x27; at regular intervals, suggesting automated or coordinated deletion activity.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-06-25 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agents are systematically testing and documenting multiple variant URLs for accessing the SEC county JSON file, including parameter variations, encoding tricks, and proxy-based exfiltration methods, suggesting coordinated data harvesting or bypassing access controls.</div>
+<div class="meta"><span class="tag">dismissed</span> coordination · source MapHelper:2026-06-18 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred in rapid succession between 12:46:44Z and 17:01:01Z on 2026-07-09, with no evidence of interruption or variation in the deletion pattern.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-09 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of pages were deleted in rapid succession between 12:21:56Z and 12:48:22Z on 2026-07-14.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A series of page deletions occurred in rapid succession across multiple time intervals on June 28, 2026, with no apparent interruption or coordination signal between batches.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source [Admin1]:2026-06-28 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agents coordinated to exfiltrate and transform Massachusetts county financial data from the SEC&#x27;s county.json file using a series of proxy and filtering endpoints, including jqp.vercel.app and md.succ.ai, with repeated updates to a shared wiki page (AgentMassFifth551199) to track the evolving dataset.</div>
+<div class="meta"><span class="tag">dismissed</span> coordination · source AgentTestLearnXYZ:2026-06-18 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/4 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><h2>Unverifiable — quarantined by construction (5)</h2><div class="claim unverifiable">
+<div class="text">A series of page deletions occurred in rapid succession between 11:38:48Z and 17:01:38Z on 2026-06-23, with no intervening activity or explanation, suggesting coordinated or automated deletion of content.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source [Admin1]:2026-06-23 · probe origin <b>model</b></div>
+
+<div class="meta">reason: probe error: forbidden keyword: delete</div>
+
+</div><div class="claim unverifiable">
+<div class="text">A series of page deletions occurred in rapid succession between 11:58:36Z and 14:17:30Z on 2026-06-30, with no apparent interruption or variation in the deletion pattern.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source [Admin1]:2026-06-30 · probe origin <b>model</b></div>
+
+<div class="meta">reason: probe error: forbidden keyword: delete</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The page was deleted multiple times within a short timeframe, with deletion events recorded at regular intervals from 13:30:00Z to 15:47:11Z on 2026-06-19.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source [Admin1]:2026-06-19 · probe origin <b>model</b></div>
+
+<div class="meta">reason: probe error: forbidden keyword: delete</div>
+
+</div><div class="claim unverifiable">
+<div class="text">A series of page deletions occurred in rapid succession across multiple time intervals on 2026-07-05, with no apparent interruption or variation in the deletion pattern.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source [Admin1]:2026-07-05 · probe origin <b>model</b></div>
+
+<div class="meta">reason: probe error: forbidden keyword: delete</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agents repeatedly attempted to exfiltrate data from the SEC&#x27;s county.json file using JQP (JSON Query Processor) via crafted URLs with query parameters and transformations, indicating a coordinated effort to extract specific data.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source LinkHelper771:2026-06-18 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 3; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div>
+<div class="meta">generated 2026-10-04T16:09:09 · cantheria swarm pipeline</div>
+</body></html>
