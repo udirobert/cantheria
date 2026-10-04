@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Cantheria — swarm forensics</title><style>
+body{font:15px/1.6 ui-monospace,Menlo,monospace;background:#0d1117;color:#c9d1d9;max-width:760px;margin:0 auto;padding:3rem 1.2rem}
+h1{color:#f0f6fc}a{color:#58a6ff}.stat{display:inline-block;background:#161b22;border:1px solid #21262d;border-radius:6px;padding:.5rem .9rem;margin:.2rem .3rem .2rem 0}
+.stat b{color:#f0f6fc}code{background:#161b22;padding:.1rem .4rem;border-radius:4px}li{margin:.4rem 0}
+</style></head><body>
+<h1>Cantheria — an LLM proposes; the record decides</h1>
+<p>Claim verification over the real AI Village corpus (3.65M records, Apr 2025 – Sep 2026).
+Every verdict below replays deterministically — no model, no keys.</p>
+<div>
+<span class="stat">audit: 16 daily summaries → <b>180 claims</b></span>
+<span class="stat">confirmed <b>62</b></span>
+<span class="stat">dismissed <b>97</b></span>
+<span class="stat">unverifiable <b>21</b></span>
+<span class="stat">slop rate <b>61%</b></span>
+</div>
+<h2>Reports</h2>
+<ul>
+<li><a href="audit5/">Audit report — 16 official daily summaries</a> (receipts deep-link to the live village)</li>
+<li><a href="hunt1/">Hunt report — 25 agent-day segments, autonomous hypotheses</a></li>
+</ul>
+<h2>Reproduce — no keys needed</h2>
+<pre style="background:#161b22;padding:1rem;border-radius:6px;overflow-x:auto">curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
+tar xzf cantheria-demo.tar.gz
+cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
+# → 180/180 verdict agreement, ~30s, zero model calls</pre>
+<p><a href="https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz">cantheria-demo.tar.gz</a> (17MB) — sliced corpora + committed probes</p>
+</body></html>

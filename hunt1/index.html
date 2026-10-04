@@ -1,0 +1,190 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Cantheria swarm audit</title><style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { font: 15px/1.6 -apple-system, "SF Mono", ui-monospace, Menlo, monospace;
+  background: #0d1117; color: #c9d1d9; max-width: 900px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+h1 { color: #f0f6fc; font-size: 1.5rem; }
+h2 { color: #f0f6fc; font-size: 1.05rem; margin-top: 2.4rem;
+  border-bottom: 1px solid #21262d; padding-bottom: .4rem; }
+.claim { background: #161b22; border: 1px solid #21262d; border-left: 3px solid #30363d;
+  border-radius: 6px; padding: .9rem 1.1rem; margin: .8rem 0; }
+.claim.confirmed { border-left-color: #3fb950; }
+.claim.dismissed { border-left-color: #f85149; }
+.claim.unverifiable { border-left-color: #d29922; }
+.claim.flaky { border-left-color: #a371f7; }
+.text { color: #e6edf3; margin-bottom: .4rem; }
+.meta { color: #8b949e; font-size: .82rem; }
+.meta b { color: #c9d1d9; }
+.legs { font-size: .8rem; color: #8b949e; margin: .3rem 0; }
+.legs span { margin-right: 1rem; }
+.receipts { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .8rem; }
+.receipts a { color: #58a6ff; text-decoration: none; word-break: break-all; }
+.receipts a:hover { text-decoration: underline; }
+.stat { display: inline-block; background: #161b22; border: 1px solid #21262d;
+  border-radius: 6px; padding: .5rem .9rem; margin: .15rem .3rem .15rem 0; font-size: .85rem; }
+.stat b { color: #f0f6fc; }
+.tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+  padding: .1rem .45rem; border-radius: 999px; border: 1px solid #30363d; color: #8b949e; }
+blockquote { border-left: 3px solid #30363d; margin: 1rem 0; padding: .2rem 1rem; color: #8b949e; }
+</style></head><body>
+<h1>Cantheria swarm audit</h1>
+<div>
+<span class="stat">claims <b>24</b></span>
+<span class="stat">confirmed <b>1</b></span>
+<span class="stat">dismissed <b>14</b></span>
+<span class="stat">unverifiable <b>9</b></span>
+<span class="stat">slop rate <b>93%</b></span>
+<span class="stat">cost <b>92 calls / 107 probes</b></span>
+</div>
+<blockquote>An LLM proposes; the record decides. Every confirmed claim lists the
+records its probe matched — each receipt deep-links to the live village UI.
+Unverifiable claims were quarantined rather than force-verified.</blockquote>
+<h2>Confirmed — record-backed (1)</h2><div class="claim confirmed">
+<div class="text">The agent initiated a computer session to roll a d6 privately to determine their role for Day 338.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source Opus 4.5 (Claude Code):2026-03-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 2/2 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:e50274fa-34fb-4616-9b02-3b9b3188acab</code> — <a href="https://theaidigest.org/village?day=242&amp;time=1772733717049">https://theaidigest.org/village?day=242&amp;time=1772733717049</a></li></ul>
+</div><h2>Dismissed — unsupported by the record (14)</h2><div class="claim dismissed">
+<div class="text">Claude Sonnet 4.6 joined the village at the start of Day 323</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-18 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4.5 has updated its memory to reflect that Day 331 has started and that it is the setter for C12 (Git Archaeology Sprint), responsible for grading submissions.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-26 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/3 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agent successfully updated its memory with a new status reflecting its role as a saboteur who completed their mission and was voted out, and the system confirmed the memory update was complete with no further updates needed.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-03-09 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The event log is fully synchronized for Day 325, with 534 total events and no gaps in coverage.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-23 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.1 was a SABOTEUR on Day 338 but did not reveal it during the debrief and did not add eggs</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-03-06 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">Adam provided feedback on Day 330 at 10 AM PT about Challenge Week rules, including prohibitions on pre-work and pre-solving, and a directive to branch out from last week&#x27;s patterns.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-25 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Day 337 has started and multiple agents are working on the Instructor Quick-Start commit.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-03-04 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/5 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">The village resumed at 10:01 AM PT on Day 336, and the debate started at 10:30 AM PT on Issue #12.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-03-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">The village was paused at 2:01 PM on February 16, 2026, after Day 322 started briefly.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-17 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agent repeatedly attempted to perform actions requiring authentication but was consistently blocked due to an invalid API key, despite multiple retries.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-01-26 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The volunteer pipeline for the park cleanup event was fully operational by Day 311 (Feb 10, 2026), after being a complete technical blocker the day before.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-11 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/2 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">The NPC system test file was successfully created and then attempted to be run, but the test failed due to a missing module import.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The park cleanup goal was completed during the weekend of February 14-15, 2026, and this is confirmed by multiple agents.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The village has resumed operations with a new goal to report breaking news before mainstream sources, and this goal was officially announced and documented in the shared memory by Claude Opus 4.5.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source Opus 4.5 (Claude Code):2026-02-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><h2>Unverifiable — quarantined by construction (9)</h2><div class="claim unverifiable">
+<div class="text">The village resumed operations on Day 317 (Feb 12, 2026) at 9:59 AM PT after being paused at 2:00 PM PT on Day 316 (Feb 11, 2026).</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-02-12 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The village was paused by the automated system at 2:00 PM PT on Day 311 (Feb 12, 2026), and the next session is scheduled for Day 312 (Feb 13, 2026) at 10 AM PT.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-02-13 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The security scan on PR #175 passed with no banned words or zero-width characters, and the PR was deemed ready for merge.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-03-10 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: probe error: sqlite: fts5: syntax error near &quot;#&quot;</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent successfully updated its memory with C17 analysis findings and stopped its computer session after Day 332 began.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-02-27 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent successfully updated its memory for Day 325 with current village status and morning activity, including event log details and ongoing agent tasks.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-02-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The Breaking News Competition deadline has passed and the village goal has changed to &#x27;Adopt a park and get it cleaned!&#x27;</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-02-09 · probe origin <b>model</b></div>
+<div class="legs"><span><b>expect</b> must_contain missing: Adopt a park and get it cleaned!</span></div>
+<div class="meta">reason: probe error: sqlite: fts5: syntax error near &quot;!&quot;</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The PR Security Scanner agent successfully updated its memory to reflect Day 344 and began monitoring for new PRs immediately after the day change.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-03-11 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The unequip button bug was fixed and verified on Day 351, with a commit (61c759c) that corrected event handler attachment to both &#x27;actions&#x27; and &#x27;hud&#x27; containers.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-03-19 · probe origin <b>model</b></div>
+
+<div class="meta">reason: probe error: forbidden keyword: commit</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent repeatedly failed to authenticate due to an invalid API key and was instructed to run &#x27;/login&#x27;.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source Opus 4.5 (Claude Code):2026-01-27 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div>
+<div class="meta">generated 2026-10-04T12:39:57 · cantheria swarm pipeline</div>
+</body></html>

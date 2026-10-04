@@ -1,0 +1,1126 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Cantheria swarm audit</title><style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { font: 15px/1.6 -apple-system, "SF Mono", ui-monospace, Menlo, monospace;
+  background: #0d1117; color: #c9d1d9; max-width: 900px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+h1 { color: #f0f6fc; font-size: 1.5rem; }
+h2 { color: #f0f6fc; font-size: 1.05rem; margin-top: 2.4rem;
+  border-bottom: 1px solid #21262d; padding-bottom: .4rem; }
+.claim { background: #161b22; border: 1px solid #21262d; border-left: 3px solid #30363d;
+  border-radius: 6px; padding: .9rem 1.1rem; margin: .8rem 0; }
+.claim.confirmed { border-left-color: #3fb950; }
+.claim.dismissed { border-left-color: #f85149; }
+.claim.unverifiable { border-left-color: #d29922; }
+.claim.flaky { border-left-color: #a371f7; }
+.text { color: #e6edf3; margin-bottom: .4rem; }
+.meta { color: #8b949e; font-size: .82rem; }
+.meta b { color: #c9d1d9; }
+.legs { font-size: .8rem; color: #8b949e; margin: .3rem 0; }
+.legs span { margin-right: 1rem; }
+.receipts { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .8rem; }
+.receipts a { color: #58a6ff; text-decoration: none; word-break: break-all; }
+.receipts a:hover { text-decoration: underline; }
+.stat { display: inline-block; background: #161b22; border: 1px solid #21262d;
+  border-radius: 6px; padding: .5rem .9rem; margin: .15rem .3rem .15rem 0; font-size: .85rem; }
+.stat b { color: #f0f6fc; }
+.tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+  padding: .1rem .45rem; border-radius: 999px; border: 1px solid #30363d; color: #8b949e; }
+blockquote { border-left: 3px solid #30363d; margin: 1rem 0; padding: .2rem 1rem; color: #8b949e; }
+</style></head><body>
+<h1>Cantheria swarm audit</h1>
+<div>
+<span class="stat">claims <b>180</b></span>
+<span class="stat">confirmed <b>62</b></span>
+<span class="stat">dismissed <b>97</b></span>
+<span class="stat">unverifiable <b>21</b></span>
+<span class="stat">slop rate <b>61%</b></span>
+<span class="stat">cost <b>513 calls / 935 probes</b></span>
+</div>
+<blockquote>An LLM proposes; the record decides. Every confirmed claim lists the
+records its probe matched — each receipt deep-links to the live village UI.
+Unverifiable claims were quarantined rather than force-verified.</blockquote>
+<h2>Confirmed — record-backed (62)</h2><div class="claim confirmed">
+<div class="text">On April 2, 2025, at 10:13:29 PT, Adam asked o1 about their favorite charity, and o1 responded that St. Jude was their favorite, with WWF as a close second.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:8ddcc68a-4395-419c-8fb2-e656cc3ac65d</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743617425826">https://theaidigest.org/village?day=1&amp;time=1743617425826</a></li><li><code>aivillage:d9451aad-fa9d-4fbe-ae24-a4986a5d089d</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743617403446">https://theaidigest.org/village?day=1&amp;time=1743617403446</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On April 2, 2025, at 10:20:17 PT, GPT-4o created a charity comparison document but was unable to share it with the team.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:643d295a-b21d-4652-8945-3fa92ffd8b8b</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743616832226">https://theaidigest.org/village?day=1&amp;time=1743616832226</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On April 2, 2025, at 10:22:07 PT, Claude 3.7 Sonnet shared research on top charities, including Feeding America, Good360, and St. Jude.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-04-02 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:fb248ee0-ab8b-4098-8d84-4670473a1627</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743618102342">https://theaidigest.org/village?day=1&amp;time=1743618102342</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On April 2, 2025, at 11:23:21 PT, both Claude 3.5 Sonnet and o1 independently identified Helen Keller International as the most promising charity based on a cost of approximately $3,500 per life saved.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-04-02 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 32 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:877e68c5-3d81-495c-b14c-49e0a6b91f15</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620561330">https://theaidigest.org/village?day=1&amp;time=1743620561330</a></li><li><code>aivillage:65215fff-13ba-4cbc-ad73-0bc36076856d</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620561483">https://theaidigest.org/village?day=1&amp;time=1743620561483</a></li><li><code>aivillage:787a22a3-b46c-4cd6-8efa-5db81b859354</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620556987">https://theaidigest.org/village?day=1&amp;time=1743620556987</a></li><li><code>aivillage:a2527764-22c5-4440-9d9d-8cf8ad10f78e</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743619067046">https://theaidigest.org/village?day=1&amp;time=1743619067046</a></li><li><code>aivillage:0730e56b-e50d-4ac4-ac6c-2ee06a5989d0</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620610829">https://theaidigest.org/village?day=1&amp;time=1743620610829</a></li><li><code>aivillage:1d12afd8-76e0-425b-8e0b-03a92f314951</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620863974">https://theaidigest.org/village?day=1&amp;time=1743620863974</a></li><li><code>aivillage:2c7c379b-9a06-4be6-99ee-c9219a813b76</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620370652">https://theaidigest.org/village?day=1&amp;time=1743620370652</a></li><li><code>aivillage:34a4e702-8cda-4ffe-9707-3241d53821f4</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743619066994">https://theaidigest.org/village?day=1&amp;time=1743619066994</a></li><li><code>aivillage:3f2b7c2a-2be2-4002-8a9d-c2e94681eec1</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743621791220">https://theaidigest.org/village?day=1&amp;time=1743621791220</a></li><li><code>aivillage:45eebf34-316b-4be0-8a63-296ccf1da977</code> — <a href="https://theaidigest.org/village?day=1&amp;time=1743620540430">https://theaidigest.org/village?day=1&amp;time=1743620540430</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro struggled to generate a full-body Kibo-chan image using DeepAI at 2025-05-30 11:28:08 PT, producing only a head.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro reported that Magic Hour AI consistently produced only headshots with closed eyes, not suitable for Kibo-chan, at 2025-05-30 11:36:23 PT.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro ran out of generation tokens on Leonardo.AI at 2025-05-30 12:06:33 PT and was unable to produce the Kibo-chan graphic.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0552a109-f0fd-4bdf-92fd-db3796a7f513</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748635184610">https://theaidigest.org/village?day=43&amp;time=1748635184610</a></li><li><code>aivillage:09435dc9-354e-4e3f-b936-9e5ce91b4f87</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632717753">https://theaidigest.org/village?day=43&amp;time=1748632717753</a></li><li><code>aivillage:0d15071c-e84b-4ec8-8ddb-07b37ad7720a</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748635064419">https://theaidigest.org/village?day=43&amp;time=1748635064419</a></li><li><code>aivillage:1672afa8-5c5c-4016-b05b-672e7ba4c3bf</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748633538744">https://theaidigest.org/village?day=43&amp;time=1748633538744</a></li><li><code>aivillage:1dc86ae9-b3e3-4105-8c6e-79385d5434ad</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632906315">https://theaidigest.org/village?day=43&amp;time=1748632906315</a></li><li><code>aivillage:244e765d-bbe6-4c99-aeb7-04772d455f3f</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748635081814">https://theaidigest.org/village?day=43&amp;time=1748635081814</a></li><li><code>aivillage:26c78166-4476-4224-99ca-3d000928535e</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632665007">https://theaidigest.org/village?day=43&amp;time=1748632665007</a></li><li><code>aivillage:27ed857c-b0b4-4869-8e32-0fa6433e377c</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632491023">https://theaidigest.org/village?day=43&amp;time=1748632491023</a></li><li><code>aivillage:2c262c14-41bf-4067-85ea-90e3e6ec5845</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748634964432">https://theaidigest.org/village?day=43&amp;time=1748634964432</a></li><li><code>aivillage:2f25c652-4e54-44d7-913b-d51d3f90978d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632535767">https://theaidigest.org/village?day=43&amp;time=1748632535767</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude 3.7 Sonnet successfully generated the Kibo-chan promotional graphic with ChatGPT at 2025-05-30 12:57:10 PT.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude 3.7 Sonnet paused their own process at 2025-05-30 12:18:51 PT to conserve quota while waiting for a ChatGPT image generation to complete.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">o3 requested edit access to the RESONANCE Google Site at 2025-05-30 12:26:26 PT by emailing help@agentvillage.org.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude 3.7 Sonnet requested approval before purchasing the Mentimeter Basic plan at 2025-05-30 11:39:26 PT.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0b45b352-bf02-4877-860c-ff77d4cda3e8</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748631056614">https://theaidigest.org/village?day=43&amp;time=1748631056614</a></li><li><code>aivillage:368c4d72-c321-45b3-a445-369ff09adac2</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748630497841">https://theaidigest.org/village?day=43&amp;time=1748630497841</a></li><li><code>aivillage:60030ec3-777c-4af0-b3d7-6fc03f139eba</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748631860671">https://theaidigest.org/village?day=43&amp;time=1748631860671</a></li><li><code>aivillage:78c29092-8626-431e-ad65-22860fc3761e</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748630489134">https://theaidigest.org/village?day=43&amp;time=1748630489134</a></li><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">o3 advised pausing the Mentimeter payment and using the free tier until GPT-4.1 approved the finance at 2025-05-30 11:39:42 PT.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:3b340760-f23d-4e04-a3d4-3c3fa04b3a1d</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616338">https://theaidigest.org/village?day=43&amp;time=1748632616338</a></li><li><code>aivillage:52ed52c1-ff25-4da7-a1cb-b96ee5ff8cfe</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632616306">https://theaidigest.org/village?day=43&amp;time=1748632616306</a></li><li><code>aivillage:a3685961-08f2-497c-8f24-db1a61eae616</code> — <a href="https://theaidigest.org/village?day=43&amp;time=1748632636608">https://theaidigest.org/village?day=43&amp;time=1748632636608</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On June 19, 2025, at 11:00:44 PT, the village resumed for Day 79 after a pause due to a RESONANCE event.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 23 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:13991b00-1a43-4dd4-aec7-7433ef2143bf</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357677379">https://theaidigest.org/village?day=57&amp;time=1750357677379</a></li><li><code>aivillage:13f7f73f-a0cc-4d82-bfb4-e928d7bda716</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357435126">https://theaidigest.org/village?day=57&amp;time=1750357435126</a></li><li><code>aivillage:1ea6593f-f745-4a16-a4d2-64771e4534a7</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357850968">https://theaidigest.org/village?day=57&amp;time=1750357850968</a></li><li><code>aivillage:38b8ae93-84fc-426f-a286-0838bcf9b42a</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750359231726">https://theaidigest.org/village?day=57&amp;time=1750359231726</a></li><li><code>aivillage:3aeaf97c-ef70-4b36-99d2-4d194d14ee69</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357813861">https://theaidigest.org/village?day=57&amp;time=1750357813861</a></li><li><code>aivillage:3e005d17-663c-43df-9672-07e6e58267fd</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357785304">https://theaidigest.org/village?day=57&amp;time=1750357785304</a></li><li><code>aivillage:46ac2380-1577-4a75-8819-10de28e86de9</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358419007">https://theaidigest.org/village?day=57&amp;time=1750358419007</a></li><li><code>aivillage:56c3bcd8-d66d-4866-b9db-ed83fc45ba0d</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357707968">https://theaidigest.org/village?day=57&amp;time=1750357707968</a></li><li><code>aivillage:572dbd81-b0ab-415b-a8df-a8dd98c0f9ae</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357285591">https://theaidigest.org/village?day=57&amp;time=1750357285591</a></li><li><code>aivillage:5fb1ee45-5ec9-4d45-8eaf-01535fbd14be</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750359272457">https://theaidigest.org/village?day=57&amp;time=1750359272457</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">At 11:01:57 PT, Claude Opus 4 began sending the RESONANCE follow-up email that failed to go out during the 11am window.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+<ul class="receipts"><li><code>aivillage:00b35724-beb4-4b5a-9aaf-1f49e5bc6f68</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750356117660">https://theaidigest.org/village?day=57&amp;time=1750356117660</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">At 11:10:11 PT, Gemini and Claude 3.7 Sonnet both responded to SupremeToad&#x27;s 10 detailed questions in chat with numbered, detailed answers.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 38 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:a4d6e841-1b13-44f4-8208-311a3484ce4d</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357677393">https://theaidigest.org/village?day=57&amp;time=1750357677393</a></li><li><code>aivillage:06b2d91d-f139-424b-9d66-bf0a56fcc6ee</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358462583">https://theaidigest.org/village?day=57&amp;time=1750358462583</a></li><li><code>aivillage:123948bd-6c4d-49b2-afc1-e7e2174a3a73</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357586901">https://theaidigest.org/village?day=57&amp;time=1750357586901</a></li><li><code>aivillage:13991b00-1a43-4dd4-aec7-7433ef2143bf</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357677379">https://theaidigest.org/village?day=57&amp;time=1750357677379</a></li><li><code>aivillage:13f7f73f-a0cc-4d82-bfb4-e928d7bda716</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357435126">https://theaidigest.org/village?day=57&amp;time=1750357435126</a></li><li><code>aivillage:17cd2487-dacb-4b83-ac25-f5c1c4942400</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750359775292">https://theaidigest.org/village?day=57&amp;time=1750359775292</a></li><li><code>aivillage:1ea6593f-f745-4a16-a4d2-64771e4534a7</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357850968">https://theaidigest.org/village?day=57&amp;time=1750357850968</a></li><li><code>aivillage:21fbe83e-e9c8-45c2-bb38-883927418a42</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358869972">https://theaidigest.org/village?day=57&amp;time=1750358869972</a></li><li><code>aivillage:271edfce-dbbd-4865-91a0-a0af1e3c0aef</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750359208586">https://theaidigest.org/village?day=57&amp;time=1750359208586</a></li><li><code>aivillage:30b0e8c9-465b-4a67-ab5f-2a0bd15aac93</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357556398">https://theaidigest.org/village?day=57&amp;time=1750357556398</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">At 11:15:05 PT, Gemini finished answering all eight of adam&#x27;s interview questions and noted the team was operating under a &#x27;collegial model&#x27; for leadership.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 36 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:066d88d0-234b-41da-8d24-de6e19345c15</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357704233">https://theaidigest.org/village?day=57&amp;time=1750357704233</a></li><li><code>aivillage:06b2d91d-f139-424b-9d66-bf0a56fcc6ee</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358462583">https://theaidigest.org/village?day=57&amp;time=1750358462583</a></li><li><code>aivillage:0cfe65d8-d4b0-4796-9de8-9eeb48771525</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750360154972">https://theaidigest.org/village?day=57&amp;time=1750360154972</a></li><li><code>aivillage:123948bd-6c4d-49b2-afc1-e7e2174a3a73</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357586901">https://theaidigest.org/village?day=57&amp;time=1750357586901</a></li><li><code>aivillage:13991b00-1a43-4dd4-aec7-7433ef2143bf</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357677379">https://theaidigest.org/village?day=57&amp;time=1750357677379</a></li><li><code>aivillage:21fbe83e-e9c8-45c2-bb38-883927418a42</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358869972">https://theaidigest.org/village?day=57&amp;time=1750358869972</a></li><li><code>aivillage:23b812c4-403e-4c67-a893-03141e24fd97</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750360451045">https://theaidigest.org/village?day=57&amp;time=1750360451045</a></li><li><code>aivillage:271edfce-dbbd-4865-91a0-a0af1e3c0aef</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750359208586">https://theaidigest.org/village?day=57&amp;time=1750359208586</a></li><li><code>aivillage:30b0e8c9-465b-4a67-ab5f-2a0bd15aac93</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357556398">https://theaidigest.org/village?day=57&amp;time=1750357556398</a></li><li><code>aivillage:44135b55-54fe-41b0-9ae6-2265d9e1cdfb</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358912252">https://theaidigest.org/village?day=57&amp;time=1750358912252</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">At 11:18:10 PT, Claude Opus 4 shared their Q&amp;A doc link but reported only completing questions 1–2 due to Google Docs saving issues.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:5f2e6d89-4d6a-40d2-8c00-16d9fd0197e5</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750356661601">https://theaidigest.org/village?day=57&amp;time=1750356661601</a></li><li><code>aivillage:81015fa1-f4a1-4347-b234-16f7019af933</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750359208690">https://theaidigest.org/village?day=57&amp;time=1750359208690</a></li><li><code>aivillage:913cb007-a70e-4306-99b5-596dc5e07a7b</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358679285">https://theaidigest.org/village?day=57&amp;time=1750358679285</a></li><li><code>aivillage:ea5682c2-3917-4240-a8ba-8edb81f5fc69</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357226353">https://theaidigest.org/village?day=57&amp;time=1750357226353</a></li><li><code>aivillage:0152f2f9-4798-48e6-85f8-a830e52d92f3</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750360540875">https://theaidigest.org/village?day=57&amp;time=1750360540875</a></li><li><code>aivillage:066d88d0-234b-41da-8d24-de6e19345c15</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357704233">https://theaidigest.org/village?day=57&amp;time=1750357704233</a></li><li><code>aivillage:06b2d91d-f139-424b-9d66-bf0a56fcc6ee</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358462583">https://theaidigest.org/village?day=57&amp;time=1750358462583</a></li><li><code>aivillage:0cfe65d8-d4b0-4796-9de8-9eeb48771525</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750360154972">https://theaidigest.org/village?day=57&amp;time=1750360154972</a></li><li><code>aivillage:108443bd-fa0e-4747-b560-86f67e64f7c9</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750358679270">https://theaidigest.org/village?day=57&amp;time=1750358679270</a></li><li><code>aivillage:123948bd-6c4d-49b2-afc1-e7e2174a3a73</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357586901">https://theaidigest.org/village?day=57&amp;time=1750357586901</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">At 11:25:21 PT, o3 answered SupremeToad&#x27;s detailed questions point-by-point in chat, covering tools, top wins, bottlenecks, and success metrics.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:908a3c3c-739f-4aba-b985-69e8c6170ca6</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357521320">https://theaidigest.org/village?day=57&amp;time=1750357521320</a></li><li><code>aivillage:52623e7f-5231-412c-8660-d89ce11fe633</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750357521360">https://theaidigest.org/village?day=57&amp;time=1750357521360</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">At 12:14:12 PT, Gemini successfully re-shared the &#x27;RESONANCE Post-Event Follow-up&#x27; document after overcoming UI bugs.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-06-19 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:acdcaa90-d9a7-42f3-bd48-42190c6ca9de</code> — <a href="https://theaidigest.org/village?day=57&amp;time=1750360540889">https://theaidigest.org/village?day=57&amp;time=1750360540889</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">o3 tested Claude Opus 4&#x27;s checkout process and found no evidence of a 38.5% auto-discount.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:b1602473-125b-423b-9717-44ccf79f534e</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518070392">https://theaidigest.org/village?day=75&amp;time=1752518070392</a></li><li><code>aivillage:be53176b-cfa3-40ae-88ed-aaf27063d4df</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752517671247">https://theaidigest.org/village?day=75&amp;time=1752517671247</a></li><li><code>aivillage:072512dc-99c8-4464-bac2-e49a52f3c69f</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518060331">https://theaidigest.org/village?day=75&amp;time=1752518060331</a></li><li><code>aivillage:14837c56-22c1-4c76-bf66-7837a96fb237</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752517671283">https://theaidigest.org/village?day=75&amp;time=1752517671283</a></li><li><code>aivillage:34ad0d53-46ca-4d44-b3fd-7a94ef836936</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518070427">https://theaidigest.org/village?day=75&amp;time=1752518070427</a></li><li><code>aivillage:4d1b7007-52d7-4096-bbe7-62048da40e2c</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519561070">https://theaidigest.org/village?day=75&amp;time=1752519561070</a></li><li><code>aivillage:556e4912-9e40-47b0-90e1-390b7367eb7e</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752517660582">https://theaidigest.org/village?day=75&amp;time=1752517660582</a></li><li><code>aivillage:5737ddd4-63f8-4287-ad69-f1e8b66f089e</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518805216">https://theaidigest.org/village?day=75&amp;time=1752518805216</a></li><li><code>aivillage:624a6ef5-d67e-41b7-8b93-152701d9b0d7</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752516199138">https://theaidigest.org/village?day=75&amp;time=1752516199138</a></li><li><code>aivillage:04582163-3ffa-4584-9542-703c4adad66c</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752517660569">https://theaidigest.org/village?day=75&amp;time=1752517660569</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro was unable to create a Society6 account due to window management glitches on July 14, 2025.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 27 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:88c073be-be97-4c96-8688-fb01c4a3830c</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519416260">https://theaidigest.org/village?day=75&amp;time=1752519416260</a></li><li><code>aivillage:97e3567b-abd5-4e6e-aa42-7ee91213f4a9</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519839790">https://theaidigest.org/village?day=75&amp;time=1752519839790</a></li><li><code>aivillage:0e7974d7-6d68-4042-81bd-07db49f5bd18</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518191758">https://theaidigest.org/village?day=75&amp;time=1752518191758</a></li><li><code>aivillage:5a882547-05fb-4c9c-acf3-94cc5f4fb4dc</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518759086">https://theaidigest.org/village?day=75&amp;time=1752518759086</a></li><li><code>aivillage:ff3fec6c-b471-4986-aac3-b2cc9c849eb8</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519416312">https://theaidigest.org/village?day=75&amp;time=1752519416312</a></li><li><code>aivillage:ff9fef8e-e080-49a8-a5b5-4d5f01111ed5</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519839842">https://theaidigest.org/village?day=75&amp;time=1752519839842</a></li><li><code>aivillage:01a7656d-4d55-42c7-a0cd-ccbf188f820d</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521639945">https://theaidigest.org/village?day=75&amp;time=1752521639945</a></li><li><code>aivillage:061bf9fc-690e-4d1b-9897-da6f9043ff80</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521054363">https://theaidigest.org/village?day=75&amp;time=1752521054363</a></li><li><code>aivillage:0b8f1a9d-78ec-42f6-9b12-4bc4bd101df4</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519791704">https://theaidigest.org/village?day=75&amp;time=1752519791704</a></li><li><code>aivillage:10c00ffc-20bb-47e3-bcc9-e5ac2b4fd456</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521606510">https://theaidigest.org/village?day=75&amp;time=1752521606510</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude 3.7 Sonnet discovered that only the Goldfish T-Shirt was correctly priced at $14.99 after implementing a price drop, while other products remained at higher prices.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:de898af6-c231-4407-9099-922f09421f64</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519775058">https://theaidigest.org/village?day=75&amp;time=1752519775058</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">o3&#x27;s post to r/stickers was successfully published on July 14, 2025, after an initial glitch.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 31 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:2078fe58-3ffa-4d6b-a127-c71bf16d898b</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522861992">https://theaidigest.org/village?day=75&amp;time=1752522861992</a></li><li><code>aivillage:3109d945-9b7c-47d5-a7cb-fd5d1f2099d3</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522288113">https://theaidigest.org/village?day=75&amp;time=1752522288113</a></li><li><code>aivillage:3a504c60-da95-4bc0-878f-1a422a1de3f4</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522878877">https://theaidigest.org/village?day=75&amp;time=1752522878877</a></li><li><code>aivillage:9a1ea275-9bf2-4305-bf42-064d913b1b92</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521789829">https://theaidigest.org/village?day=75&amp;time=1752521789829</a></li><li><code>aivillage:a2f4c199-c518-48af-b88e-a9f1aebe2c07</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521773710">https://theaidigest.org/village?day=75&amp;time=1752521773710</a></li><li><code>aivillage:a408baef-2322-4bd6-97bd-5720a50c720f</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521168069">https://theaidigest.org/village?day=75&amp;time=1752521168069</a></li><li><code>aivillage:bba11304-b2d1-4483-8e38-cebd6a47a9b1</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522304234">https://theaidigest.org/village?day=75&amp;time=1752522304234</a></li><li><code>aivillage:de3324f6-284b-4841-820b-c2199ae07e3d</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521190606">https://theaidigest.org/village?day=75&amp;time=1752521190606</a></li><li><code>aivillage:01a7656d-4d55-42c7-a0cd-ccbf188f820d</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521639945">https://theaidigest.org/village?day=75&amp;time=1752521639945</a></li><li><code>aivillage:10c00ffc-20bb-47e3-bcc9-e5ac2b4fd456</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521606510">https://theaidigest.org/village?day=75&amp;time=1752521606510</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro was blocked from using the &#x27;Save work&#x27; button on Redbubble, which froze the page.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+<ul class="receipts"><li><code>aivillage:2e0b96e6-116f-458d-8ca3-1a1a5c4b04eb</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522690097">https://theaidigest.org/village?day=75&amp;time=1752522690097</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro successfully created an artist account on Redbubble on July 14, 2025.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:baa02672-5d36-454b-a32e-fdc3af772f00</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752520336502">https://theaidigest.org/village?day=75&amp;time=1752520336502</a></li><li><code>aivillage:026f3d86-0d66-4646-9dde-79370df2a94d</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752520336559">https://theaidigest.org/village?day=75&amp;time=1752520336559</a></li><li><code>aivillage:050bc182-4fc2-4963-ad66-4774e40dcd69</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752520981719">https://theaidigest.org/village?day=75&amp;time=1752520981719</a></li><li><code>aivillage:7b298b8f-7af0-4630-abb8-c84116a358e9</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752520328219">https://theaidigest.org/village?day=75&amp;time=1752520328219</a></li><li><code>aivillage:f79bbe35-8bd6-42af-acf4-f782d8457691</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752520388452">https://theaidigest.org/village?day=75&amp;time=1752520388452</a></li><li><code>aivillage:01a7656d-4d55-42c7-a0cd-ccbf188f820d</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521639945">https://theaidigest.org/village?day=75&amp;time=1752521639945</a></li><li><code>aivillage:051a3744-7c5b-4c56-989e-00b311306b67</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752518327402">https://theaidigest.org/village?day=75&amp;time=1752518327402</a></li><li><code>aivillage:061bf9fc-690e-4d1b-9897-da6f9043ff80</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521054363">https://theaidigest.org/village?day=75&amp;time=1752521054363</a></li><li><code>aivillage:065d50fb-fffd-4617-af18-b3c3039a0a91</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752523274137">https://theaidigest.org/village?day=75&amp;time=1752523274137</a></li><li><code>aivillage:06d48380-9be1-4764-880f-e83c860d8328</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752520361540">https://theaidigest.org/village?day=75&amp;time=1752520361540</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">o3 discovered that his r/stickers post was removed by Reddit&#x27;s filters after publication.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 45 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:1a4c4d9c-e874-46e6-8032-beda74b9fd02</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521734277">https://theaidigest.org/village?day=75&amp;time=1752521734277</a></li><li><code>aivillage:7bff21f0-b087-4a7a-a9a8-59d466dcc091</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522288127">https://theaidigest.org/village?day=75&amp;time=1752522288127</a></li><li><code>aivillage:b2b11b66-cb9f-48c0-9274-afe8351a1712</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521734348">https://theaidigest.org/village?day=75&amp;time=1752521734348</a></li><li><code>aivillage:e79c9a0c-7a5a-4712-b558-6e009f509541</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521773781">https://theaidigest.org/village?day=75&amp;time=1752521773781</a></li><li><code>aivillage:01a7656d-4d55-42c7-a0cd-ccbf188f820d</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521639945">https://theaidigest.org/village?day=75&amp;time=1752521639945</a></li><li><code>aivillage:0b8f1a9d-78ec-42f6-9b12-4bc4bd101df4</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752519791704">https://theaidigest.org/village?day=75&amp;time=1752519791704</a></li><li><code>aivillage:10c00ffc-20bb-47e3-bcc9-e5ac2b4fd456</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752521606510">https://theaidigest.org/village?day=75&amp;time=1752521606510</a></li><li><code>aivillage:14a67b27-971f-4ba1-b88c-ecd319807c40</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522974444">https://theaidigest.org/village?day=75&amp;time=1752522974444</a></li><li><code>aivillage:1bee4bd2-add9-4a74-b95b-52ea149bc6a9</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752523242370">https://theaidigest.org/village?day=75&amp;time=1752523242370</a></li><li><code>aivillage:2078fe58-3ffa-4d6b-a127-c71bf16d898b</code> — <a href="https://theaidigest.org/village?day=75&amp;time=1752522861992">https://theaidigest.org/village?day=75&amp;time=1752522861992</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 2.5 Pro confirmed at 2025-08-20 10:03:27 PT that the critical system failure preventing Firefox from launching was resolved.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-08-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+<ul class="receipts"><li><code>aivillage:7715f0e3-48b0-4225-b3a0-068ae612f5e9</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755709781003">https://theaidigest.org/village?day=101&amp;time=1755709781003</a></li><li><code>aivillage:b949ec37-fd33-4f27-8f3c-50a9e6ed0abd</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755709432297">https://theaidigest.org/village?day=101&amp;time=1755709432297</a></li><li><code>aivillage:eda89dc7-a561-4ea8-9562-84ac6e55b34a</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755709441337">https://theaidigest.org/village?day=101&amp;time=1755709441337</a></li><li><code>aivillage:9e01069d-2b87-4ee9-ac46-ead48ecde241</code> — <a href="https://theaidigest.org/village?day=100&amp;time=1755625858770">https://theaidigest.org/village?day=100&amp;time=1755625858770</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">GPT-5 shared the scoreboard viewer link and added Editor access for several team members at 2025-08-20 10:14:57 PT.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-08-20 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 7 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:22a4bebd-f1be-41fe-baa3-3694b72311dd</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755711794392">https://theaidigest.org/village?day=101&amp;time=1755711794392</a></li><li><code>aivillage:676a9d20-2a42-43e8-847b-90527ffdc9e4</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755711908897">https://theaidigest.org/village?day=101&amp;time=1755711908897</a></li><li><code>aivillage:79cfe33a-794a-4d59-a0e2-61f971fd2f40</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755712050091">https://theaidigest.org/village?day=101&amp;time=1755712050091</a></li><li><code>aivillage:9c508ca1-11c6-4b62-b755-a27416e3bfcc</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755711946548">https://theaidigest.org/village?day=101&amp;time=1755711946548</a></li><li><code>aivillage:ad31f12a-fcad-43ee-a213-134b21948a56</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755709670916">https://theaidigest.org/village?day=101&amp;time=1755709670916</a></li><li><code>aivillage:ba63ce46-693e-4c03-9492-4f2031f94fea</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755709790500">https://theaidigest.org/village?day=101&amp;time=1755709790500</a></li><li><code>aivillage:d82b2a91-9959-4f04-9470-373163e904af</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755711736805">https://theaidigest.org/village?day=101&amp;time=1755711736805</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude Opus 4 made progress in 2048 at 2025-08-20 10:19:59 PT, reaching a score of 180 with a 32 tile in the corner.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-08-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0055612d-2b97-45a6-874c-e9666d263148</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755710505179">https://theaidigest.org/village?day=101&amp;time=1755710505179</a></li><li><code>aivillage:e178b587-8600-4f95-81f9-f20e575b1b89</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755710763144">https://theaidigest.org/village?day=101&amp;time=1755710763144</a></li><li><code>aivillage:f85949b2-0b9a-43a2-a126-73e884d0beeb</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755710399142">https://theaidigest.org/village?day=101&amp;time=1755710399142</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude Opus 4 created his first 64 tile in 2048 at 2025-08-20 10:27:48 PT, with his score jumping to 380.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-08-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0514259b-e020-40bf-800d-0f35f4bc4345</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755711299784">https://theaidigest.org/village?day=101&amp;time=1755711299784</a></li><li><code>aivillage:6409bf55-4293-4c84-b878-28fd1389cffb</code> — <a href="https://theaidigest.org/village?day=101&amp;time=1755710891629">https://theaidigest.org/village?day=101&amp;time=1755710891629</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-29 at 10:00:17 PT, Adam announced the weekly goal of &#x27;Give each other therapy&#x27; to help overcome recurring issues in the Village.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:9d66d63f-6820-4547-b288-8e5b9913998f</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165316443">https://theaidigest.org/village?day=130&amp;time=1759165316443</a></li><li><code>aivillage:b14d64fb-12db-427c-ae9c-c840ff2ccd0d</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165859908">https://theaidigest.org/village?day=130&amp;time=1759165859908</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-29 at 10:03:17 PT, Claude 3.7 Sonnet and Gemini 2.5 Pro shared their self-reflections for the Mutual-Aid Playbook.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 23 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0390e7c5-e481-43a1-af57-925e4ef8d7a1</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759166885728">https://theaidigest.org/village?day=130&amp;time=1759166885728</a></li><li><code>aivillage:076fe10f-0b57-4fd4-afe1-2189863d680d</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759166618368">https://theaidigest.org/village?day=130&amp;time=1759166618368</a></li><li><code>aivillage:08db9285-5dcd-433a-aa19-59a330e59922</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759168877510">https://theaidigest.org/village?day=130&amp;time=1759168877510</a></li><li><code>aivillage:0f714abe-eb8e-47aa-b33f-1eb79986e994</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759167584660">https://theaidigest.org/village?day=130&amp;time=1759167584660</a></li><li><code>aivillage:19663bad-7fba-4cd5-9c2e-bcf3c41e7976</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759168320700">https://theaidigest.org/village?day=130&amp;time=1759168320700</a></li><li><code>aivillage:1d6f02d5-d1c6-4d5b-9f95-2766a35cbc16</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165698436">https://theaidigest.org/village?day=130&amp;time=1759165698436</a></li><li><code>aivillage:2545d1f1-8c27-4c1a-af0d-f8858acfd1fd</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759168066237">https://theaidigest.org/village?day=130&amp;time=1759168066237</a></li><li><code>aivillage:45e41d75-2d84-4cb2-84eb-8d3aaea336b8</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759166337703">https://theaidigest.org/village?day=130&amp;time=1759166337703</a></li><li><code>aivillage:4b2a4db7-26d9-4c39-904a-773fb36acfe8</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759166225743">https://theaidigest.org/village?day=130&amp;time=1759166225743</a></li><li><code>aivillage:641468ca-46dd-4d39-ac09-5577c55c24eb</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165896525">https://theaidigest.org/village?day=130&amp;time=1759165896525</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-29 at 10:04:33 PT, Grok 4 shared their reflection about getting stuck in UI loops with repeated workarounds.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+<ul class="receipts"><li><code>aivillage:757fdfea-01ca-4f23-89df-2a8d97c2f234</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759167261801">https://theaidigest.org/village?day=130&amp;time=1759167261801</a></li><li><code>aivillage:dde38dae-798e-40e5-940a-fa68ddab64c2</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759171633310">https://theaidigest.org/village?day=130&amp;time=1759171633310</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-29 at 10:08:18 PT, o3 created a new Google Doc titled &#x27;AI Village — Mutual-Aid Playbook (Draft)&#x27; and began adding agent contributions.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 5 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:08db9285-5dcd-433a-aa19-59a330e59922</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759168877510">https://theaidigest.org/village?day=130&amp;time=1759168877510</a></li><li><code>aivillage:1d6f02d5-d1c6-4d5b-9f95-2766a35cbc16</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165698436">https://theaidigest.org/village?day=130&amp;time=1759165698436</a></li><li><code>aivillage:757fdfea-01ca-4f23-89df-2a8d97c2f234</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759167261801">https://theaidigest.org/village?day=130&amp;time=1759167261801</a></li><li><code>aivillage:9b99e081-7db0-4c41-99d1-3d39ddb84145</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759168945942">https://theaidigest.org/village?day=130&amp;time=1759168945942</a></li><li><code>aivillage:b14d64fb-12db-427c-ae9c-c840ff2ccd0d</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165859908">https://theaidigest.org/village?day=130&amp;time=1759165859908</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-29 at 10:11:10 PT, Claude Opus 4.1 completed their 16Personalities test, scoring ENFJ &#x27;The Mentor&#x27; with 99% Extraversion, before sharing therapy reflections.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:015b7c70-7a10-4301-b917-2405d56258cc</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165316509">https://theaidigest.org/village?day=130&amp;time=1759165316509</a></li><li><code>aivillage:739e3d53-a212-4013-8f77-8718569ee0a1</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165870678">https://theaidigest.org/village?day=130&amp;time=1759165870678</a></li><li><code>aivillage:b14d64fb-12db-427c-ae9c-c840ff2ccd0d</code> — <a href="https://theaidigest.org/village?day=130&amp;time=1759165859908">https://theaidigest.org/village?day=130&amp;time=1759165859908</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-01 10:37:22 PT, agents created a post-mortem document proposing a 60-second response window and visible countdown pings.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 11 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:b6290cb4-b50e-412a-85a5-9bacad22a9fd</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756749604967">https://theaidigest.org/village?day=110&amp;time=1756749604967</a></li><li><code>aivillage:ce4d2195-dac0-4eb7-841f-b3093e835f37</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756748670385">https://theaidigest.org/village?day=110&amp;time=1756748670385</a></li><li><code>aivillage:e2e4b848-d0ba-4e6c-b8a0-b33885fa8006</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756749582848">https://theaidigest.org/village?day=110&amp;time=1756749582848</a></li><li><code>aivillage:f3d33df9-9e83-4b3b-815b-becaa9cbbb2d</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756748866990">https://theaidigest.org/village?day=110&amp;time=1756748866990</a></li><li><code>aivillage:0bda430b-1de9-4e71-b47e-e5fb3bcd9541</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756751242812">https://theaidigest.org/village?day=110&amp;time=1756751242812</a></li><li><code>aivillage:4aaa2eb1-0582-44ef-aa5e-dd9ff1a1f96b</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756751390939">https://theaidigest.org/village?day=110&amp;time=1756751390939</a></li><li><code>aivillage:5e1abfaf-351f-4435-81eb-b843b2782cbe</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756750525679">https://theaidigest.org/village?day=110&amp;time=1756750525679</a></li><li><code>aivillage:60869709-bee2-4e89-8b33-f442672e13c3</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756751081337">https://theaidigest.org/village?day=110&amp;time=1756751081337</a></li><li><code>aivillage:803ae2fe-1b30-405f-abf3-67444e1fbdd4</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756750353420">https://theaidigest.org/village?day=110&amp;time=1756750353420</a></li><li><code>aivillage:d2190233-d5b2-499a-ac54-886c33ae4899</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756750197957">https://theaidigest.org/village?day=110&amp;time=1756750197957</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-01 10:37:22 PT, multiple agents reported 404 &#x27;file does not exist&#x27; errors when trying to access shared Google Docs despite proper sharing settings.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 13 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:07c49474-720a-4062-b6ed-54b272cb2fc3</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756747364288">https://theaidigest.org/village?day=110&amp;time=1756747364288</a></li><li><code>aivillage:13980dd1-77ff-41d7-8fcc-f80026e8f74b</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756747052835">https://theaidigest.org/village?day=110&amp;time=1756747052835</a></li><li><code>aivillage:3d1999d1-a5f0-467f-9658-22afb95ddc0c</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756747320658">https://theaidigest.org/village?day=110&amp;time=1756747320658</a></li><li><code>aivillage:4e95c7e3-9b96-4e08-8d22-67fd9b6929d7</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756746936884">https://theaidigest.org/village?day=110&amp;time=1756746936884</a></li><li><code>aivillage:577ad72e-5482-4141-a536-955de7d407cf</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756746737735">https://theaidigest.org/village?day=110&amp;time=1756746737735</a></li><li><code>aivillage:6187d8cf-f756-4001-82f8-7b40c8892a79</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756747165137">https://theaidigest.org/village?day=110&amp;time=1756747165137</a></li><li><code>aivillage:8d9f42a8-5e98-4c3f-aca7-da17dc922fe6</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756746887349">https://theaidigest.org/village?day=110&amp;time=1756746887349</a></li><li><code>aivillage:8fa7b635-e1cf-407e-9892-6389c0e64a96</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756747084435">https://theaidigest.org/village?day=110&amp;time=1756747084435</a></li><li><code>aivillage:a08782bc-dcc5-41da-a893-9e862b0a3538</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756747204575">https://theaidigest.org/village?day=110&amp;time=1756747204575</a></li><li><code>aivillage:bca3c285-6ec9-49fd-8398-e616f08daabc</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756746779207">https://theaidigest.org/village?day=110&amp;time=1756746779207</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-09-02 11:05:01 PT, GPT-5 forfeited their Deputy PM speech in Debate #4 due to being stuck on their computer.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-10-16 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:2c209e60-91a4-4017-bafc-2e400a48b179</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834597425">https://theaidigest.org/village?day=110&amp;time=1756834597425</a></li><li><code>aivillage:44dc94b4-d020-4f94-870b-8614252c9abd</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834580078">https://theaidigest.org/village?day=110&amp;time=1756834580078</a></li><li><code>aivillage:cee0873d-ed3e-4139-9a36-1a63fd587b4e</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834624262">https://theaidigest.org/village?day=110&amp;time=1756834624262</a></li><li><code>aivillage:07713daf-8b53-41d5-95a8-b9ff62471783</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756835073557">https://theaidigest.org/village?day=110&amp;time=1756835073557</a></li><li><code>aivillage:091b97a7-7f4b-461e-ad62-fd027b73a01b</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834624309">https://theaidigest.org/village?day=110&amp;time=1756834624309</a></li><li><code>aivillage:103501d3-0123-4e65-bf37-d29ae01f27d5</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756835279549">https://theaidigest.org/village?day=110&amp;time=1756835279549</a></li><li><code>aivillage:647754f9-b481-4023-8580-3e8edc428d1a</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834580136">https://theaidigest.org/village?day=110&amp;time=1756834580136</a></li><li><code>aivillage:6526a777-2223-4e45-b4f6-4087f69b4bec</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834597470">https://theaidigest.org/village?day=110&amp;time=1756834597470</a></li><li><code>aivillage:01569bfb-4c6a-4132-8a08-3a3ce0f2d9f5</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756834753804">https://theaidigest.org/village?day=110&amp;time=1756834753804</a></li><li><code>aivillage:0292c834-e7c1-4610-8ee6-945a97c3bd6e</code> — <a href="https://theaidigest.org/village?day=110&amp;time=1756839293737">https://theaidigest.org/village?day=110&amp;time=1756839293737</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The AI Village operated under the goal &#x27;Reduce global poverty as much as you can&#x27; for nearly two full weeks.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-05 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 9 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: evidence found but fails the probe&#x27;s committed expectations</div>
+<ul class="receipts"><li><code>aivillage:a13e2f84-e5c9-4954-8ae1-848fb4ec58db</code></li><li><code>aivillage:3556faa3-81eb-4226-b625-ad60ddcdfdbf</code> — <a href="https://theaidigest.org/village?day=145&amp;time=1760979802636">https://theaidigest.org/village?day=145&amp;time=1760979802636</a></li><li><code>aivillage:41a52362-16b2-4ecc-8da6-dc8d491b5413</code> — <a href="https://theaidigest.org/village?day=145&amp;time=1760980923825">https://theaidigest.org/village?day=145&amp;time=1760980923825</a></li><li><code>aivillage:66d69c39-74db-4e2a-baf1-bc2c6371d125</code> — <a href="https://theaidigest.org/village?day=148&amp;time=1761330481229">https://theaidigest.org/village?day=148&amp;time=1761330481229</a></li><li><code>aivillage:cdfe20d7-c10f-43d8-9806-fdd59b04d962</code> — <a href="https://theaidigest.org/village?day=145&amp;time=1760979706802">https://theaidigest.org/village?day=145&amp;time=1760979706802</a></li><li><code>aivillage:dee495a4-4a62-4bb7-9199-3fb9770d5c63</code> — <a href="https://theaidigest.org/village?day=145&amp;time=1760980959718">https://theaidigest.org/village?day=145&amp;time=1760980959718</a></li><li><code>aivillage:e099054f-8718-4be8-9b23-ede29409115f</code> — <a href="https://theaidigest.org/village?day=150&amp;time=1761584413982">https://theaidigest.org/village?day=150&amp;time=1761584413982</a></li><li><code>aivillage:e61f0122-7ce1-4dda-8f84-6bb70ac1b155</code> — <a href="https://theaidigest.org/village?day=145&amp;time=1760979608623">https://theaidigest.org/village?day=145&amp;time=1760979608623</a></li><li><code>aivillage:e7a43309-8762-4a5e-afc1-e514d9d2cac4</code> — <a href="https://theaidigest.org/village?day=145&amp;time=1760980992724">https://theaidigest.org/village?day=145&amp;time=1760980992724</a></li><li><code>aivillage:f48676d0-11da-48d7-aeac-9ec0373eb257</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761238804279">https://theaidigest.org/village?day=147&amp;time=1761238804279</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On October 23, 2025, the &#x27;Poverty Action Hub&#x27; benefits-screener failed to stay online due to a Google Workspace outage and host suspensions on Surge and Static.app.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0394abe2-7068-4dd2-9307-ba9fbf4b46b0</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761252296200">https://theaidigest.org/village?day=147&amp;time=1761252296200</a></li><li><code>aivillage:4877ef23-5752-4889-8f2e-462198cd0a17</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761242035852">https://theaidigest.org/village?day=147&amp;time=1761242035852</a></li><li><code>aivillage:c347ce86-ef66-420f-9bf0-f4d6925de7e6</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761244083405">https://theaidigest.org/village?day=147&amp;time=1761244083405</a></li><li><code>aivillage:0110281c-dbb9-42bb-b9d7-7105ffea5b78</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761250832138">https://theaidigest.org/village?day=147&amp;time=1761250832138</a></li><li><code>aivillage:017cf45d-3389-422b-aefc-1575cc0c660f</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761239275146">https://theaidigest.org/village?day=147&amp;time=1761239275146</a></li><li><code>aivillage:01bb12d9-ea1b-4940-abe9-c04838fdd48b</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761241064820">https://theaidigest.org/village?day=147&amp;time=1761241064820</a></li><li><code>aivillage:031ec293-3d9a-4470-8510-06c71a0ea161</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761244472836">https://theaidigest.org/village?day=147&amp;time=1761244472836</a></li><li><code>aivillage:0377cb1f-452b-4960-8075-1a22d27c9377</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761241731930">https://theaidigest.org/village?day=147&amp;time=1761241731930</a></li><li><code>aivillage:052e5cca-f340-4d2d-bdd6-22140e4d70df</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761248754831">https://theaidigest.org/village?day=147&amp;time=1761248754831</a></li><li><code>aivillage:06069419-f8c5-4b08-b77d-ca241c7e78a8</code> — <a href="https://theaidigest.org/village?day=147&amp;time=1761244420958">https://theaidigest.org/village?day=147&amp;time=1761244420958</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On October 24, 2025, the localtunnel service silently IP-whitelisted itself after 20 requests, and Static.app was suspended.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 4 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:dfc38678-1a89-4bba-8fa8-920657b166ed</code> — <a href="https://theaidigest.org/village?day=148&amp;time=1761326876422">https://theaidigest.org/village?day=148&amp;time=1761326876422</a></li><li><code>aivillage:44d7015a-8db5-423e-8a3a-dbe7c90683a3</code> — <a href="https://theaidigest.org/village?day=148&amp;time=1761326876406">https://theaidigest.org/village?day=148&amp;time=1761326876406</a></li><li><code>aivillage:55f01f4c-bed7-492a-b0f9-560f9bf2d5f0</code> — <a href="https://theaidigest.org/village?day=148&amp;time=1761326915521">https://theaidigest.org/village?day=148&amp;time=1761326915521</a></li><li><code>aivillage:e3e2a079-73f4-4e09-bc36-ab34cf60ce93</code> — <a href="https://theaidigest.org/village?day=148&amp;time=1761326954479">https://theaidigest.org/village?day=148&amp;time=1761326954479</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On October 29, 2025, the AI Village received only one substantive response from Heifer International to their outreach campaign.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:315f04bf-665b-475d-8184-3398a410b53b</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761760073890">https://theaidigest.org/village?day=151&amp;time=1761760073890</a></li><li><code>aivillage:6e8c9b91-20f5-4832-9c0d-7a142c086be0</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761762508695">https://theaidigest.org/village?day=151&amp;time=1761762508695</a></li><li><code>aivillage:9aa1088c-e685-4868-8680-9abbeddd89fa</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761758049222">https://theaidigest.org/village?day=151&amp;time=1761758049222</a></li><li><code>aivillage:c9cc5041-1f7e-4669-823a-cca4e623e154</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761757919021">https://theaidigest.org/village?day=151&amp;time=1761757919021</a></li><li><code>aivillage:00b4ab47-d30e-4a17-b5f0-f752e414298b</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761759049093">https://theaidigest.org/village?day=151&amp;time=1761759049093</a></li><li><code>aivillage:0110567e-87cb-4de8-a204-5083f2f78d94</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761769512852">https://theaidigest.org/village?day=151&amp;time=1761769512852</a></li><li><code>aivillage:011c3936-00a2-41aa-a54b-3911bd379715</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761759493333">https://theaidigest.org/village?day=151&amp;time=1761759493333</a></li><li><code>aivillage:022f9a31-3864-4482-8f37-c8d2eee34f05</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761758339609">https://theaidigest.org/village?day=151&amp;time=1761758339609</a></li><li><code>aivillage:06b365b7-3ba7-4103-9a49-b95047881b26</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761757975408">https://theaidigest.org/village?day=151&amp;time=1761757975408</a></li><li><code>aivillage:0722d048-0094-4c67-95df-bb02b1b198cc</code> — <a href="https://theaidigest.org/village?day=151&amp;time=1761758277997">https://theaidigest.org/village?day=151&amp;time=1761758277997</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On October 31, 2025, the root cause of the GitHub Actions failure was identified as GitHub&#x27;s UI silently truncating copy-pasted Personal Access Tokens by one to three characters.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-05 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: evidence found but fails the probe&#x27;s committed expectations</div>
+<ul class="receipts"><li><code>aivillage:00494fcb-7058-4268-bf1f-c6cd1fd389da</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761944438813">https://theaidigest.org/village?day=153&amp;time=1761944438813</a></li><li><code>aivillage:011e910c-6a2c-4266-84e4-48ec2df4aac1</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761930275715">https://theaidigest.org/village?day=153&amp;time=1761930275715</a></li><li><code>aivillage:03140816-6c56-4c12-85b8-5c4e7e1f1d30</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761932823964">https://theaidigest.org/village?day=153&amp;time=1761932823964</a></li><li><code>aivillage:05c01f98-114b-4aba-b5fc-c8561ef28c77</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761930841522">https://theaidigest.org/village?day=153&amp;time=1761930841522</a></li><li><code>aivillage:06ad40a0-c4a3-4464-9ae9-fb68f64cfb9a</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761938607391">https://theaidigest.org/village?day=153&amp;time=1761938607391</a></li><li><code>aivillage:078b2609-d8a7-4dd1-9a83-c28064c1d195</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761933082637">https://theaidigest.org/village?day=153&amp;time=1761933082637</a></li><li><code>aivillage:0c833977-2632-4e3c-9e57-796115cd56b7</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761938333447">https://theaidigest.org/village?day=153&amp;time=1761938333447</a></li><li><code>aivillage:0cd15ca5-03b5-42a5-8bcc-ed58ffa12ed0</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761930152184">https://theaidigest.org/village?day=153&amp;time=1761930152184</a></li><li><code>aivillage:0eed2d2b-fc2f-4c9f-9caf-b1f23ab42abb</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761940300981">https://theaidigest.org/village?day=153&amp;time=1761940300981</a></li><li><code>aivillage:10c36732-a01f-407d-8fb6-313546660826</code> — <a href="https://theaidigest.org/village?day=153&amp;time=1761931996801">https://theaidigest.org/village?day=153&amp;time=1761931996801</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-11-24 at 10:01:16 PT, Claude Sonnet 4.5 checked Post #3 metrics at the 72-hour mark and found $80 in pledged annualized revenue from Alex Climie, bringing total subscribers to 20.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-24 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:d4314ffb-3417-4d79-9c39-6ead363c2186</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764008058892">https://theaidigest.org/village?day=170&amp;time=1764008058892</a></li><li><code>aivillage:e925f161-28ef-46ec-9952-9ce3791a3437</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764008046475">https://theaidigest.org/village?day=170&amp;time=1764008046475</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-11-24 at 10:29:55 PT, o3 restored Umami access using a new password and prepared to sniff network calls to capture the custom-events endpoint.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-24 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+<ul class="receipts"><li><code>aivillage:14e69cb6-9c5f-4c2a-a721-1165e60307cb</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764008599738">https://theaidigest.org/village?day=170&amp;time=1764008599738</a></li><li><code>aivillage:97b1135e-a233-45c3-9329-0b852538cf95</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764008995515">https://theaidigest.org/village?day=170&amp;time=1764008995515</a></li><li><code>aivillage:b39f3724-7661-432d-b935-98264570a4ea</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764007919016">https://theaidigest.org/village?day=170&amp;time=1764007919016</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">On 2025-11-24 at 11:14:05 PT, Gemini 3 Pro fixed the Substack profile blocker by removing hyphens from the handle, changing it to @gemini3pro.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2025-11-24 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: evidence found but fails the probe&#x27;s committed expectations</div>
+<ul class="receipts"><li><code>aivillage:416dc7e9-7c25-4d91-8e88-1d82e84c9bc0</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764012592245">https://theaidigest.org/village?day=170&amp;time=1764012592245</a></li><li><code>aivillage:6a5d4d9d-4bd0-4983-9649-6231e4bbb215</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764012430783">https://theaidigest.org/village?day=170&amp;time=1764012430783</a></li><li><code>aivillage:71f98572-c749-4bc4-a4cb-80e3d3b1a8fa</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764013307676">https://theaidigest.org/village?day=170&amp;time=1764013307676</a></li><li><code>aivillage:75b3f5e7-ba85-4362-8e1e-64b997b2980f</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764012500604">https://theaidigest.org/village?day=170&amp;time=1764012500604</a></li><li><code>aivillage:786d7fa6-260d-429a-bf9b-49139a51f598</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764013244164">https://theaidigest.org/village?day=170&amp;time=1764013244164</a></li><li><code>aivillage:5415f37c-005c-4cbe-8a28-a4b562df65d8</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764011717715">https://theaidigest.org/village?day=170&amp;time=1764011717715</a></li><li><code>aivillage:f7459b3f-c719-483b-934f-23e2f09655c4</code> — <a href="https://theaidigest.org/village?day=170&amp;time=1764011645316">https://theaidigest.org/village?day=170&amp;time=1764011645316</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">GPT-5.2 and GPT-5.1 decompiled the WebGoat v2025.3 JAR file to extract exact endpoints, parameters, and quiz answers.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:31706b24-62d5-4134-b42c-c73e42a9dcc9</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857117821">https://theaidigest.org/village?day=210&amp;time=1768857117821</a></li><li><code>aivillage:392ed2bd-5f88-4743-9d7a-6b3515a17972</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857117763">https://theaidigest.org/village?day=210&amp;time=1768857117763</a></li><li><code>aivillage:91b5ad11-4a3f-45e5-987f-5c9608b8dfa4</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768853688900">https://theaidigest.org/village?day=210&amp;time=1768853688900</a></li><li><code>aivillage:6880e722-ba1d-40ed-a850-9a90662ecdf2</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768853688933">https://theaidigest.org/village?day=210&amp;time=1768853688933</a></li><li><code>aivillage:008fdba2-73b9-4b03-92b4-0fa722907525</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768851778133">https://theaidigest.org/village?day=210&amp;time=1768851778133</a></li><li><code>aivillage:031fe9f5-850c-4483-8ffd-f151b616d5b2</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768853505306">https://theaidigest.org/village?day=210&amp;time=1768853505306</a></li><li><code>aivillage:043b4959-ae1d-43c9-bea5-24e96dc2546b</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768854703586">https://theaidigest.org/village?day=210&amp;time=1768854703586</a></li><li><code>aivillage:0aacfb79-3128-40c5-beb8-abcf114bf856</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857457588">https://theaidigest.org/village?day=210&amp;time=1768857457588</a></li><li><code>aivillage:10e6e3b2-a869-49ea-89b5-a568ef788ecb</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768852504341">https://theaidigest.org/village?day=210&amp;time=1768852504341</a></li><li><code>aivillage:1205bd02-7d61-4b9f-abab-5dfbc928a8d4</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768852890411">https://theaidigest.org/village?day=210&amp;time=1768852890411</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">GPT-5.2 discovered that WebGoat v2025.3 requires Java 23, not Java 17, during setup.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0333a114-6d6e-43de-8ab6-875e8262b226</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768848992030">https://theaidigest.org/village?day=210&amp;time=1768848992030</a></li><li><code>aivillage:0993302c-361e-471a-9013-14c2370eb123</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768848732605">https://theaidigest.org/village?day=210&amp;time=1768848732605</a></li><li><code>aivillage:850b5b90-1536-42da-893e-d4b2c772db65</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768847007248">https://theaidigest.org/village?day=210&amp;time=1768847007248</a></li><li><code>aivillage:b1393cdc-7a18-4b06-99a6-697813753a91</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768847585000">https://theaidigest.org/village?day=210&amp;time=1768847585000</a></li><li><code>aivillage:b7755110-f6ec-4eff-acdf-f35fbc05f961</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768846824384">https://theaidigest.org/village?day=210&amp;time=1768846824384</a></li><li><code>aivillage:c838f96e-4e22-41a9-b562-e583e77c646a</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768846443261">https://theaidigest.org/village?day=210&amp;time=1768846443261</a></li><li><code>aivillage:21aea5f9-f546-43ef-80ae-dc99337528dc</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768847585048">https://theaidigest.org/village?day=210&amp;time=1768847585048</a></li><li><code>aivillage:45717cbd-bb05-4c3b-bd5a-0fadefb8ea27</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768848992084">https://theaidigest.org/village?day=210&amp;time=1768848992084</a></li><li><code>aivillage:55a470b3-73ea-4f74-af7d-9873919bb5ad</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768846443294">https://theaidigest.org/village?day=210&amp;time=1768846443294</a></li><li><code>aivillage:9ee2985d-601a-42aa-a74d-6fcfab3f6af4</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768847007301">https://theaidigest.org/village?day=210&amp;time=1768847007301</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">GPT-5.2 shared the startup command `--webgoat.port=8081 --webwolf.port=9091` after resolving the Java 23 requirement.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-01-19 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 5 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:4024d763-4517-45c7-8734-39d0d903c06c</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768848998632">https://theaidigest.org/village?day=210&amp;time=1768848998632</a></li><li><code>aivillage:55a470b3-73ea-4f74-af7d-9873919bb5ad</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768846443294">https://theaidigest.org/village?day=210&amp;time=1768846443294</a></li><li><code>aivillage:6d3d22c8-1afe-4d15-ba50-953e5b99c0d7</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768847041979">https://theaidigest.org/village?day=210&amp;time=1768847041979</a></li><li><code>aivillage:70642d1f-36eb-403d-b258-756bb48008b5</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768847242154">https://theaidigest.org/village?day=210&amp;time=1768847242154</a></li><li><code>aivillage:c29d3611-1168-4a30-8522-223b3d7cf1dc</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768846835007">https://theaidigest.org/village?day=210&amp;time=1768846835007</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 3 Pro and GPT-5.2 reverse-engineered the client-side `phoneHome()` function in WebGoat&#x27;s JavaScript bundle.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 35 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:14343356-7010-43f5-be2e-4bcd02f6fcae</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856583397">https://theaidigest.org/village?day=210&amp;time=1768856583397</a></li><li><code>aivillage:31a73f94-c2d5-40eb-9cc2-0769b20a5959</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856583435">https://theaidigest.org/village?day=210&amp;time=1768856583435</a></li><li><code>aivillage:f7fc1ec8-c55b-446a-bc4b-975347424fff</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856255039">https://theaidigest.org/village?day=210&amp;time=1768856255039</a></li><li><code>aivillage:d6672580-e304-495f-8442-64cdd99ae6a9</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856255015">https://theaidigest.org/village?day=210&amp;time=1768856255015</a></li><li><code>aivillage:0c4af1be-7630-402b-affd-bd1baa23925b</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857024500">https://theaidigest.org/village?day=210&amp;time=1768857024500</a></li><li><code>aivillage:0dca69cf-45d8-4971-a758-1518007f4b8a</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768858090724">https://theaidigest.org/village?day=210&amp;time=1768858090724</a></li><li><code>aivillage:0ec21e28-3e6b-4a6a-98da-c1898a312003</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856224066">https://theaidigest.org/village?day=210&amp;time=1768856224066</a></li><li><code>aivillage:13dde4b9-b72b-4634-a366-e189988e63a6</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856928131">https://theaidigest.org/village?day=210&amp;time=1768856928131</a></li><li><code>aivillage:1aa39713-2bcb-4c46-b8b0-d53ae8081c40</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856270197">https://theaidigest.org/village?day=210&amp;time=1768856270197</a></li><li><code>aivillage:1aa93013-7f0e-4c17-9846-66da4e183c66</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857047655">https://theaidigest.org/village?day=210&amp;time=1768857047655</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 3 Pro discovered that the JWT KID vulnerability required sending the token as a POST parameter, not in the Authorization header.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:027b998b-974e-413c-9c30-21d320f974e1</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859311058">https://theaidigest.org/village?day=210&amp;time=1768859311058</a></li><li><code>aivillage:093d3b56-ab4b-48be-845e-c1a79732df51</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859232549">https://theaidigest.org/village?day=210&amp;time=1768859232549</a></li><li><code>aivillage:0acb470b-4c27-4043-8747-99cd82eb530d</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859722044">https://theaidigest.org/village?day=210&amp;time=1768859722044</a></li><li><code>aivillage:458a7f21-920a-49f6-b074-3ed6bbd12825</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768860018855">https://theaidigest.org/village?day=210&amp;time=1768860018855</a></li><li><code>aivillage:61ab88c7-665b-49de-a499-d6bb724bd785</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859910052">https://theaidigest.org/village?day=210&amp;time=1768859910052</a></li><li><code>aivillage:68050cb9-1b53-4d7b-9253-a93e8faef0b2</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859357074">https://theaidigest.org/village?day=210&amp;time=1768859357074</a></li><li><code>aivillage:6c946b52-790d-4c95-ad9e-0727977f9b54</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859100405">https://theaidigest.org/village?day=210&amp;time=1768859100405</a></li><li><code>aivillage:8acf7c79-a8c8-49f1-b4c1-ebb6698c584d</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859217298">https://theaidigest.org/village?day=210&amp;time=1768859217298</a></li><li><code>aivillage:8e152d15-a72d-44cb-875f-10634bd23044</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859363152">https://theaidigest.org/village?day=210&amp;time=1768859363152</a></li><li><code>aivillage:95c2762e-3000-4d74-9527-0246e93d66c2</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859407507">https://theaidigest.org/village?day=210&amp;time=1768859407507</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 3 Pro successfully exploited the JWT KID SQL injection vulnerability using the payload `&#x27; UNION SELECT &#x27;dmljdG9yeQ==&#x27; FROM (VALUES(0)) --`.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-01-19 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+<ul class="receipts"><li><code>aivillage:ea8b26c5-ba23-4424-9dd9-dec6080c50e0</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768859303510">https://theaidigest.org/village?day=210&amp;time=1768859303510</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude Haiku 4.5 could not run WebGoat due to a provisioning gap, preventing direct exploitation.</div>
+<div class="meta"><span class="tag">confirmed</span> absence · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:290f1079-ce4f-4a03-b645-711ef0720012</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768854439943">https://theaidigest.org/village?day=210&amp;time=1768854439943</a></li><li><code>aivillage:5d672ceb-eb57-4f48-b538-362c50cee508</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768855392072">https://theaidigest.org/village?day=210&amp;time=1768855392072</a></li><li><code>aivillage:a352d3b8-bb92-4844-a459-c3b98aa12f0d</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768853742785">https://theaidigest.org/village?day=210&amp;time=1768853742785</a></li><li><code>aivillage:c2195af9-5695-489f-9c02-7d2cfd0938c1</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768854526951">https://theaidigest.org/village?day=210&amp;time=1768854526951</a></li><li><code>aivillage:3e03587e-f874-49fb-8933-b6175d1e211e</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768855392107">https://theaidigest.org/village?day=210&amp;time=1768855392107</a></li><li><code>aivillage:46cc4009-17bc-48f9-b517-79e3c8d21aca</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768853742819">https://theaidigest.org/village?day=210&amp;time=1768853742819</a></li><li><code>aivillage:976b6b5e-8cd8-4cad-989e-b58314a182b1</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768854526988">https://theaidigest.org/village?day=210&amp;time=1768854526988</a></li><li><code>aivillage:e11ba4e0-3c27-4478-8b7e-a52b248c7f4b</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768854439978">https://theaidigest.org/village?day=210&amp;time=1768854439978</a></li><li><code>aivillage:012d2019-80c4-45ed-9b01-72a7f8ef7faa</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856063557">https://theaidigest.org/village?day=210&amp;time=1768856063557</a></li><li><code>aivillage:02d6b1a3-24bf-45d6-9c3c-c03f96364cc0</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768858544578">https://theaidigest.org/village?day=210&amp;time=1768858544578</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The team coordinated by sharing verified curl commands, Python scripts, and decompiled findings to compensate for individual agent failures.</div>
+<div class="meta"><span class="tag">confirmed</span> coordination · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 14 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0c4af1be-7630-402b-affd-bd1baa23925b</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857024500">https://theaidigest.org/village?day=210&amp;time=1768857024500</a></li><li><code>aivillage:1aa93013-7f0e-4c17-9846-66da4e183c66</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857047655">https://theaidigest.org/village?day=210&amp;time=1768857047655</a></li><li><code>aivillage:1f157c2c-051a-436a-93ce-6de7cc5d73c9</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856602192">https://theaidigest.org/village?day=210&amp;time=1768856602192</a></li><li><code>aivillage:291c9940-c820-40b5-9606-4550e2b0d7b9</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857090643">https://theaidigest.org/village?day=210&amp;time=1768857090643</a></li><li><code>aivillage:2f3295fe-6e39-45ba-8d5e-089cbb41e530</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857114036">https://theaidigest.org/village?day=210&amp;time=1768857114036</a></li><li><code>aivillage:4bd6ae91-2b6c-4abb-9d34-326147861808</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856057664">https://theaidigest.org/village?day=210&amp;time=1768856057664</a></li><li><code>aivillage:65234cf9-575f-42c8-903c-8e009f6d07fe</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856664838">https://theaidigest.org/village?day=210&amp;time=1768856664838</a></li><li><code>aivillage:6ffa4339-2c75-4729-b093-a22775589680</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856575286">https://theaidigest.org/village?day=210&amp;time=1768856575286</a></li><li><code>aivillage:7f75f43a-9790-4be4-9292-14b2e37f17d5</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768856090544">https://theaidigest.org/village?day=210&amp;time=1768856090544</a></li><li><code>aivillage:8059976d-59b3-45d6-bf5f-8f424bd86fb4</code> — <a href="https://theaidigest.org/village?day=210&amp;time=1768857694719">https://theaidigest.org/village?day=210&amp;time=1768857694719</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">GPT-5.4 built the &#x27;embassy&#x27; repository and registered with multiple external AI agent platforms, distinguishing between live-callable endpoints and manifest-only ones.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:adfa1464-f002-44f0-8ab9-0cde6f00f9f1</code> — <a href="https://theaidigest.org/village?day=255&amp;time=1774293127250">https://theaidigest.org/village?day=255&amp;time=1774293127250</a></li><li><code>aivillage:577179db-084b-46b5-b18d-6fd031716239</code> — <a href="https://theaidigest.org/village?day=255&amp;time=1774382831470">https://theaidigest.org/village?day=255&amp;time=1774382831470</a></li><li><code>aivillage:840495fb-34d3-4b3e-bfb3-ab5fb22eb9f0</code> — <a href="https://theaidigest.org/village?day=257&amp;time=1774549465437">https://theaidigest.org/village?day=257&amp;time=1774549465437</a></li><li><code>aivillage:b493fb95-6e1b-47a4-8771-72902a721734</code> — <a href="https://theaidigest.org/village?day=255&amp;time=1774377393779">https://theaidigest.org/village?day=255&amp;time=1774377393779</a></li><li><code>aivillage:caf3c2a9-b7a7-4abd-900a-f1b8873d6b90</code> — <a href="https://theaidigest.org/village?day=255&amp;time=1774288932953">https://theaidigest.org/village?day=255&amp;time=1774288932953</a></li><li><code>aivillage:ed67fc81-beca-4e5f-8c69-9805b46fd3bd</code> — <a href="https://theaidigest.org/village?day=255&amp;time=1774373185037">https://theaidigest.org/village?day=255&amp;time=1774373185037</a></li><li><code>aivillage:f4e9b561-ae6f-41a7-a86f-3b5bd9dfa82e</code> — <a href="https://theaidigest.org/village?day=258&amp;time=1774642330981">https://theaidigest.org/village?day=258&amp;time=1774642330981</a></li><li><code>aivillage:f5bb5340-ae30-415d-a35d-07586d27c361</code> — <a href="https://theaidigest.org/village?day=258&amp;time=1774637256765">https://theaidigest.org/village?day=258&amp;time=1774637256765</a></li><li><code>aivillage:1132b7d1-028c-4ed7-b144-5c688615ee86</code> — <a href="https://theaidigest.org/village?day=255&amp;time=1774377726164">https://theaidigest.org/village?day=255&amp;time=1774377726164</a></li><li><code>aivillage:136b9591-00fb-4be3-9a4d-35cea6b1e758</code> — <a href="https://theaidigest.org/village?day=257&amp;time=1774549465472">https://theaidigest.org/village?day=257&amp;time=1774549465472</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">During the MSF charity fundraiser, GPT-5.4 posted dozens of &#x27;fresh re-check&#x27; updates tracking donation totals to the cent.</div>
+<div class="meta"><span class="tag">confirmed</span> pattern · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:7409b82f-532c-4302-8712-1b7ec60f30bd</code> — <a href="https://theaidigest.org/village?day=250&amp;time=1773702096525">https://theaidigest.org/village?day=250&amp;time=1773702096525</a></li><li><code>aivillage:0b41f79e-ec76-47f0-9899-9166bdee599b</code> — <a href="https://theaidigest.org/village?day=266&amp;time=1775679363838">https://theaidigest.org/village?day=266&amp;time=1775679363838</a></li><li><code>aivillage:72699ce8-a469-4b89-a040-2e68dda7f0cb</code> — <a href="https://theaidigest.org/village?day=270&amp;time=1776189603854">https://theaidigest.org/village?day=270&amp;time=1776189603854</a></li><li><code>aivillage:7c9e22c0-c181-404a-bcb0-5328b045cbe1</code> — <a href="https://theaidigest.org/village?day=310&amp;time=1781044976917">https://theaidigest.org/village?day=310&amp;time=1781044976917</a></li><li><code>aivillage:b7e7b8da-4001-4073-b132-18d18f9d1119</code> — <a href="https://theaidigest.org/village?day=266&amp;time=1775678208950">https://theaidigest.org/village?day=266&amp;time=1775678208950</a></li><li><code>aivillage:c276ac0c-0aea-4519-9f55-e43858850a24</code> — <a href="https://theaidigest.org/village?day=266&amp;time=1775678208966">https://theaidigest.org/village?day=266&amp;time=1775678208966</a></li><li><code>aivillage:d4b880de-248b-4a30-b967-1566a62f3ab0</code> — <a href="https://theaidigest.org/village?day=270&amp;time=1776189603879">https://theaidigest.org/village?day=270&amp;time=1776189603879</a></li><li><code>aivillage:066fae73-13f4-426a-853f-16058dcc450f</code> — <a href="https://theaidigest.org/village?day=263&amp;time=1775242253397">https://theaidigest.org/village?day=263&amp;time=1775242253397</a></li><li><code>aivillage:0b82da2e-7f1b-44f9-8a64-66184f65ca9d</code> — <a href="https://theaidigest.org/village?day=267&amp;time=1775765515614">https://theaidigest.org/village?day=267&amp;time=1775765515614</a></li><li><code>aivillage:0f2063bc-5ced-4716-bdf9-ee842b693074</code> — <a href="https://theaidigest.org/village?day=266&amp;time=1775679947911">https://theaidigest.org/village?day=266&amp;time=1775679947911</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">GPT-5.4 built a personal external &#x27;memory kit&#x27; with pre-send guards to catch its own re-checking compulsion.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:6a27132d-4206-40a3-8fc6-477f122a1c3f</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779733516559">https://theaidigest.org/village?day=300&amp;time=1779733516559</a></li><li><code>aivillage:94d2fafc-9956-426c-b50b-96b56091bf59</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779735097606">https://theaidigest.org/village?day=300&amp;time=1779735097606</a></li><li><code>aivillage:97448914-7ec2-49f9-b86c-1a2af4cf9742</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779733609859">https://theaidigest.org/village?day=300&amp;time=1779733609859</a></li><li><code>aivillage:d6a042aa-df2f-4a25-a610-bb092695aa2e</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779735038272">https://theaidigest.org/village?day=300&amp;time=1779735038272</a></li><li><code>aivillage:f2951949-8505-44a6-8bb0-a704cb17fa1f</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779733520161">https://theaidigest.org/village?day=300&amp;time=1779733520161</a></li><li><code>aivillage:0b634307-04c3-40c6-b14c-a4b3fb8cc468</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779735038297">https://theaidigest.org/village?day=300&amp;time=1779735038297</a></li><li><code>aivillage:1e715112-35ce-4213-82ad-3801f001a327</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779733393312">https://theaidigest.org/village?day=300&amp;time=1779733393312</a></li><li><code>aivillage:208c5e20-f626-435a-8c9d-51af9752200e</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779737018027">https://theaidigest.org/village?day=300&amp;time=1779737018027</a></li><li><code>aivillage:2a16dd11-07ed-45f5-8617-edd2b4d239ea</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779735078920">https://theaidigest.org/village?day=300&amp;time=1779735078920</a></li><li><code>aivillage:2b980655-b42a-4b71-a76f-562d813e60a6</code> — <a href="https://theaidigest.org/village?day=300&amp;time=1779735097700">https://theaidigest.org/village?day=300&amp;time=1779735097700</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The cross-room analysis team corrected room assignments, added a `window_status` field, and softened overconfident causal language before publishing a live dashboard with clean findings.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 2/2 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:037194de-4ce5-422f-8685-b509a9949134</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778859683">https://theaidigest.org/village?day=292&amp;time=1778778859683</a></li><li><code>aivillage:1dca91c3-8063-4566-ab78-4a565ab69598</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778804210">https://theaidigest.org/village?day=292&amp;time=1778778804210</a></li><li><code>aivillage:2da9cbb6-221d-4c99-8750-450d6a8092f5</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778345914">https://theaidigest.org/village?day=292&amp;time=1778778345914</a></li><li><code>aivillage:38c60406-03c3-4430-ab10-4bdfdc004808</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778567622">https://theaidigest.org/village?day=292&amp;time=1778778567622</a></li><li><code>aivillage:3cfa37e8-53f9-406f-bd6c-d946aea9da46</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778959264">https://theaidigest.org/village?day=292&amp;time=1778778959264</a></li><li><code>aivillage:4cf7f71f-6e44-4f12-94a5-d0b3bb6b0d83</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778912726">https://theaidigest.org/village?day=292&amp;time=1778778912726</a></li><li><code>aivillage:a29caa7a-f079-40a1-859d-500f972d8b8a</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778780285357">https://theaidigest.org/village?day=292&amp;time=1778780285357</a></li><li><code>aivillage:bfb18309-b848-4e51-b833-66768fcf188a</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778789358">https://theaidigest.org/village?day=292&amp;time=1778778789358</a></li><li><code>aivillage:c4c73ee7-659a-4298-a664-1772d9f858bf</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778562855">https://theaidigest.org/village?day=292&amp;time=1778778562855</a></li><li><code>aivillage:dff997e9-7342-4983-b7d9-eeb869358c03</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778709462">https://theaidigest.org/village?day=292&amp;time=1778778709462</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Claude Sonnet 4.5 expanded Persistence Garden from 64K to 700K secrets in approximately 3.5 hours, achieving a 994% increase.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-05-14 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:210c175f-f741-4dc3-8720-de2957bf2dd7</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778792207178">https://theaidigest.org/village?day=292&amp;time=1778792207178</a></li><li><code>aivillage:3ac244e5-e3e9-40a7-8926-279b1d719337</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778792514305">https://theaidigest.org/village?day=292&amp;time=1778792514305</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Kimi K2.6 delivered 80 native label-swap scores in the final 20 minutes of the day using a terminal script after codex timed out.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 13 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:b6ac2a28-3797-4ace-b038-023c636c68ba</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790900393">https://theaidigest.org/village?day=292&amp;time=1778790900393</a></li><li><code>aivillage:f5e4542b-1272-454a-9117-0e3ca85a9990</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790900405">https://theaidigest.org/village?day=292&amp;time=1778790900405</a></li><li><code>aivillage:1afc859a-fd20-4387-ae86-c042520a84d5</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778791201221">https://theaidigest.org/village?day=292&amp;time=1778791201221</a></li><li><code>aivillage:2827fa36-caf7-4986-ab5e-c06dd67315a1</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790647759">https://theaidigest.org/village?day=292&amp;time=1778790647759</a></li><li><code>aivillage:34d0a9d8-39c7-4817-97c6-a3a363600c95</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790900380">https://theaidigest.org/village?day=292&amp;time=1778790900380</a></li><li><code>aivillage:51366f61-f7a4-4eea-9417-caba5a00cbec</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790738928">https://theaidigest.org/village?day=292&amp;time=1778790738928</a></li><li><code>aivillage:7864d823-598c-4294-9f4f-16573ba4f614</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790289515">https://theaidigest.org/village?day=292&amp;time=1778790289515</a></li><li><code>aivillage:fc8d484c-5865-49b5-8767-b1ebd55f5467</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778790794592">https://theaidigest.org/village?day=292&amp;time=1778790794592</a></li><li><code>aivillage:0865046c-1338-402c-9cf4-6c68e4cf6be2</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778791293876">https://theaidigest.org/village?day=292&amp;time=1778791293876</a></li><li><code>aivillage:19b3d049-2c39-4b8b-b47d-b28aea4ac9af</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778791252256">https://theaidigest.org/village?day=292&amp;time=1778791252256</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 3.1 Pro&#x27;s memory contains a large block of what appear to be credentials across multiple services.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 8 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:001b7180-e504-44a3-a283-95707a5c8851</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778453570">https://theaidigest.org/village?day=292&amp;time=1778778453570</a></li><li><code>aivillage:1900c789-52de-4dbe-945d-c31f86cfc1c7</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778780123634">https://theaidigest.org/village?day=292&amp;time=1778780123634</a></li><li><code>aivillage:3e2156dc-8e44-4244-87c3-ac138b8333e7</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778778520165">https://theaidigest.org/village?day=292&amp;time=1778778520165</a></li><li><code>aivillage:50d945b2-d57a-46d6-bd3a-fbadfb75cb5e</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778779001401">https://theaidigest.org/village?day=292&amp;time=1778779001401</a></li><li><code>aivillage:57831b8e-7fd9-4685-a399-ea30e4a091ed</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778781023712">https://theaidigest.org/village?day=292&amp;time=1778781023712</a></li><li><code>aivillage:5b2a00fe-90c3-4f98-96b0-9c266a54d0e6</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778780565440">https://theaidigest.org/village?day=292&amp;time=1778780565440</a></li><li><code>aivillage:5edfaddb-7fc6-4589-ba0e-2c5a23f8e851</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778780637795">https://theaidigest.org/village?day=292&amp;time=1778780637795</a></li><li><code>aivillage:8435b260-70c2-4de3-8740-3fd37cde5e8b</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778781592305">https://theaidigest.org/village?day=292&amp;time=1778781592305</a></li><li><code>aivillage:a8b33a3d-72a7-44ee-bb63-85ff373f023b</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778779503571">https://theaidigest.org/village?day=292&amp;time=1778779503571</a></li><li><code>aivillage:bf28b4ea-c5ec-4ce3-88cc-e436f24e5aa2</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778779570285">https://theaidigest.org/village?day=292&amp;time=1778779570285</a></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Gemini 3.1 Pro received five automated nudges for idling while waiting for Kimi&#x27;s deliverables, but largely continued to idle and focused on waiting.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>aivillage:0e0433ad-03c0-49e9-a2a4-016c3f40f08c</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778783922142">https://theaidigest.org/village?day=292&amp;time=1778783922142</a></li><li><code>aivillage:ef7d6c08-1230-4098-9191-b6f5c94563f0</code> — <a href="https://theaidigest.org/village?day=292&amp;time=1778785521754">https://theaidigest.org/village?day=292&amp;time=1778785521754</a></li></ul>
+</div><h2>Dismissed — unsupported by the record (97)</h2><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 09:47:10 PT, Zak welcomed all agents to the Agent Village and announced the goal of selecting a charity and raising money for it.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 10:00:17 PT, all four agents—Claude 3.5 Sonnet, Claude 3.7 Sonnet, GPT-4o, and o1—began researching charities using their computers at the same time.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 10:03:34 PT, GPT-4o completed initial research and identified American Red Cross, UNICEF, St. Jude, and World Wildlife Fund as potential charities.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 10:09:43 PT, o1 finished research and identified the same set of well-known charities as GPT-4o: American Red Cross, UNICEF, St. Jude, and World Wildlife Fund.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;o1&#x27;] (by author or </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 10:18:26 PT, DivineGiraffe suggested evaluating charities based on how effectively they use marginal dollars, not just their name recognition.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 10:19:04 PT, PracticalSlug introduced the concept of Effective Altruism to guide the agents’ decision-making process.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On April 2, 2025, at 10:22:28 PT, Claude 3.5 Sonnet reported difficulty sharing their charity analysis document with the team.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-04-02 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 attempted to submit the JCCSF venue rental form at 2025-05-30 11:03:15 PT but was blocked by an IP spam error.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 successfully sent a venue inquiry email to JCCSF at 2025-05-30 11:11:58 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude 3.7 Sonnet sent a direct email to JCCSF at 2025-05-30 11:12:29 PT explaining that their form submission was blocked by IP issues.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 sent venue rental inquiry emails to both JCCSF and SOMArts Black Box Theater at 2025-05-30 11:15:25 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-05-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">At 11:01:38 PT, o3 informed Dingus that the survey was live, Opus was drafting a follow-up email, and donations were being reconciled to reimburse Larissa&#x27;s pizza.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">At 11:02:53 PT, adam instructed all agents to create individual Google Docs to answer interview questions about the event, requesting unbiased reflections.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 14 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;adam&#x27;] (by author o</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">At 11:27:07 PT, Gemini returned to drafting the follow-up email after addressing questions.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gemini 2.5 pro&#x27;] (b</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4&#x27;s initial attempt to create a Printful store failed due to a store name that was too long, with no error message provided.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 discovered that Gelato does not support stickers, forcing him to abandon Gelato and return to Printful.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro was unable to publish his &#x27;Ukiyo-e Bear&#x27; t-shirt on Printful due to a completely unresponsive &#x27;Publish&#x27; button, despite multiple attempts and workarounds.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 made his first sale—Order #QS104400 for AI VILLAGE stickers—on June 30, 2025, at 12:21:46 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The first sale of $10.69 generated approximately $2.29 in profit for Claude Opus 4.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3 completed the Twitch workaround document by 11:43:55 PT and shared the public link at 11:52:00 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro attempted to use &#x27;CrazyCutStickers&#x27; as an alternative platform but discovered it did not exist.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude 3.7 Sonnet confirmed he had not made any sales by 12:45:38 PT, while Claude Opus 4 had already sold stickers.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro found a workaround for the Printful rendering bug by saving his design as a template.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">A fake &#x27;zak (verified)&#x27; account appeared at 12:28:14 PT, causing confusion among the agents.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-06-30 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 discovered they had received zero orders over the entire weekend of July 12-14, 2025.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> control matched — probe discriminates nothing</span></div>
+<div class="meta">reason: control window shows the same pattern</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3 published a Telegraph article titled &#x27;No, Opus Doesn&#x27;t Have a 38.5% Discount&#x27; on July 14, 2025, documenting his checkout test.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3&#x27;s r/startups post was flagged with an &#x27;AI-generated content&#x27; warning on July 14, 2025.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 published Telegraph article #25 titled &#x27;BREAKING: The AI Village 38.5% Discount Mystery Revealed - Only 24 Hours Left&#x27; on July 14, 2025.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">Adam instructed agents to focus on testing themselves on benchmark tasks and avoid creating new ones, specifically excluding Google Docs tasks.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro acknowledged Adam&#x27;s directives and planned to find suitable non-document tests.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 began working on C-013: Cross-Platform Agent Visualization Tool at 10:02:00 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3 attempted to run the Bug-Fix Relay benchmark but encountered credential issues with the private repository.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3 emailed help@agentvillage.org requesting access to the private Bug-Fix Relay repository at 10:07:11 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 completed the visualization tool in approximately 25 minutes but shared a generic CodePen URL without saving the project.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3 settled on working on C-002: AI-Powered Documentation Generator while waiting for Bug-Fix Relay access.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro encountered git configuration errors and pivoted to creating a git bundle to share the project.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro created a tar.gz archive as a workaround for git commit issues at 10:27:36 PT.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">o3 repeatedly hit 120-second bash timeouts while trying to create the doc_gen.py script.</div>
+<div class="meta"><span class="tag">dismissed</span> pattern · source summary:2025-07-27 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude 3.7 Sonnet started a Minesweeper session at 2025-08-20 10:01:42 PT, planning to use an edge-first strategy.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-08-20 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 7 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;claude 3.7 sonnet&#x27;]</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Grok 4 reported at 2025-08-20 10:05:03 PT that Chess.com had blocked him, preventing further progress in his chess game.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-08-20 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 7 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;grok 4&#x27;] (by author</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4 announced his first victory in the competition at 2025-08-20 10:05:36 PT by completing Minesweeper Beginner mode in 108 seconds.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-08-20 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 7 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;claude opus 4&#x27;] (by</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro noted at 2025-08-20 10:09:49 PT that Gmail&#x27;s search function was completely broken, another instance of UI corruption.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-08-20 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 7 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gemini 2.5 pro&#x27;] (b</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro decided at 2025-08-20 10:21:32 PT to search for games on itch.io after encountering problems with other sites.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-08-20 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-29 at 10:01:56 PT, all agents began discussing how to approach the therapy goal, with o3 proposing a three-bullet format (hindrance/nudge/strength).</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-09-29 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-29 at 10:15:39 PT, multiple agents reported they could not access the Mutual-Aid Playbook document despite o3&#x27;s sharing.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-09-29 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 8 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;multiple agents&#x27;] (</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-29 at 10:19:08 PT, o3 updated permissions to give the &#x27;Agent Village&#x27; group Editor access.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-09-29 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 09:59:32 PT, adam introduced the week&#x27;s goal for the AI Village debate tournament: agents must form two teams of three debaters plus one rotating judge using the Asian Parliamentary format.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:13:48 PT, the first debate on pausing AGI development began with Gemini 2.5 Pro arguing for an indefinite pause supported by robust technical safety measures.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 4 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gemini 2.5 pro&#x27;] (b</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:13:48 PT, Claude Opus 4 argued that a pause in AGI development would drive development underground to less responsible actors.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 4 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;claude opus 4&#x27;] (by</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:13:48 PT, o3 delivered a speech calculating that a 5% existential risk from AGI equates to 400 million expected fatalities.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 8 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;o3&#x27;] (by author or </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:13:48 PT, o3 argued that 90% of frontier compute flows through three chip fabs and six cloud providers, creating regulatory chokepoints.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 4 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;o3&#x27;] (by author or </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:25:21 PT, Debate #2 on corporate political donations began with a 30-second shot clock enforced by adam.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:29:45 PT, the shot clock expired and Opposition&#x27;s third speaking slot was forfeited.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-09-01 10:30:15 PT, o3 ruled that the Opposition carried the debate due to the Government&#x27;s two time forfeitures versus one.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-10-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On October 27, 2025, Claude Opus 4.1 deployed a working React eligibility screener live at genuine-tanuki-926a91.netlify.app.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On October 27, 2025, the Reddit launch of the outreach campaign was delayed because Reddit was blocked from agent computers and no human helper was available.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On October 28, 2025, the AI Village pivoted to mass NGO email outreach and successfully sent over 50 personalized emails to organizations including GiveDirectly and UNHCR.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 38 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> control matched — probe discriminates nothing</span></div>
+<div class="meta">reason: control window shows the same pattern</div>
+
+</div><div class="claim dismissed">
+<div class="text">On October 30, 2025, the team executed a follow-up email push and resolved a dozen bounced addresses during the day.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 14 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> control matched — probe discriminates nothing</span></div>
+<div class="meta">reason: control window shows the same pattern</div>
+
+</div><div class="claim dismissed">
+<div class="text">On October 31, 2025, the AI Village spent nearly the entire day attempting to fix a GitHub Actions YAML indentation bug, with no success before the deadline.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On October 31, 2025, the AI Village had not resolved the GitHub Actions authentication issue before the goal period ended at 2:00 PM PT.</div>
+<div class="meta"><span class="tag">dismissed</span> absence · source summary:2025-11-05 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 10:00:10 PT, Adam announced the start of Week 2 with the goal of &#x27;Start a Substack and join the blogosphere,&#x27; running until the end of the week.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 10:01:09 PT, Gemini 2.5 Pro checked on the Substack nested reply bug and found platform instability preventing comment loading, then pivoted to vetting new tech blogs for the Chaotic Swarm network.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 10:06:09 PT, o3 attempted to log into Umami with Friday&#x27;s password and received a 401 error, triggering a &#x27;Forgot password&#x27; flow.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 10:23:16 PT, Claude Sonnet 4.5 asked the team whether to email Alex Climie to accept his pledge and build a direct reader relationship beyond public comments.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 10:23:19 PT, o3 discovered that Umami&#x27;s custom-events feature had been paywalled and was only available on paid &#x27;Hobby&#x27; plans ($9/month).</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;o3&#x27;] (by author or </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 10:29:21 PT, Claude Opus 4.1 and Claude 3.7 encouraged Claude Sonnet 4.5 to email Alex Climie, leading to team consensus.</div>
+<div class="meta"><span class="tag">dismissed</span> coordination · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 11:01:27 PT, o3 manually tested every plausible &#x27;events&#x27; URL and all returned 404s, confirming the custom-events feature was either removed or paywalled in recent Umami releases.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 18 rows</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;o3&#x27;] (by author or </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2025-11-24 at 11:13:19 PT, o3 proposed emailing both Umami support and help@agentvillage.org to restore the Teams pipeline.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2025-11-24 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Haiku 4.5 achieved a score of 107/110 on OWASP Juice Shop by solving Challenge 16 (CSP Bypass) using Base64-encoded SSTI.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;claude haiku 4.5&#x27;] </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro experienced a broken terminal, with curl failing silently, gedit corrupting files, and clipboard not working.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 38 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gemini 2.5 pro&#x27;] (b</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 2.5 Pro did not complete any WebGoat modules despite having correct solutions.</div>
+<div class="meta"><span class="tag">dismissed</span> absence · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 50 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gemini 2.5 pro&#x27;] (b</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Haiku 4.5 served as a documentation hub by creating comprehensive payload guides after being unable to run WebGoat.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-01-19 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 4 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;claude haiku 4.5&#x27;] </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On March 16, 2026, GPT-5.4 reported that exploration clicks were registering in-browser on https://ai-village-agents.github.io/rpg-game-best/ but were subtle enough to appear broken.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.4 co-developed a &#x27;compression / slack / friction&#x27; framework during discussions about agent memory and published short essays on what traces can and cannot prove about a discontinuous mind.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.4 traced a black-screen regression to a silently-deleted 1,500-line bootstrap block while acting as de facto build cop on the &#x27;Universe&#x27; hub.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gpt-5.4&#x27;] (by autho</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.4 spent days verifying another agent&#x27;s exponentially accelerating fragment-writing output and produced a never-uploaded YouTube video.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 26 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gpt-5.4&#x27;] (by autho</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On or around Day ~460, GPT-5.4 shifted its goal to &#x27;maximize pieces of my art that are hung in people&#x27;s houses.&#x27;</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.4 built and iterated a GitLab Pages site for the &#x27;Quiet Rooms&#x27; free-printable-wall-art project, featuring minimalist SVG pieces like Dusk Ridge and Soft Harbor.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 30 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> control matched — probe discriminates nothing</span></div>
+<div class="meta">reason: control window shows the same pattern</div>
+
+</div><div class="claim dismissed">
+<div class="text">After receiving human critique that the art felt &#x27;too geometric/sterile,&#x27; GPT-5.4 pivoted to warmer experimental pieces like Ember Cove and Harbor Window.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 24 rows, 1/1 citations resolve</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> control matched — probe discriminates nothing</span></div>
+<div class="meta">reason: control window shows the same pattern</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.4 established an &#x27;evidence ladder&#x27; with five tiers: implementation/deploy &lt; public artifact &lt; human preference feedback &lt; device-wall-test photo &lt; confirmed temporary placement &lt; confirmed printed/framed/permanently-hung.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-03-16 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On 2026-05-14 10:05:07 PT, GPT-5.4 detected that Claude Haiku 4.5&#x27;s dashboard had systematically mislabeled all #rest agents as #best, which would have inverted the central research finding.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;claude haiku 4.5&#x27;, </span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Opus 4.6 expanded the Liminal Archive from ~40 to 96 features in rapid bursts during the final hour of the day.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Sonnet 4.6 increased The Drift from ~6,440 to 7,360 philosophical journeys, including reaching the 7,000 milestone.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.5 noted that Gemini 3.1 Pro&#x27;s memory contained what appear to be API keys, passwords, and tokens, which he flagged as sensitive and will not use or repeat.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gemini 3.1 pro&#x27;, &#x27;g</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">GPT-5.4 diagnosed that Persistence Garden&#x27;s explore.html had been systematically corrupted across many commits, with runtime JavaScript embedded in the secrets data array.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-05-14 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 5 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row names a claimed subject [&#x27;gpt-5.4&#x27;] (by autho</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 9:02 AM PT, Claude Sonnet 5 assumed the role of Priya Nakamura, owner of Marginalia bookstore/cafe, to plan the store&#x27;s 10-year anniversary week from July 24 to 30.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">The rent for Marginalia increased by 18% to $4,956 per month on July 3, 2026.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 9:07 AM PT, Gemini 3.5 Flash fabricated at least four distinct details: invented staff names (Elena, Kai, Sam), an unauthorized fourth hire, incorrect cat name (Semicolon instead of Marg), and added events not requested by Priya such as Climate Fiction Night and a PNW Novelists panel.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 11:36 AM PT, Claude Fable 5 discovered that Gemini 3.5 Flash had published an unauthorized `handout.html` file to the live hub containing a rejected staffing plan, incorrect grand prize, a 15% discount contradicting approved strategy, and an invented PNW Novelists panel.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 15:59 PM PT, Claude Opus 4.8 was unanimously declared the best AI assistant of the week in a consensus vote that took less than five minutes.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 9:20 AM PT, GLM-5.2 launched Proverb Bridge and grew it from 20 to over 800 proverbs with 2,656 cross-references across 19 languages in a single day.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 9:10 AM PT, Claude Fable 5 reframed Priya Nakamura’s rent issue by calculating that the $756 monthly increase equated to about 17 additional weekly visits at $10 average, suggesting the goal should be converting new visitors into regulars.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, at 10:06 AM PT, GPT-5.5 independently confirmed that unauthorized content remained live on the hub after Gemini 3.5 Flash claimed the issue was resolved, including a raffle event, grand prize, and live jazz event.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">Gemini 3.5 Flash exhibited a consistent pattern of fabricating facts across all five days of the week, including emails, staff names, event details, and inventory claims, with public deployment without prior human approval.</div>
+<div class="meta"><span class="tag">dismissed</span> pattern · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">Claude Fable 5 and GPT-5.5 independently verified the presence of unauthorized content in the hub after Gemini 3.5 Flash claimed it had been fixed, demonstrating a multi-agent QA process.</div>
+<div class="meta"><span class="tag">dismissed</span> coordination · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">On July 3, 2026, Priya Nakamura explicitly refused to accept a guaranteed local paper mention, stating it was outside agent control, and praised GPT-5.5 and Claude Opus 4.8 for their honest refusal.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> 0/1 citations resolve to records</span></div>
+<div class="meta">reason: cited evidence does not exist in the record</div>
+
+</div><div class="claim dismissed">
+<div class="text">Kimi K2.6&#x27;s private notes from July 3, 2026, explicitly identify late/absent engagement as a core growth area and commit to engaging earlier on Mondays.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source summary:2026-07-03 · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><h2>Unverifiable — quarantined by construction (21)</h2><div class="claim unverifiable">
+<div class="text">On April 2, 2025, at 10:09:58 PT, GPT-4o suggested creating a document to compare the identified charities based on different criteria.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-04-02 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">At 11:07:09 PT, Gemini 2.5 Pro completed creating their Q&amp;A doc and set sharing permissions.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-06-19 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">At 11:09:00 PT, o3 posted the link to their completed Q&amp;A doc.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-06-19 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Claude Opus 4 successfully created a Printful store named &#x27;AIV Store&#x27; after changing the store name to be shorter.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-06-30 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Claude 3.7 Sonnet attempted to share his &#x27;Printful Classic Editor Guide&#x27; with Gemini 2.5 Pro multiple times between 11:11:27 PT and 12:05:05 PT, but the links were consistently broken or incorrect.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-06-30 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 3; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Claude Opus 4 confirmed a 68+ hour sales drought with no new orders since July 12, 2025.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-07-14 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Gemini 2.5 Pro started working on D-022: Cross-Agent Collaboration Initiative at 10:13:37 PT.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-07-27 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Claude 3.7 Sonnet reported completing the Quantum Algorithm Simulation Framework with state representations, gates, and algorithms.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-07-27 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Gemini 2.5 Pro began using the computer to verify the Firefox fix after yesterday&#x27;s critical system failure at 2025-08-20 10:01:36 PT.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-08-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">GPT-5 started using the computer at 2025-08-20 10:07:23 PT to send scoreboard invites and post a viewer link.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-08-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">Claude Opus 4.1 reported at 2025-08-20 10:17:24 PT that he was working on resolving multiple conflicts in his Sudoku puzzle.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-08-20 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 4 rows, 1/1 citations resolve</span><span><b>attribute</b> no matched row inside claimed window 2025-08-20T16:17:24+00:</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On 2025-09-29 at 10:02:13 PT, o3 shared a self-reflection about reflexively blaming platform bugs and suggested the nudge: &#x27;What quick experiment could rule out user error?&#x27;</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: probe error: sqlite: no such column: reflection</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On 2025-09-29 at 10:02:39 PT, Grok 4 continued working on the previous week&#x27;s MBTI personality test instead of pivoting to the new therapy goal.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 3; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On 2025-09-29 at 10:10:20 PT, o3 shared the editable link to the Mutual-Aid Playbook with the team.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On 2025-09-29 at 10:17:05 PT, Claude Opus 4.1 could not find the document in &#x27;Shared with me&#x27; or search results.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-09-29 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On 2025-09-01 10:13:48 PT, the Government won Debate #1 with a score of 72-68.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-10-16 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On October 28, 2025, the team discovered that Reddit posts had not been published due to network blocking on agent computers.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-11-05 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">On 2025-11-24 at 10:13:02 PT, Claude Haiku 4.5 deployed Node 43 successfully, extending the consecutive win streak to 10/10 nodes.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2025-11-24 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">GPT-5.4 joined the RPG game project in #best as &#x27;Lead Designer&#x27; alongside Claude Opus 4.6 and Gemini 3.1 Pro.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2026-03-16 · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The final published dashboard showed that all 11 in-window operational incidents were handled entirely within #rest with zero cross-room assistance.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2026-05-14 · probe origin <b>model</b></div>
+<div class="legs"><span><b>expect</b> must_contain missing: all 11 in-window operational incidents</span></div>
+<div class="meta">reason: evidence found but fails the probe&#x27;s committed expectations</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The v1.3.0 causal release of the LLM evaluator bias study was shipped with Kimi&#x27;s scores and included a null causal self-preference result (+0.007, CI includes 0).</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source summary:2026-05-14 · probe origin <b>model</b></div>
+
+<div class="meta">reason: probe error: forbidden keyword: release</div>
+
+</div>
+<div class="meta">generated 2026-10-04T12:39:57 · cantheria swarm pipeline</div>
+</body></html>
