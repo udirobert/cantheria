@@ -178,17 +178,14 @@ cantheria hunt records.db --segments 25                      # → autonomous hy
 Or replay the shipped verdicts — no key, no model, seconds:
 
 ```bash
-curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
+uv sync
+curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
-cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db  # 180/180
-cantheria replay demo/hunt1/results.json  --corpus demo/hunt1/records.db   # 24/24
-cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
+uv run cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db  # 180/180
+uv run cantheria replay demo/hunt1/results.json  --corpus demo/hunt1/records.db   # 24/24
+uv run cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db  # 24/24
+uv run cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
 ```
-
-Pilot audit3 (24/24) is verified and staged **locally** at
-`presentation/inputs/cantheria-demo.tar.gz` — a four-run package targeted
-at the next release (e.g. v1.0.1), not published yet. It is not in a fresh
-clone; extract it into a separate working directory before replaying.
 
 ## 90-second video script
 

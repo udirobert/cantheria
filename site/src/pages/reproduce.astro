@@ -7,17 +7,15 @@ const setup: string[] = [
   'git clone https://github.com/udirobert/cantheria.git',
   'cd cantheria',
   'uv sync',
-  'curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz',
+  'curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz',
+  'shasum -a 256 cantheria-demo.tar.gz',
   'tar xzf cantheria-demo.tar.gz',
 ];
 const replays: string[] = [
   'uv run cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db',
   'uv run cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db',
-  'uv run cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db',
-];
-const pilot: string[] = [
-  'tar xzf /absolute/path/to/staged/cantheria-demo.tar.gz',
   'uv run cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db',
+  'uv run cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db',
 ];
 ---
 
@@ -38,7 +36,7 @@ const pilot: string[] = [
   <div class="rule-label" id="install">
     <span class="no">01</span>
     <h2>Install and fetch artifacts</h2>
-    <span class="note">Release asset: cantheria-demo.tar.gz (v1.0.0)</span>
+    <span class="note">Release asset: cantheria-demo.tar.gz (v1.0.1, 23,992,857 bytes)</span>
   </div>
 
   <div class="cmd-list">
@@ -50,15 +48,19 @@ const pilot: string[] = [
     ))}
   </div>
   <p style="font-size:0.85rem;margin-top:0.9rem;">
-    <a href="https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz">
+    <a href="https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz">
       Download cantheria-demo.tar.gz directly →
     </a>
+  </p>
+  <p class="note" style="font-size:0.8rem;overflow-wrap:anywhere;">
+    Expected SHA-256:{' '}
+    <code style="overflow-wrap:anywhere;">ba8640cfb4cc0588d466c08e684fe7ec7607f6dce63a8d12fd669c4c808105d0</code>
   </p>
 
   <div class="rule-label" id="replay">
     <span class="no">02</span>
     <h2>Replay recorded checks</h2>
-    <span class="note">Keyless replay of committed checks</span>
+    <span class="note">Keyless replay of committed checks — four runs in the archive</span>
   </div>
 
   <div class="cmd-list">
@@ -75,32 +77,6 @@ const pilot: string[] = [
     <li>Sliced replay is not exhaustive auditing of the corpus.</li>
     <li>Exact flags are defined by the released CLI; consult the repository README and DEMO notes for the authoritative version.</li>
   </ul>
-
-  <details class="desk-group" style="margin-top:1.6rem;">
-    <summary><strong>Pilot audit package — staged, not published</strong></summary>
-    <div style="padding:0.8rem 0 0.4rem;font-size:0.95rem;">
-      <p>
-        A four-run package adds the pilot <code>audit3</code> run (24/24). It is staged
-        locally at <code>presentation/inputs/cantheria-demo.tar.gz</code> and targeted
-        at a future release (e.g. v1.0.1) that has not been published — there is no
-        download link for it yet. The file is local and is not included in a fresh
-        repository clone.
-      </p>
-      <p>
-        To inspect it, run from a separate working directory with the staged file
-        copied there to avoid mixing extracts — replace the placeholder path in the
-        first command:
-      </p>
-      <div class="cmd-list">
-        {pilot.map((cmd) => (
-          <div class="cmd">
-            <code>{cmd}</code>
-            <CopyText text={cmd} />
-          </div>
-        ))}
-      </div>
-    </div>
-  </details>
 
   <div class="rule-label">
     <span class="no">03</span>

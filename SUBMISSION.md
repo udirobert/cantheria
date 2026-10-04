@@ -18,11 +18,11 @@ https://udirobert.github.io/cantheria/
 - **Corpus 2** — the collusion.wiki incident report audited against its own
   underlying record (42k German-wiki edits/events/pastes): 108 claims,
   10 confirmed, receipts included
-- **Replayable demo corpus** (~18MB / 18,009,272-byte tarball) —
+- **Replayable demo corpus** (~24MB / 23,992,857-byte tarball) —
   `cantheria replay` re-runs every committed probe deterministically:
   **no model, no API key** — 180/180 (audit), 24/24 (hunt), and 108/108
-  (collusion audit2) in the v1.0.0 asset in seconds; pilot audit3 (24/24)
-  verified and staged locally for the next asset
+  (collusion audit2) in the v1.0.1 asset in seconds; audit3 (24/24) ships in
+  the same tarball
 
 ## The findings (real data, real numbers)
 
@@ -102,17 +102,13 @@ mechanical fallback arbitrates when they can't express the test).
 
 ```bash
 # keyless — deterministic replay of the committed probes
-curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
+uv sync
+curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
-cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db          # 180/180 (v1.0.0 asset)
-cantheria replay demo/hunt1/results.json  --corpus demo/hunt1/records.db           #  24/24  (v1.0.0 asset)
-cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108 (v1.0.0 asset)
-
-# pilot audit3 (24/24) — LOCAL staged package, not published:
-# presentation/inputs/cantheria-demo.tar.gz is a four-run local file targeted
-# at the next release (e.g. v1.0.1). Extract into a separate working directory
-# (it is not in a fresh clone), then:
-#   cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db
+uv run cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db          # 180/180 (v1.0.1 asset)
+uv run cantheria replay demo/hunt1/results.json  --corpus demo/hunt1/records.db           #  24/24  (v1.0.1 asset)
+uv run cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db           #  24/24  (v1.0.1 asset)
+uv run cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108 (v1.0.1 asset)
 
 # full pipeline (needs a chat backend — see .env.example)
 cantheria ingest data/aivillage --corpus records.db

@@ -192,7 +192,7 @@
     "commands": [
       "cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db"
     ],
-    "artifactUrl": null,
+    "artifactUrl": "https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz",
     "limitations": [
       "Replay re-executes the committed probe against a sliced corpus, not the full 3.6M-record village DB.",
       "Replay reproduces the recorded checks; it does not establish the unresolved clauses above."

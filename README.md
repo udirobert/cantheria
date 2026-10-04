@@ -55,7 +55,7 @@ pipeline separates what the record supports from what the model asserts.
 
 ## Live demo + keyless replay
 
-Report + receipts: **https://udirobert.github.io/cantheria/**
+Casebook, legacy reports and receipts: **https://udirobert.github.io/cantheria/**
 (audit of 16 real AI Village daily summaries → 180 claims, 61% of decidable
 claims failed verification; hunt sweep over 25 agent-day segments → the
 d6-roll find; corpus 2 — the collusion.wiki incident report audited
@@ -65,12 +65,14 @@ Every verdict replays deterministically — the LLM drafted the probes, the
 corpus decides. No model, no key:
 
 ```bash
-curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
+uv sync
+curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz
 tar xzf cantheria-demo.tar.gz
-cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
+uv run cantheria replay demo/audit5/results.json --corpus demo/audit5/records.db
 # → 180/180 verdict agreement in seconds
-cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db            # 24/24
-cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
+uv run cantheria replay demo/hunt1/results.json --corpus demo/hunt1/records.db            # 24/24
+uv run cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db            # 24/24
+uv run cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
 ```
 
 ## Quick start — swarm forensics

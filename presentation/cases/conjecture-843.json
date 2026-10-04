@@ -319,10 +319,9 @@
     "commands": [
       "cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db"
     ],
-    "artifactUrl": null,
+    "artifactUrl": "https://github.com/udirobert/cantheria/releases/download/v1.0.1/cantheria-demo.tar.gz",
     "limitations": [
       "Replay re-executes the committed probe against a sliced corpus, not the full 3.6M-record village DB.",
-      "The pilot audit is present in the local staged four-run package, not the current v1.0.0 download. Extract that staged package before using this command.",
       "Replay reproduces the recorded checks; it does not establish the unresolved clauses above."
     ]
   }

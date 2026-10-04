@@ -268,10 +268,10 @@ content is required to navigate.
 ### M4 — Evidence bench and reproduction
 
 - [ ] Publish stable individual claim pages with filters and search.
-- [ ] Show failure reasons and not-run checks, not only confirmed receipts.
-- [ ] Provide clear installation, download, and keyless replay instructions.
+- [x] Show failure reasons and not-run checks, not only confirmed receipts.
+- [x] Provide clear installation, download, and keyless replay instructions.
 - [ ] Capture and embed actual replay execution with context and a text transcript.
-- [ ] Preserve old report paths or provide intentional compatible redirects.
+- [x] Preserve old report paths or provide intentional compatible redirects.
 
 **Accept when:** visitors can find claims by corpus/verdict and link to them;
 search scope is honest; reproduction artifacts remain downloadable and the clean
@@ -303,12 +303,13 @@ A script is not completion of the recorded video.
 ### M6 — Judge-path QA and release
 
 - [ ] Test comprehension with a fresh visitor; record their confusion and resolve it.
-- [ ] Check responsive layout, keyboard/focus behavior, contrast, and reduced motion.
+- [x] Check responsive layout, keyboard/focus behavior, and reduced motion.
+- [ ] Audit color contrast across text and status states.
 - [ ] Check static/no-JavaScript reading and external-source outage fallback.
-- [ ] Run relevant frontend build/checks and existing offline regression checks.
-- [ ] Verify no secrets, unintended large assets, or mutated evidence enter the release.
+- [x] Run relevant frontend build/checks and existing offline regression checks.
+- [x] Verify no secrets, unintended large assets, or mutated evidence enter the release.
 - [ ] Check all public entry points, claim links, fonts, search files, casts, and downloads.
-- [ ] Verify clean-download replay and document agreements and limitations.
+- [x] Verify clean-download replay and document agreements and limitations.
 - [ ] Review final diff and record deployment revision and verification evidence.
 
 **Accept when:** a fresh visitor can explain Cantheria, open a case, understand its
@@ -321,12 +322,12 @@ Update this table as milestones progress. Keep failed checks and blockers visibl
 
 | Milestone | State | Artifact / verification evidence | Blocker or limitation |
 |---|---|---|---|
-| M1 Evidence baseline | Integrated and reviewed locally; user acceptance pending | `presentation/CONTRACT.md`, `presentation/EVIDENCE_BASELINE.md`, all three rendered cases and clause reviews; lead clarified that the Conjecture-843 receipt describes a 24-odd-cycle certificate but the probe does not independently validate it; frozen staged four-run package SHA-256 `ba8640cfb4cc0588d466c08e684fe7ec7607f6dce63a8d12fd669c4c808105d0` | Across-the-wire incident-report passage remains unavailable and disclosed. Report labels and stale confirmed-claim reasons fixed locally without changing verification behavior; no publication yet |
-| M2 Flagship case | Complete locally; awaiting user design feedback | `site/`; integrated `/cases/private-die/`; 31 passing tests, clean Astro diagnostics and production build in `site/verification/`; desktop/mobile screenshots `final-home-1440.png`, `final-case-1440.png`, `final-case-390.png` | Not committed or publicly deployed; recorded verdict and editorial qualification remain distinct |
-| M3 Tour and craft | In progress; visual artifacts and motion ready for user feedback | All three supplied case files render; original canary plate, illustrative murmuration, recorded-sequence FlightMap, explanatory ReplayDiagram, and identity grammar plate; 35 passing tests and screenshots in `site/verification/artifact-final-*` | Full guided tour and user acceptance remain; static/mobile views and live reduced-motion/manual pause verified; hidden-tab pause is code-reviewed, not observed in headless browser |
-| M4 Bench and replay | In progress | Local `/bench/` text/corpus/verdict filters and `/reproduce/` installation/download/replay instructions | No embedded execution recording or new clean-download replay verification; public release pending |
-| M5 Materials | Not started by UI workstream | Local identity page and verification screenshots available as source material | Final docs, case brief, preview cards, video recording, and user review still required |
-| M6 QA and release | Local gates checked; commit/publication blocked on owner secret-review process | Offline Python suite passed (92 tests observed); fresh report tests 14/14, ruff clean, frontend diagnostics/build clean, provenance smoke 9/9 and fidelity checks 12/12. Current v1.0.0 digest verified: three runs; frozen staged package adds audit3 | Configured detect-secrets hook flags two UUID-derived claim-ID fields in conjecture-843/across-the-wire. Baseline and security controls unchanged; owner review required. Fresh-visitor comprehension, publication approval/deployment, and video remain |
+| M1 Evidence baseline | Integrated and reviewed locally; user acceptance pending | `presentation/CONTRACT.md`, `presentation/EVIDENCE_BASELINE.md`, all three rendered cases and clause reviews; lead clarified that the Conjecture-843 receipt describes a 24-odd-cycle certificate but the probe does not independently validate it; published v1.0.1 four-run package SHA-256 `ba8640cfb4cc0588d466c08e684fe7ec7607f6dce63a8d12fd669c4c808105d0` (byte-identical to the frozen local file) | Across-the-wire incident-report passage remains unavailable and disclosed. Report labels and stale confirmed-claim reasons fixed without changing verification behavior |
+| M2 Flagship case | Complete locally; awaiting user design feedback | `site/`; integrated `/cases/private-die/`; 38 passing tests, clean Astro diagnostics and production build in `site/verification/`; desktop/mobile screenshots `final-home-1440.png`, `final-case-1440.png`, `final-case-390.png` | Committed; not publicly deployed; recorded verdict and editorial qualification remain distinct |
+| M3 Tour and craft | In progress; visual artifacts and motion ready for user feedback | All three supplied case files render; original canary plate, illustrative murmuration, recorded-sequence FlightMap, explanatory ReplayDiagram, and identity grammar plate; 38 passing tests and screenshots in `site/verification/artifact-final-*` | Full guided tour and user acceptance remain; static/mobile views and live reduced-motion/manual pause verified; hidden-tab pause is code-reviewed, not observed in headless browser |
+| M4 Bench and replay | In progress | Local `/bench/` text/corpus/verdict filters and `/reproduce/` installation/download/replay instructions; published v1.0.1 asset verified by lead from a clean download — all four replays agree (180/180, 24/24, 24/24, 108/108) | No embedded execution recording yet; public site deployment pending |
+| M5 Materials | In progress | Revised README/DEMO/SUBMISSION prose and the 90-second video storyboard in DEMO.md now exist; local identity page and verification screenshots available as source material | Printable case brief, preview cards, final screen recording, and owner review still required |
+| M6 QA and release | Local gates green; main commit/push completed; site deployment pending | Offline Python suite passed (92 tests observed); fresh report tests 14/14, ruff clean, frontend diagnostics/build clean, provenance smoke 9/9 and fidelity checks 12/12; pre-commit hooks green on the staged release set. Owner approved two `is_secret:false` baseline entries for the UUID-derived claim IDs; v1.0.1 published and replay-verified | Public site deployment and post-deploy browser checks pending — do not claim a live deployment until public HTTP and browser checks support it. Fresh-visitor comprehension, video, and the absent collusion incident-report source passage remain |
 
 Execution order is M1 -> M2 -> M3/M4 -> M5 -> M6. Do not expand the optional
 artwork workstream before the flagship evidence interaction is complete.
