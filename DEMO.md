@@ -126,7 +126,7 @@ cantheria audit records.db --claims claims_big.jsonl         # → REPORT.md + j
 cantheria hunt records.db --segments 25                      # → autonomous hypotheses
 ```
 
-Or replay the shipped verdicts — no key, no model, ~30s:
+Or replay the shipped verdicts — no key, no model, ~4s:
 
 ```bash
 curl -LO https://github.com/udirobert/cantheria/releases/download/v1.0.0/cantheria-demo.tar.gz
