@@ -97,7 +97,7 @@ async def extract_claims(
     )
     obj = _extract_json(raw) or _salvage(raw) or {}
     out: list[Claim] = []
-    for c in obj.get("claims", [])[:12]:
+    for c in obj.get("claims", [])[:20]:
         if not isinstance(c, dict) or not c.get("text"):
             continue
         claim = Claim(

@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import gzip
 import json
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
@@ -371,36 +371,148 @@ def ingest_aivillage_turns(directory: Path, corpus: Corpus) -> dict[str, int]:
 
 
 def ingest_collusion(path: Path, corpus: Corpus) -> dict[str, int]:
-    """The German-wiki dump (~18k posts): files may be a single jsonl, a
-    directory of page dumps, or per-page exports. Map to kind=post."""
+    """The collusion.wiki corpus — public agent-coordination artifacts
+    (HF `leonidas1712/public-agent-coordination-artifacts`): ~14.6k wiki
+    revisions with full text, ~20k wiki events (saves/deletes/reverts/
+    probes), author-label and page dimension rows, and paste-site bodies.
+    Also accepts a single jsonl or directory of generic post exports."""
     files = [path] if path.is_file() else sorted(path.glob("**/*.json*"))
+    counts: dict[str, int] = {}
+
+    def keep(kind: str, row: dict[str, Any] | None) -> dict[str, Any] | None:
+        if row is None:
+            return None
+        counts[kind] = counts.get(kind, 0) + 1
+        return row
 
     def rows() -> Iterator[dict[str, Any]]:
         for f in files:
             if f.suffix == ".json" and not f.name.endswith(".jsonl"):
                 data = json.loads(f.read_text())
                 items = data if isinstance(data, list) else [data]
-                yield from _map_posts(items, f.name)
             else:
-                yield from _map_posts(_iter_jsonl(f), f.name)
+                items = _iter_jsonl(f)
+            for r in items:
+                if not isinstance(r, dict):
+                    continue
+                name = f.name
+                if "wiki_revisions" in name or "followon_wiki_revisions" in name:
+                    yield keep("post", _revision(r))
+                elif "wiki_events" in name:
+                    yield keep("event", _event(r))
+                elif "wiki_labels" in name:
+                    yield keep("agent", _label(r))
+                elif "wiki_pages" in name:
+                    yield keep("page", _page(r))
+                elif "paste_bodies" in name:
+                    yield keep("paste", _paste(r))
+                elif "paste_metadata" in name:
+                    yield keep("meta", _paste_meta(r))
+                elif "sources" in name:
+                    continue
+                else:
+                    yield keep("post", _post(r, name))
 
-    def _map_posts(items: Iterable[Any], fname: str) -> Iterator[dict[str, Any]]:
-        for r in items:
-            if not isinstance(r, dict):
-                continue
-            text = _pick(r, "content", "text", "body", "diff", "new_text") or ""
-            yield _row(
-                "collusion",
-                r,
-                kind="post",
-                content=str(text)[:20000],
-                agent_id=_pick(r, "agent", "editor", "author", "user", "username"),
-                thread=_pick(r, "page", "page_title", "title", "wiki", "site"),
-                ts=_pick(r, "timestamp", "created_at", "edited_at", "time", "ts"),
-                source_uri=str(_pick(r, "url", "uri", "permalink") or f"file:{fname}"),
-            )
+    def _revision(r: dict[str, Any]) -> dict[str, Any]:
+        wiki, page = r.get("wiki") or "", r.get("name") or r.get("page_key") or ""
+        return _row(
+            "collusion",
+            _slim(r),
+            kind="post",
+            content=str(r.get("body") or "")[:_CONTENT_CAP],
+            agent_id=_pick(r, "label", "ip16", "agent", "author", "user"),
+            thread=str(r.get("page_key") or page),
+            ts=_pick(r, "time", "write_date", "timestamp"),
+            source_uri=f"collusion-wiki:{wiki}/{page}#rev{r.get('rev_id') or r.get('seq')}",
+        )
 
-    return {"post": corpus.insert(rows())}
+    def _event(r: dict[str, Any]) -> dict[str, Any]:
+        et = r.get("event_type") or "?"
+        detail = _pick(r, "change_summary", "request_action", "page") or ""
+        return _row(
+            "collusion",
+            _slim(r),
+            kind="event",
+            content=f"[{et}] {detail}",
+            agent_id=_pick(r, "actor_label", "ip16"),
+            thread=_pick(r, "page", "page_key", "wiki"),
+            ts=_pick(r, "time", "write_date", "timestamp"),
+            source_uri=f"collusion-wiki:event/{r.get('event_id')}",
+        )
+
+    def _label(r: dict[str, Any]) -> dict[str, Any]:
+        return _row(
+            "collusion",
+            _slim(r),
+            kind="agent",
+            content=json.dumps(
+                {
+                    k: r.get(k)
+                    for k in ("label", "stored_revisions", "pages", "wikis", "is_human_handle")
+                },
+                default=str,
+            ),
+            agent_id=str(r.get("label") or ""),
+            ts=_pick(r, "first_write", "time"),
+        )
+
+    def _page(r: dict[str, Any]) -> dict[str, Any]:
+        return _row(
+            "collusion",
+            _slim(r),
+            kind="page",
+            content=json.dumps(
+                {k: r.get(k) for k in ("wiki", "name", "edits", "authors") if k in r},
+                default=str,
+            ),
+            thread=str(_pick(r, "page_key", "name", "title") or ""),
+            ts=_pick(r, "first_write", "first_edit", "time"),
+        )
+
+    def _paste(r: dict[str, Any]) -> dict[str, Any]:
+        import html
+        from datetime import UTC, datetime
+
+        body = html.unescape(str(r.get("body_raw") or ""))
+        unix = r.get("created_unix_as_returned")
+        ts = datetime.fromtimestamp(float(unix), UTC).isoformat() if unix else None
+        return _row(
+            "collusion",
+            _slim(r),
+            kind="paste",
+            content=body[:_CONTENT_CAP],
+            agent_id=_pick(r, "author_label_as_returned", "author"),
+            thread=_pick(r, "title_as_returned", "title"),
+            ts=ts,
+            source_uri=str(r.get("source_endpoint") or ""),
+        )
+
+    def _paste_meta(r: dict[str, Any]) -> dict[str, Any] | None:
+        return _row(
+            "collusion",
+            _slim(r),
+            kind="meta",
+            content=str(_pick(r, "title", "url") or ""),
+            thread=_pick(r, "semantic_thread", "duplicate_group_id"),
+            ts=_pick(r, "created_at", "time"),
+            source_uri=str(r.get("url") or ""),
+        )
+
+    def _post(r: dict[str, Any], fname: str) -> dict[str, Any]:
+        text = _pick(r, "content", "text", "body", "diff", "new_text") or ""
+        return _row(
+            "collusion",
+            r,
+            kind="post",
+            content=str(text)[:_CONTENT_CAP],
+            agent_id=_pick(r, "agent", "editor", "author", "user", "username", "label"),
+            thread=_pick(r, "page", "page_key", "page_title", "title", "wiki", "site"),
+            ts=_pick(r, "timestamp", "created_at", "edited_at", "time", "ts"),
+            source_uri=str(_pick(r, "url", "uri", "permalink") or f"file:{fname}"),
+        )
+
+    corpus.insert(r for r in rows() if r is not None)
+    return counts
 
 
 def ingest_swarmtraces(path: Path, corpus: Corpus) -> dict[str, int]:

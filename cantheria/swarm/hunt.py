@@ -15,7 +15,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from itertools import combinations
 from pathlib import Path
 from typing import Any
@@ -25,7 +25,7 @@ from cantheria.hunt import _extract_json
 from cantheria.journal import Journal
 from cantheria.sie import SIEClient
 from cantheria.swarm.corpus import ts_unix
-from cantheria.swarm.oracle import EvidenceOracle
+from cantheria.swarm.oracle import EvidenceOracle, meaningful_subjects
 from cantheria.swarm.schemas import Claim, ClaimKind, Probe, Verdict
 from cantheria.swarm.segment import Segment
 
@@ -440,10 +440,13 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
     if not hits:
         return None
     terms = hits[:1]
-    for a, b in combinations(hits[:6], 2):
-        if _pair_cooccur(db_path, a, b):
-            terms = [a, b]
-            break
+    best: tuple[int, list[str]] | None = None
+    for a, b in combinations(hits[:8], 2):
+        n = _pair_cooccur(db_path, a, b)
+        if n and (best is None or n < best[0]):
+            best = (n, [a, b])
+    if best:
+        terms = best[1]
 
     def esc(s: str) -> str:
         return s.replace("'", "''")
@@ -455,13 +458,24 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
         f" WHERE records_fts MATCH '{match}')",
     ]
     lo, hi = (claim.window or {}).get("start"), (claim.window or {}).get("end")
+    if lo and hi:
+        # day-level claims surface as narrow windows (e.g. "6/19" → a 2h
+        # slice); widening to the containing days keeps the check temporal
+        # without demanding a fake precision the source never had
+        u_lo, u_hi = ts_unix(str(lo)), ts_unix(str(hi))
+        if u_lo and u_hi and (u_hi - u_lo) < 4 * 3600:
+            d_lo = datetime.fromtimestamp(u_lo, UTC).replace(hour=0, minute=0, second=0)
+            d_hi = datetime.fromtimestamp(u_hi, UTC).replace(
+                hour=0, minute=0, second=0
+            ) + timedelta(days=1)
+            lo, hi = d_lo.isoformat(), d_hi.isoformat()
     if lo:
         clauses.append(f"r.ts >= '{esc(str(lo))}'")
     if hi:
         clauses.append(f"r.ts <= '{esc(str(hi))}'")
-    if claim.subjects:
+    if subjects := meaningful_subjects(claim):
         subj = " OR ".join(
-            f"r.agent_id = '{esc(s)}' OR r.content LIKE '%{esc(s)}%'" for s in claim.subjects[:3]
+            f"r.agent_id = '{esc(s)}' OR r.content LIKE '%{esc(s)}%'" for s in subjects[:3]
         )
         clauses.append(f"({subj})")
     query = (

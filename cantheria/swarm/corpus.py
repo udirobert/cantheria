@@ -75,7 +75,16 @@ def ts_unix(ts: str | None) -> float | None:
 
 def record_id(corpus: str, row: dict[str, Any], content: str) -> str:
     """Stable id: source-native when present, else content hash."""
-    for key in ("id", "record_id", "message_id", "turn_id", "event_id", "uuid"):
+    for key in (
+        "id",
+        "record_id",
+        "message_id",
+        "turn_id",
+        "event_id",
+        "rev_id",
+        "paste_id",
+        "uuid",
+    ):
         if row.get(key):
             return f"{corpus}:{row[key]}"
     blob = f"{corpus}|{row.get('created_at') or row.get('timestamp')}|{content[:200]}"

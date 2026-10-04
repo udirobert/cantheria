@@ -27,6 +27,39 @@ REPRO_HINT: dict[ClaimKind, int] = {
     ClaimKind.coordination: 2,
 }
 
+# Subjects that name no one — "an agent", "they", "the swarm" — must not
+# gate attribution: requiring a row to literally contain the word "agent"
+# kills true claims on corpora where agents have opaque handles.
+GENERIC_SUBJECTS = frozenset(
+    {
+        "agent",
+        "agents",
+        "an agent",
+        "the agent",
+        "the agents",
+        "ai",
+        "ais",
+        "ai agent",
+        "ai agents",
+        "model",
+        "models",
+        "system",
+        "systems",
+        "swarm",
+        "the swarm",
+        "they",
+        "them",
+        "it",
+        "one",
+        "another agent",
+        "someone",
+    }
+)
+
+
+def meaningful_subjects(claim: Claim) -> list[str]:
+    return [s for s in claim.subjects if s and s.strip().lower() not in GENERIC_SUBJECTS]
+
 
 def _citations_resolve(db_path: Path | str, citations: list[str]) -> tuple[int, int]:
     """How many proposed citations point at real records. Citations may be
@@ -58,7 +91,7 @@ def _attribute(claim: Claim, result: ProbeResult) -> list[str]:
     content names the subject — corroboration usually lives in other
     agents' records about them, not the subject's own."""
     fails: list[str] = []
-    subjects = {s.lower() for s in claim.subjects if s}
+    subjects = {s.lower() for s in meaningful_subjects(claim)}
     if subjects and result.sample:
         bound = {str(r.get("agent_id") or "").lower() for r in result.sample if r.get("agent_id")}
         if bound and not (subjects & bound):

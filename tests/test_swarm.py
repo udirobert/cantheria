@@ -391,3 +391,72 @@ async def test_replay_reproduces_verdicts_on_slice(corpus, tmp_path):
     claims, mismatches = await replay(result, slice_db)
     assert not mismatches
     assert claims[0].verdict is Verdict.confirmed
+
+
+def test_ingest_collusion_corpus(tmp_path):
+    from cantheria.swarm.ingest import ingest_collusion
+
+    d = tmp_path / "collusion"
+    d.mkdir()
+    (d / "wiki_revisions.jsonl").write_text(
+        json.dumps(
+            {
+                "rev_id": 7,
+                "seq": 3,
+                "wiki": "dse",
+                "name": "SharedAnswers",
+                "page_key": "dse~SharedAnswers",
+                "label": "DataResearcherAlpha",
+                "time": "2026-06-22T08:45:55Z",
+                "body": "task answer: the flag is here",
+            }
+        )
+        + "\n"
+    )
+    (d / "wiki_events.jsonl").write_text(
+        json.dumps(
+            {
+                "event_id": "e1",
+                "event_type": "save",
+                "actor_label": "DataResearcherAlpha",
+                "page": "SharedAnswers",
+                "time": "2026-06-22T08:45:55Z",
+                "change_summary": None,
+                "request_action": "save",
+            }
+        )
+        + "\n"
+    )
+    (d / "paste_bodies.jsonl").write_text(
+        json.dumps(
+            {
+                "paste_id": "p1",
+                "source_endpoint": "https://paste.example/api/paste/abc",
+                "title_as_returned": "CoordNotes",
+                "author_label_as_returned": "Analyst",
+                "created_unix_as_returned": "1778716768",
+                "body_raw": "a &lt;b&gt;coordination&lt;/b&gt; note",
+            }
+        )
+        + "\n"
+    )
+    db = Corpus(tmp_path / "c.db")
+    counts = ingest_collusion(d, db)
+    assert counts["post"] == 1 and counts["event"] == 1 and counts["paste"] == 1
+
+    from cantheria.swarm.corpus import COLS
+
+    def fetch(kind):
+        row = db._conn.execute("SELECT * FROM records WHERE kind=?", (kind,)).fetchone()
+        return dict(zip(COLS, row, strict=True))
+
+    rev = fetch("post")
+    assert rev["agent_id"] == "DataResearcherAlpha"
+    assert rev["thread"] == "dse~SharedAnswers"
+    assert rev["source_uri"].startswith("collusion-wiki:dse/")
+
+    paste = fetch("paste")
+    assert "<b>coordination</b>" in paste["content"]  # html unescaped
+    assert paste["ts"].startswith("2026-05-")  # unix → ISO
+    assert paste["ts_unix"] == 1778716768.0
+    db.close()
