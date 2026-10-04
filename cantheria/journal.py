@@ -12,7 +12,7 @@ import threading
 from pathlib import Path
 from typing import Any
 
-from cantheria.schemas import Finding
+from pydantic import BaseModel
 
 
 class Journal:
@@ -21,7 +21,7 @@ class Journal:
         self._lock = threading.Lock()
         path.parent.mkdir(parents=True, exist_ok=True)
 
-    def log(self, finding: Finding, event: str) -> None:
+    def log(self, finding: BaseModel, event: str) -> None:
         row = {"event": event, "finding": json.loads(finding.model_dump_json())}
         with self._lock, self.path.open("a") as f:
             f.write(json.dumps(row) + "\n")

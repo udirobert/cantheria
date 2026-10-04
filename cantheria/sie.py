@@ -12,6 +12,7 @@ failure modes visible.
 from __future__ import annotations
 
 import asyncio
+import json
 import random
 from typing import Any
 
@@ -77,7 +78,18 @@ class SIEClient:
                 await asyncio.sleep(_retry_delay(resp, attempt))
                 continue
             resp.raise_for_status()
-            return resp.json()
+            try:
+                return resp.json()
+            except json.JSONDecodeError:
+                # some OpenAI-compatible gateways stream or append junk on
+                # transient faults — a 200 with an unparseable body is a
+                # failed attempt, not a fatal one
+                if attempt < _MAX_ATTEMPTS - 1:
+                    await asyncio.sleep(_retry_delay(resp, attempt))
+                    continue
+                raise SIEError(
+                    f"undecodable response from {path} after {_MAX_ATTEMPTS} attempts"
+                ) from None
         raise SIEError(f"unreachable — {_MAX_ATTEMPTS} attempts against {path} failed")
 
     async def embed(self, model: str, texts: list[str]) -> list[list[float]]:
