@@ -32,6 +32,12 @@ The shared contract is `presentation/CONTRACT.md`; the renderer schema is
 | collusion results | `runs/collusion/audit2/results.json` (108: 81 dismissed / 16 unverifiable / 10 confirmed / 1 flaky) + REPORT.md; `runs/collusion/hunt1/` (20: 15 dismissed / 5 unverifiable) | PULLED from server 2026-10-04. Full replay 108/108 on `runs/collusion/records.db` (124 MB, pulled); slice (451 records) replay 108/108. |
 | frozen presentation inputs | `presentation/inputs/` | DONE 2026-10-04 — audit3 slice (12 MB, sha256 `e273be07…d287eeb`), collusion slice (3.7 MB, sha256 `87b17090…fc4ea1e`), staged tarball (hash above). |
 
+Local hygiene note (2026-11-08): derived `runs/*/records.db` corpora and
+published-video masters were cleaned from this machine to free space. All are
+regenerable — corpora via `cantheria ingest` from public sources (the village
+DB lives on snapflip-vultr; `data/swarmtraces/` retained locally), videos via
+the published releases/YouTube. No committed evidence was removed.
+
 ## Export tooling
 
 - `presentation/tools/export_case.py` — results.json + REPORT.md + review JSON → case JSON. Verified: output parses against A's zod schema; anchors verified via A's `resolveAnnotations`.
