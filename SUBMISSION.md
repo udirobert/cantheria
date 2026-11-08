@@ -145,3 +145,13 @@ New evidence since the numbers above:
   a probe-truncation hazard.
 - **PDF report**: `presentation/cantheria-report.pdf` (source:
   `presentation/report.html`).
+
+## Presentation assets (2026-11-08)
+
+- **Video (public):** https://youtu.be/8GQ9Vg_zuKg — 68s film, ElevenLabs
+  v4 narration, aligned captions, real casebook footage, canary/murmuration
+  illustrations, FLUX-generated swarm plate. Source: `presentation/film-v4.html`.
+- **Slides:** Templafy-generated 8-slide deck (Pitch Deck structure:
+  Cantheria / Problem / Turn / Finding / Live Example / Detection Latency /
+  Trust and Limits / Close), downloaded locally.
+- **Project image:** `presentation/project-image.png`.
