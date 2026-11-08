@@ -115,6 +115,29 @@ ship with the narrative.</div>
       were the oracle, our own failure rate would have been a fabrication.</li>
 </ul>
 
+<h2>3b. The headline dataset: auditing the SwarmTraces report itself</h2>
+<p>Same move as the collusion.wiki audit, applied to the incident's own
+payload corpus: 189,579 redacted attack-payload records from
+swarmtraces.org (no timestamps, no agent labels), against 14 atomic claims
+distilled from the investigation report's findings
+(<code>eval/swarmtraces_claims/</code>).</p>
+<table>
+  <tr><th>verdict</th><th>n</th><th>notes</th></tr>
+  <tr><td>confirmed</td><td>2</td><td>Kubernetes references (1,525 rows corpus-wide), Docker Hub references (4,823 rows) — with receipts</td></tr>
+  <tr><td>unverifiable</td><td>12</td><td>quarantined, not forced</td></tr>
+  <tr><td>dismissed</td><td>0</td><td></td></tr>
+</table>
+<p>Direct SQL spot-checks confirm the report's keywords are genuinely in
+the record (LOOT &times;4, slack &times;10, inference &times;56, rm &minus;rf
+&times;207, captcha &times;123, dns &times;590) — the claims are largely
+<em>true of the record</em>. Coverage collapsed for two honest reasons:
+the drafter abstains on unattributed payload corpora with nothing to bind,
+and one committed probe's own <code>substr(content,1,400)</code>
+projection truncated away the LOOT evidence it was checking for — a
+probe-authoring hazard the journal preserves for a human to re-run.
+0 false confirmations; the pipeline said what it could prove and
+quarantined the rest.</p>
+
 <h2>4. Could it have flagged the coordination early?</h2>
 <p>Track 4's example project asks whether a forensic tool could flag swarm
 coordination early. We replayed detection signals over the collusion.wiki
@@ -216,7 +239,8 @@ unit test, not a field estimate.</div>
       180/180, 24/24, 24/24, 108/108 verdict agreement from the v1.0.1 demo
       tarball &mdash; no model, no API key.</li>
   <li><strong>New this submission:</strong> detection-latency analysis,
-      synthetic ground-truth eval + baselines, competitive-position doc.</li>
+      synthetic ground-truth eval + baselines, kollude head-to-head,
+      SwarmTraces report audit, competitive-position doc.</li>
 </ul>
 
 <h2>8. Limitations</h2>
@@ -229,7 +253,8 @@ unit test, not a field estimate.</div>
   <li>Probe quality depends on the drafting model; the mechanical fallback
       and repair loop mitigate but do not eliminate this.</li>
   <li>Corpus coverage: aivillage + collusion.wiki exercised end-to-end;
-      SwarmTraces loader exists.</li>
+      SwarmTraces payload corpus audited (structureless &rarr;
+      abstention-heavy coverage, documented).</li>
 </ul>
 
 <h2>9. Team</h2>

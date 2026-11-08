@@ -138,5 +138,10 @@ New evidence since the numbers above:
   density monitor's 2026-05-27 — independent methods converge; different
   layers (calibrated population alarm vs. per-claim adjudication).
 - **Related work & positioning**: `RELATED_WORK.md`.
+- **SwarmTraces audit** (`eval/swarmtraces_claims/`): the incident report's
+  own 14 checkable claims against its 189,579-record payload corpus —
+  2 confirmed with receipts (Kubernetes, Docker Hub), 12 quarantined,
+  0 false confirmations; documents abstention on unattributed corpora and
+  a probe-truncation hazard.
 - **PDF report**: `presentation/cantheria-report.pdf` (source:
   `presentation/report.html`).
