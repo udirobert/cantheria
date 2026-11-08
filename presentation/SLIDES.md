@@ -63,7 +63,7 @@ slide 5 if recording is allowed; otherwise live-terminal the replay.)
   wrong."
 
 ## Asset checklist
-- [ ] demo-reel screen recording (optional but recommended) — record
-      `presentation/demo-reel.html` playing once, ~60s, 1080p
+- [x] demo video — `presentation/demo-video.mp4` (66s, 1080p, ElevenLabs VO)
+      source page: `presentation/video-reel.html`; interactive version: `demo-reel.html`
 - [ ] project-image.png (done — 1200×630)
 - [ ] one receipt screenshot: REPORT.md confirmed block or casebook case

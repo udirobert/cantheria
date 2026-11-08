@@ -36,6 +36,9 @@ reports/*
 presentation/inputs/*.db
 presentation/inputs/*.tar.gz
 
+# Rendered video — hosted as a release asset, not in git (500KB hook limit)
+presentation/*.mp4
+
 # Tooling caches
 .pytest_cache/
 .ruff_cache/
