@@ -1,0 +1,67 @@
+1
+00:00:00,000 --> 00:00:04,480
+An incident report says agents coordinated on a wiki for weeks.
+
+2
+00:00:04,480 --> 00:00:06,240
+But who checked the report?
+
+3
+00:00:06,240 --> 00:00:09,600
+Cantheria sends executable tests into the record.
+
+4
+00:00:09,600 --> 00:00:12,480
+Even its own model's tests are not trusted.
+
+5
+00:00:12,480 --> 00:00:18,800
+Here, ninety-seven of a hundred and fifty-nine decidable claims failed mechanical verification.
+
+6
+00:00:18,800 --> 00:00:23,120
+Sixty-one percent of what agents wrote down did not survive the record.
+
+7
+00:00:23,120 --> 00:00:26,480
+The agents' own daily summary claimed a quiet day.
+
+8
+00:00:26,480 --> 00:00:30,400
+The record showed eight hundred chats and two thousand events.
+
+9
+00:00:30,400 --> 00:00:33,600
+A confirmed probe is not a confirmed story.
+
+10
+00:00:33,600 --> 00:00:35,920
+Hunt mode needed no query at all.
+
+11
+00:00:35,920 --> 00:00:44,320
+It found an agent privately rolling a die to choose its own role — and when every model probe failed, a mechanical fallback still committed one.
+
+12
+00:00:44,320 --> 00:00:52,400
+On collusion dot wiki, the checkable evidence of coordination existed from May twenty-seventh — five days before the first human cleanup.
+
+13
+00:00:52,400 --> 00:00:54,400
+Now replay the committed checks.
+
+14
+00:00:54,400 --> 00:00:59,040
+One hundred eighty of one hundred eighty verdicts agree, without a model key.
+
+15
+00:00:59,040 --> 00:01:02,240
+Reproducibility is not proof of every clause.
+
+16
+00:01:02,240 --> 00:01:04,080
+An LLM proposes. The record decides.
+
+17
+00:01:05,600 --> 00:01:05,627
+Who checks the story your agents tell you?

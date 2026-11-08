@@ -63,7 +63,7 @@ slide 5 if recording is allowed; otherwise live-terminal the replay.)
   wrong."
 
 ## Asset checklist
-- [x] demo video — `presentation/demo-video.mp4` (66s, 1080p, ElevenLabs VO)
+- [x] demo video — `presentation/film-v4.mp4 (hosted: release asset — see repo releases)` (66s, 1080p, ElevenLabs VO)
       source page: `presentation/video-reel.html`; interactive version: `demo-reel.html`
 - [ ] project-image.png (done — 1200×630)
 - [ ] one receipt screenshot: REPORT.md confirmed block or casebook case

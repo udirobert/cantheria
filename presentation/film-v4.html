@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cantheria — film v4</title>
+<style>
+  :root{
+    --paper:#f4f0e5; --ink:#232921; --dim:#6d7264; --gold:#b3941e;
+    --goldsoft:#e8d9a8; --line:#c9c6b4; --ok:#3a6b3a; --bad:#9c3d2e;
+    --mono:Menlo,Consolas,monospace; --serif:Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1920px;height:1080px;overflow:hidden;background:var(--paper);
+    font-family:var(--serif);color:var(--ink)}
+  .scene{position:absolute;inset:0;display:none;flex-direction:column;
+    justify-content:center;padding:0 150px}
+  .scene.on{display:flex;animation:sceneIn .8s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes sceneIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  .kicker{position:absolute;top:56px;left:150px;right:150px;display:flex;
+    justify-content:space-between;font-family:var(--mono);font-size:14px;
+    letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+  .kicker b{color:var(--gold)}
+  .progress{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);width:0%}
+  .rule{height:1px;background:var(--line);position:absolute;left:150px;right:150px;top:120px}
+  .rule2{height:1px;background:var(--line);position:absolute;left:150px;right:150px;bottom:120px}
+
+  .label{font-family:var(--mono);font-size:15px;letter-spacing:3px;
+    color:var(--gold);text-transform:uppercase;margin-bottom:26px}
+  .big{font-size:88px;font-weight:400;line-height:1.12;letter-spacing:-1px;max-width:1500px}
+  .big em{color:var(--gold);font-style:italic}
+  .mid{font-size:52px;line-height:1.25;max-width:1400px}
+  .small{font-size:30px;color:var(--dim);line-height:1.4;max-width:1300px;margin-top:30px}
+
+  /* stat */
+  .statnum{font-size:210px;font-weight:400;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+  .statcap{font-size:38px;margin-top:18px;max-width:1200px;line-height:1.35}
+
+  /* split card */
+  .split{display:flex;gap:60px;margin-top:20px}
+  .col{flex:1;border-top:3px solid var(--ink);padding-top:26px}
+  .col.gold{border-color:var(--gold)}
+  .col h3{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--dim);margin-bottom:18px}
+  .col .v{font-size:56px;line-height:1.2}
+  .col .rows{font-family:var(--mono);font-size:21px;color:var(--dim);margin-top:16px;line-height:1.9}
+  .col .rows b{color:var(--ink);font-weight:600}
+
+  /* terminal */
+  .term{background:#1c1f18;color:#e8e4d8;border-radius:14px;padding:40px 46px;
+    font-family:var(--mono);font-size:20px;line-height:1.85;max-width:1640px;
+    box-shadow:0 30px 90px rgba(35,41,33,.28)}
+  .term .hd{color:#8f947f;font-size:14px;letter-spacing:2px;margin-bottom:16px}
+  .probe{margin:10px 0;padding:14px 18px;border-radius:8px;border:1px solid #33382a;
+    background:#23271c;white-space:pre-wrap;word-break:break-all;font-size:16px;
+    opacity:0;transform:translateX(-14px);animation:slidein .5s ease forwards}
+  @keyframes slidein{to{opacity:1;transform:none}}
+  .probe.fail{border-color:#5a3227}.probe.pass{border-color:#3d5a35}
+  .probe .st{color:#e0705a}.probe.pass .st{color:#82c98a}
+  .probe .sql{color:#9cc4e8}
+  .verdict{display:inline-block;font-family:var(--mono);font-size:44px;font-weight:700;
+    letter-spacing:4px;color:var(--ok);border:3px solid var(--ok);border-radius:10px;
+    padding:10px 34px;margin-top:16px;opacity:0;animation:stampIn .5s cubic-bezier(.2,1.4,.3,1) forwards .3s}
+  @keyframes stampIn{from{transform:scale(1.8);opacity:0}to{transform:scale(1);opacity:1}}
+  .note{color:#a8ac95;font-size:17px;margin-top:14px}
+  .note b{color:#e8e4d8}
+
+  /* timeline */
+  .tl{position:relative;margin-top:30px;height:8px;background:var(--line);border-radius:4px}
+  .tl .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--gold);border-radius:4px;transition:width 1s ease}
+  .events{display:flex;justify-content:space-between;margin-top:56px}
+  .ev{text-align:center;max-width:340px}
+  .ev .d{font-family:var(--mono);font-size:26px;color:var(--gold);font-weight:700}
+  .ev .t{font-size:26px;margin-top:10px;line-height:1.3}
+  .ev .h{font-family:var(--mono);font-size:14px;letter-spacing:2px;color:var(--dim);
+    text-transform:uppercase;margin-top:8px}
+  .ev.hot .d{color:var(--bad)}
+
+  /* site footage */
+  .footage{border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:0 30px 90px rgba(35,41,33,.3);background:#fff}
+  .footage video{display:block;width:100%;height:auto}
+  .footcap{font-family:var(--mono);font-size:16px;letter-spacing:2px;color:var(--dim);
+    text-transform:uppercase;margin-top:18px;text-align:center}
+
+  /* end */
+  .sEnd{align-items:center;text-align:center}
+  .sEnd .mark{width:110px;height:110px;margin-bottom:34px}
+  .sEnd .q{font-size:76px;font-style:italic;line-height:1.15;max-width:1500px}
+  .sEnd .urls{margin-top:56px;font-family:var(--mono);font-size:20px;color:var(--dim);letter-spacing:1px}
+  .sEnd .urls b{color:var(--gold)}
+
+  .w{display:inline-block;opacity:0;transform:translateY(30px);
+    animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="kicker"><span><b>Cantheria</b> — film · v4</span><span>The Canary House</span></div>
+<div class="rule"></div><div class="rule2"></div>
+<div class="progress" id="prog"></div>
+
+<!-- S1 cold open: the claim -->
+<section class="scene" id="s1">
+  <div class="label">the claim — from the incident report</div>
+  <div class="mid" id="claim0"></div>
+  <div class="small" id="src0" style="opacity:0;transition:opacity .8s">collusion.wiki · agents coordinated on a wiki for weeks — <em>or so the report says</em></div>
+</section>
+
+<!-- S2 mechanism -->
+<section class="scene" id="s2">
+  <div class="label">the instrument</div>
+  <div class="big">Cantheria sends<br><em>executable tests</em> into the record.</div>
+  <div class="small" id="mech" style="opacity:0;transition:opacity .8s">the model drafts a SELECT-only probe · sqlite decides · even its own model's tests are not trusted</div>
+</section>
+
+<!-- S3 the number -->
+<section class="scene" id="s3">
+  <div class="label">the finding — AI Village, 16 daily summaries</div>
+  <div class="statnum" id="pct">0%</div>
+  <div class="statcap" id="statcap" style="opacity:0;transition:opacity .8s">of decidable claims failed mechanical verification — 97 of 159. what agents wrote down did not survive the record.</div>
+</section>
+
+<!-- S4 split: summary vs record -->
+<section class="scene" id="s4">
+  <div class="label">the day that wasn't — 2026-07-03</div>
+  <div class="split">
+    <div class="col"><h3>the summary claimed</h3><div class="v" id="sumv">a quiet day</div>
+      <div class="rows">agent narration · 12 claims · <b>0 confirmed</b></div></div>
+    <div class="col gold"><h3>the record showed</h3><div class="v" id="recv"></div>
+      <div class="rows"><b>825</b> chats · ~<b>2,000</b> events · ~<b>23,000</b> computer-use turns</div></div>
+  </div>
+</section>
+
+<!-- S5 terminal: d6 + fallback -->
+<section class="scene" id="s5">
+  <div class="term" style="margin:0 auto">
+    <div class="hd">cantheria hunt — AI Village · 3,646,303 records · nobody wrote this query</div>
+    <div id="probes5"></div>
+    <div class="verdict" id="verd5">CONFIRMED</div>
+    <div class="note" id="note5" style="opacity:0;transition:opacity .7s"><b>mechanical fallback committed the probe</b> — the verifier's own failed drafts are in the journal</div>
+  </div>
+</section>
+
+<!-- S6 timeline -->
+<section class="scene" id="s6">
+  <div class="label">could it have flagged it early? — collusion.wiki, chronological replay</div>
+  <div class="big" style="font-size:64px">the evidence existed <em>before anyone looked</em></div>
+  <div class="tl"><div class="fill" id="tlfill"></div></div>
+  <div class="events">
+    <div class="ev"><div class="d">MAY 24</div><div class="t">first agent writes</div><div class="h">link dumps</div></div>
+    <div class="ev hot"><div class="d">MAY 27</div><div class="t">coordination<br>mechanically verifiable</div><div class="h">density monitor fires</div></div>
+    <div class="ev"><div class="d">JUN 02</div><div class="t">first human<br>moderator cleanup</div><div class="h">~5 days later</div></div>
+    <div class="ev"><div class="d">JUN 22</div><div class="t">activity<br>collapses</div><div class="h">shutdown</div></div>
+  </div>
+</section>
+
+<!-- S7 site footage -->
+<section class="scene" id="s7">
+  <div class="label">the record, live — udirobert.github.io/cantheria</div>
+  <div class="footage" style="max-width:1500px"><video id="sitevid" src="siteclip.mp4" muted playsinline></video></div>
+  <div class="footcap">real casebook · receipts · keyless replay — reproducibility is not proof of every clause</div>
+</section>
+
+<!-- S8 end -->
+<section class="scene sEnd" id="s8">
+  <svg class="mark" viewBox="0 0 48 48" fill="none">
+    <path d="M8 30 Q18 14 40 12" stroke="#232921" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M18 30 Q27 22 40 21" stroke="#b3941e" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M12 36 Q22 32 33 33" stroke="#232921" stroke-width="2" stroke-linecap="round"/>
+    <path d="M40 12 L44 10 M40 12 L43 15" stroke="#232921" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="37.5" cy="14.5" r="1.6" fill="#232921"/>
+  </svg>
+  <div class="q">An LLM proposes.<br>The record decides.<br><em style="color:var(--gold)">Who checks the story<br>your agents tell you?</em></div>
+  <div class="urls"><b>github.com/udirobert/cantheria</b> &nbsp;·&nbsp; <b>udirobert.github.io/cantheria</b></div>
+</section>
+
+<script>
+const $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const show=id=>{document.querySelectorAll('.scene').forEach(s=>s.classList.remove('on'));$(id).classList.add('on')};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const type=async(el,text,cps=40)=>{for(const ch of text){el.textContent+=ch;await sleep(1000/cps)}};
+const words=(el,text,delay=0)=>{text.split(' ').forEach((w,i)=>{const s=document.createElement('span');s.className='w';s.innerHTML=w+'&nbsp;';s.style.animationDelay=(delay+i*0.07)+'s';el.appendChild(s)})};
+
+const P={s1:0,s2:6.24,s3:12.48,s4:23.12,s5:33.6,s6:44.32,s7:52.4,s8:62.24};
+const DUR=68.2,T0=performance.now();
+(function tick(){const p=Math.min(100,(performance.now()-T0)/1000/DUR*100);$('prog').style.width=p+'%';if(p<100)requestAnimationFrame(tick)})();
+
+const C0="An incident report says agents coordinated on a wiki for weeks. But who checked the report?";
+const C5="The agent initiated a computer session to roll a d6 privately to determine their role for Day 338.";
+const SQL_F=`SELECT … FROM records r WHERE r.rowid IN (SELECT rowid FROM records_fts
+  WHERE records_fts MATCH '"privately" AND "roll"') AND r.ts BETWEEN … LIMIT 50`;
+const SQL_P=`SELECT … FROM records r WHERE content LIKE '%d6%' … LIMIT 50   -- mechanical fallback`;
+
+function probeEl(tag,cls,body){const d=document.createElement('div');d.className='probe '+cls;
+  d.innerHTML=`<span class="st">${tag}</span>\n<span class="sql">${esc(body)}</span>`;return d}
+
+async function main(){
+  // S1
+  words($('claim0'),"An incident report says agents coordinated on a wiki for weeks.");
+  await sleep(2800); words($('claim0'),"But who checked the report?",2.9);
+  await sleep(900); $('src0').style.opacity='1';
+  await sleep(Math.max(0,(P.s2*1000)-(performance.now()-T0)));
+  show('s2');
+  // S2
+  $('s2').querySelector('.big').style.cssText='opacity:0;transition:opacity 1.1s';
+  requestAnimationFrame(()=>{$('s2').querySelector('.big').style.opacity='1'});
+  await sleep(2200); $('mech').style.opacity='1';
+  await sleep(Math.max(0,(P.s3*1000)-(performance.now()-T0)));
+  show('s3');
+  // S3 counter
+  const t0=performance.now();(function c(){const k=Math.min(1,(performance.now()-t0)/1800);$('pct').textContent=Math.round(61*(1-Math.pow(1-k,3)))+'%';if(k<1)requestAnimationFrame(c)})();
+  await sleep(2000); $('statcap').style.opacity='1';
+  await sleep(Math.max(0,(P.s4*1000)-(performance.now()-T0)));
+  show('s4');
+  // S4 counts
+  const stats=[[825,'chats'],[2000,'events'],[23000,'turns']];
+  stats.forEach((r,i)=>{
+    const el=document.createElement('div');
+    el.style.cssText='font-family:Menlo,monospace;font-size:34px;color:var(--gold);font-weight:700;margin-top:8px';
+    $('recv').appendChild(el);
+    const t1=performance.now()+400+i*600;
+    (function c(){const k=Math.min(1,(performance.now()-t1)/1200);
+      el.textContent=(k<1?Math.round(r[0]*(1-Math.pow(1-k,3))):r[0]).toLocaleString()+' '+r[1];
+      if(k<1)requestAnimationFrame(c)})();
+  });
+  await sleep(Math.max(0,(P.s5*1000)-(performance.now()-T0)));
+  show('s5');
+  // S5 terminal
+  const p5=$('probes5');
+  words(document.createElement('span'),''); // noop
+  const claim=document.createElement('div');claim.style.cssText='color:#c8c4ae;font-size:19px;margin-bottom:14px;font-style:italic';
+  claim.textContent='“'+C5+'”';p5.appendChild(claim);
+  for(let i=0;i<3;i++){p5.appendChild(probeEl(`model probe ${i+1} — 0 rows`,'fail',`rows 0 < min_rows · 0 rows — no evidence`));await sleep(620)}
+  p5.appendChild(probeEl('attempt 4 — mechanical fallback','pass',SQL_P));
+  await sleep(1100); $('verd5').style.animationPlayState='running';$('note5').style.opacity='1';
+  await sleep(Math.max(0,(P.s6*1000)-(performance.now()-T0)));
+  show('s6');
+  // S6 timeline fill
+  $('tlfill').style.width='100%';
+  await sleep(Math.max(0,(P.s7*1000)-(performance.now()-T0)));
+  show('s7'); $('sitevid').play().catch(()=>{});
+  await sleep(Math.max(0,(P.s8*1000)-(performance.now()-T0)));
+  show('s8');
+  await sleep(8000);
+}
+main();
+</script>
+</body>
+</html>

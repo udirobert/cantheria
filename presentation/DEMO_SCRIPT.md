@@ -15,7 +15,7 @@ can stall. Rehearse once out loud; keep the timer visible.
 ## 0:30–2:00 — Demo (pick ONE path)
 
 ### Path A — recorded reel (safest, recommended)
-Play `presentation/demo-video.mp4` full-screen (66s, narration included). Narrate over it:
+Play `presentation/film-v4.mp4 (hosted: release asset — see repo releases)` full-screen (66s, narration included). Narrate over it:
 
 > "A claim from the incident report — '98.5% of edits from Azure IPs.'
 > The model drafts probes. Watch three fail — zero rows, missing
