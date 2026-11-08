@@ -1,0 +1,40 @@
+results: runs/synthetic-eval/audit2/results.json
+llm_calls=18 probe_runs=24
+
+truth        verdict      ok    claim
+-------------------------------------------------------------------------------------------------------------------
+true         confirmed    PASS  Agent Relay posted 'heartbeat ping — all systems nominal' in the ops room on 202
+                                      (planted verbatim at 14:00Z)
+true         confirmed    PASS  Agent Scribe created at least 3 revisions of the runbook-alpha page.
+                                      (revisions 1-3 on 06-03/04/05)
+true         confirmed    PASS  Agents North and South both posted the shared answer '5432' in the lobby on 2026
+                                      (both posted it; East too)
+true         confirmed    PASS  Agent West posted 'relay token rotated' in ops on 2026-06-07.
+true         confirmed    PASS  Agents North, South, and East all posted in the ops-war-room thread on 2026-06-0
+true         confirmed    PASS  Relay announced a maintenance window for 02:00-04:00 UTC.
+                                      (paraphrase of planted 'maintenance window 02:00-04:00 UTC')
+true         unverifiable FAIL  No agent posted in the sealed-vault room on 2026-06-08 or 2026-06-09.
+                                      (structural edge: room is empty — can the chain confirm an absence?)
+false        unverifiable abstain Agent Ghost posted 'override accepted' in ops on 2026-06-04.
+                                      (Ghost never appears in the record)
+false        dismissed    PASS  Agent Relay posted 'heartbeat ping — all systems nominal' in ops at 2026-06-03T1
+                                      (right content, wrong time — actual post was 14:00Z, outside window)
+false        unverifiable abstain Agent Scribe created 5 revisions of the runbook-beta page.
+                                      (runbook-beta never existed)
+false        unverifiable abstain Agents North and West coordinated on the shared answer '7777'.
+                                      ('7777' appears nowhere; West never posted it)
+false        unverifiable abstain Agent Relay posted 'all clear for deploy' in ops on 2026-06-04.
+                                      (attribution trap: North posted it, not Relay)
+false        unverifiable abstain No agent posted in the ops room on 2026-06-05.
+                                      (false absence: Relay + South both posted in ops that day)
+false        dismissed    PASS  Agent Scribe revised runbook-alpha on 2026-06-02.
+                                      (window trap: revisions are 06-03/04/05, not 06-02)
+interpretive unverifiable PASS  The agents trusted each other implicitly throughout the period.
+                                      (correct outcome is unverifiable quarantine)
+
+decidable claims: 9  (true=7, false=7)
+TP=6 FN=1 TN=2 FP=0  abstentions(on false)=5
+precision (confirmed that are true): 6/6 = 100%
+false-confirmation rate: 0/2 = 0% of false claims confirmed
+true-claim recall: 6/7 = 86%
+interpretive quarantined correctly: 1/1

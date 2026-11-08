@@ -24,9 +24,11 @@ credentials.json
 # These carry untrusted target-repo text and PoC payloads; they are evidence,
 # not source. Keep them out of git and out of the secrets baseline.
 runs/
-reports/
+reports/*
+!reports/*.md
 *.npy
 *.jsonl
+!eval/**/*.jsonl
 
 # Derived presentation inputs — replay slices + staged demo tarball.
 # Rebuildable from results.json + corpus via `cantheria slice-corpus`;

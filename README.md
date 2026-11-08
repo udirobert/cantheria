@@ -75,6 +75,19 @@ uv run cantheria replay demo/audit3/results.json --corpus demo/audit3/records.db
 uv run cantheria replay demo/collusion-audit2/results.json --corpus demo/collusion-audit2/records.db  # 108/108
 ```
 
+## Status & provenance
+
+Everything up to tag `pre-sprint-baseline` (`a2c2898`, 2026-10-04) is
+**preexisting work**, built for the AI Swarm Dynamics hackathon. The next
+target is the [AI Collusion Research Sprint](https://apartresearch.com/sprints/ai-collusion-research-sprint-2026-10-23-to-2026-10-25)
+(Oct 23-25, 2026, Track 2 / Q2.3): work landed after that tag is sprint-new
+and gets marked as such here and in the report.
+
+Re-verified 2026-10-22 from a clean extract of the v1.0.1 asset (sha256
+`ba8640cf…105d0`): `cantheria replay` reproduces 180/180, 24/24, 24/24 and
+108/108 verdict agreement, and the confirmed/dismissed/unverifiable splits
+still match the run table in [SUBMISSION.md](SUBMISSION.md).
+
 ## Quick start — swarm forensics
 
 ```bash
@@ -197,7 +210,7 @@ cantheria/
   sie.py        async client: embed / chat / rerank
   fence.py      untrusted-source filter: nonce envelope + carrier detection
   journal.py    append-only JSONL, every candidate, replayable
-  cli.py        cantheria scan|report|status|ingest|audit|hunt
+  cli.py        scan|report|audit-report|status|ingest|audit|hunt|replay|slice-corpus
   swarm/
     corpus.py   normalized `records` store (sqlite) — one table, every source
     ingest.py   loaders: aivillage / collusion / swarmtraces → records
@@ -207,6 +220,9 @@ cantheria/
     oracle.py   the evidence chain: grounding × attribute × replicate × control
     hunt.py     segment loop: hypothesize → draft probe → validate → log
     segment.py  agent-day / thread / session slicing
+    replay.py   keyless re-verification of committed probes against a corpus
+    report.py   investigator-facing markdown audit report with evidence receipts
+    report_html.py  self-contained HTML rendering of a results.json
   index.py      symbol-aware chunking + cached vector index + reranked search
   hunt.py       per-chunk loop: hypothesize → draft PoC → validate → log
   sandbox.py    resource-limited execution of untrusted PoC code

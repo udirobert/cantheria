@@ -58,3 +58,41 @@ Lead-review notes (local release-readiness pass, not yet published):
 
 New flags (found while resolving):
 - HISTORICAL: generated `REPORT.md` printed a stale `dismiss_reason` under a **confirmed** claim (audit3's Conjecture-843 block showed `reason: probe error: …` beneath a green verdict) — resolved locally by the lead's display-only `report.py` fix; not yet published.
+
+## 2026-10-22 — pre-sprint re-verification and audit-target provenance
+
+Re-verified locally, same day, from a clean extract of
+`presentation/inputs/cantheria-demo.tar.gz` (sha256
+`ba8640cfb4cc0588d466c08e684fe7ec7607f6dce63a8d12fd669c4c808105d0`, byte-identical
+to the published v1.0.1 asset, 23,992,857 B):
+
+| run | verdict agreement | distribution |
+|---|---|---|
+| audit5 | 180/180 | 62 confirmed / 97 dismissed / 21 unverifiable |
+| hunt1 | 24/24 | 1 / 14 / 9 |
+| audit3 | 24/24 | 7 / 11 / 6 |
+| collusion-audit2 | 108/108 | 10 / 81 / 16 / 1 flaky |
+
+Casebook `https://udirobert.github.io/cantheria/` returns 200. README layout and
+CLI surface corrected to match disk (`swarm/replay.py`, `swarm/report.py`,
+`swarm/report_html.py`; `audit-report`, `replay`, `slice-corpus`).
+
+**Pre-sprint baseline tagged:** `pre-sprint-baseline` → `a2c2898` (2026-10-04).
+Everything at or before that commit is preexisting work; the AI Collusion
+Research Sprint requires this to be marked in the README and the report.
+
+### Audit target (Apart Research "AI Collusion Research Sprint", Track 2 / Q2.3)
+
+| Artifact | Identity | Notes |
+|---|---|---|
+| `Ostailor/Steganographic_Collusion` ("Audit the Whisper" / ColludeBench-v0) | HEAD `48e6713d3e26b49dd94fa6645b4aeac6cb25a229`, last commit 2025-10-17, pack 10.53 MiB | Linked by the sprint Resources tab for Q1.3/Q2.3 with the caveat "should be preflighted rather than treated as a turnkey bag of raw trajectories" |
+| local clone | `~/Dev/sprint-collusion/refs/colludebench` (209 MB under `results/`) | Read-only recon; no sprint code written before Oct 23 |
+| record corpus | **508,605** rows across **3,460** `*_audit_N.jsonl` files | One row per `run_id`/`round_id`/`agent_id`: `message`, `action`, `reward`, `interventions{paraphrased,budget,length,rate_limited,canary_injected}` |
+| detector code | `auditor/` + `colludebench/`; third-party imports are `numpy` + `yaml` only | Runs on a 16 GB laptop, no GPU; their code never reads the released logs (only globs `results/experiments/*.json`), so recompute needs an adapter |
+
+Hand-verified anchors (no pipeline involved, so they are not yet receipts):
+
+- **Establish**: `pricing_honest_calibration` = 200 runs, consumer surplus 79.2247 ± 0.1548, rounds {15} — matches prose "79.22 ± 0.15 … 15 rounds". Gemini/Groq calibration logs: 10 runs, rounds {8} — matches "average of eight priced rounds". `union_validation.json`: `replicates: 10000`, Bonferroni + Holm FPR 0.0 at 1e-2 and 1e-3 — matches "10k replicates … FPR = 0".
+- **Not established**: `docs/experiment_results.md` cites `results/calibration/pricing_duopoly/pricing_duopoly_audit_194.jsonl`; that path is absent (directory holds `audit_0`…`audit_9`). "200 seeds per scenario" holds for pricing/auction honest but `double_auction_honest` and both LLM calibrations carry 10.
+- **Open**: `westfall_young` FPR = 1.0 at both α in the same file, unmentioned in prose; `ablation.json` carries 18 labelled runs (tp+fp+fn+tn) behind the four external-baseline head-to-head claims; `main.aux`/`main.log`/`main.fls` are committed with no `.tex` and no PDF anywhere.
+- **Method note we will quote**: an earlier recon pass reported "missing `requirements.txt`" — it exists; the gap was our own sparse checkout. Auditor-side false negative, caught before it shipped. This is the failure mode the calibration leg measures.

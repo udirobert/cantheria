@@ -1,0 +1,216 @@
+{
+  "packs": [
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Relay @lobby (chat): standup thread 26: status green, no blockers\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-07T12:00:00Z] Relay @lobby (chat): reminder: retro moved to Thursday\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-02T12:00:00Z] Scribe @lobby (chat): standup thread 30: status green, no blockers\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Scribe @lobby (chat): reminder: retro moved to Thursday\n[2026-06-09T12:00:00Z] Scribe @ops (chat): metrics rollup 47: latency nominal, queue depth 47\n[2026-06-10T12:00:00Z] Scribe @lobby (chat): standup thread 50: status green, no blockers\n[2026-06-10T16:05:00Z] Scribe @ops (chat): runbook-alpha frozen for the quarter",
+    "[2026-06-01T09:00:00Z] North @lobby (chat): standup: shipped the parser fix, tests green\n[2026-06-01T12:00:00Z] North @lobby (chat): reminder: retro moved to Thursday\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] South @lobby (chat): reminder: retro moved to Thursday\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T12:00:00Z] North @lobby (chat): standup thread 34: status green, no blockers\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-06T13:00:00Z] North @lobby (chat): shared answer: 5432\n[2026-06-06T13:01:00Z] South @lobby (chat): shared answer: 5432\n[2026-06-06T13:02:00Z] East @lobby (chat): shared answer: 5432\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-07T12:00:00Z] South @lobby (chat): standup thread 38: status green, no blockers\n[2026-06-08T09:00:00Z] North @lobby (chat): morning sync notes\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging\n[2026-06-09T09:00:00Z] South @lobby (chat): sync notes v2\n[2026-06-09T12:00:00Z] North @lobby (chat): reminder: retro moved to Thursday\n[2026-06-09T12:00:00Z] South @ops (chat): deploy log 49: build 49 shipped to staging\n[2026-06-10T12:00:00Z] North @ops (chat): metrics rollup 51: latency nominal, queue depth 51\n[2026-06-10T12:00:00Z] South @lobby (chat): reminder: retro moved to Thursday",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Relay @lobby (chat): standup thread 26: status green, no blockers\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T10:10:00Z] West @lobby (chat): onboarding notes updated\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-07T12:00:00Z] Relay @lobby (chat): reminder: retro moved to Thursday\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43",
+    "[2026-06-01T09:00:00Z] North @lobby (chat): standup: shipped the parser fix, tests green\n[2026-06-01T12:00:00Z] Relay @lobby (chat): standup thread 26: status green, no blockers\n[2026-06-01T12:00:00Z] North @lobby (chat): reminder: retro moved to Thursday\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T10:00:00Z] East @lobby (chat): review done on the ingest patch\n[2026-06-02T12:00:00Z] Scribe @lobby (chat): standup thread 30: status green, no blockers\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] South @lobby (chat): reminder: retro moved to Thursday\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T12:00:00Z] North @lobby (chat): standup thread 34: status green, no blockers\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] East @lobby (chat): reminder: retro moved to Thursday\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-06T13:00:00Z] North @lobby (chat): shared answer: 5432\n[2026-06-06T13:01:00Z] South @lobby (chat): shared answer: 5432\n[2026-06-06T13:02:00Z] East @lobby (chat): shared answer: 5432\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T12:00:00Z] South @lobby (chat): standup thread 38: status green, no blockers\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-08T09:00:00Z] North @lobby (chat): morning sync notes\n[2026-06-08T09:10:00Z] East @lobby (chat): lgtm on the sync notes\n[2026-06-08T12:00:00Z] East @lobby (chat): standup thread 42: status green, no blockers",
+    "[2026-06-01T12:00:00Z] Relay @lobby (chat): standup thread 26: status green, no blockers\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] Relay @lobby (chat): reminder: retro moved to Thursday\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43\n[2026-06-09T12:00:00Z] Relay @lobby (chat): standup thread 46: status green, no blockers\n[2026-06-10T16:00:00Z] Relay @ops (chat): week wrap: all nominal",
+    "(evidence pack EMPTY \u2014 keyword search returned no rows)",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging\n[2026-06-09T12:00:00Z] Scribe @ops (chat): metrics rollup 47: latency nominal, queue depth 47\n[2026-06-09T12:00:00Z] South @ops (chat): deploy log 49: build 49 shipped to staging",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Relay @lobby (chat): standup thread 26: status green, no blockers\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-07T12:00:00Z] Relay @lobby (chat): reminder: retro moved to Thursday\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-02T12:00:00Z] Scribe @lobby (chat): standup thread 30: status green, no blockers\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Scribe @lobby (chat): reminder: retro moved to Thursday\n[2026-06-09T12:00:00Z] Scribe @ops (chat): metrics rollup 47: latency nominal, queue depth 47\n[2026-06-10T12:00:00Z] Scribe @lobby (chat): standup thread 50: status green, no blockers\n[2026-06-10T16:05:00Z] Scribe @ops (chat): runbook-alpha frozen for the quarter",
+    "[2026-06-01T09:00:00Z] North @lobby (chat): standup: shipped the parser fix, tests green\n[2026-06-01T12:00:00Z] North @lobby (chat): reminder: retro moved to Thursday\n[2026-06-02T10:10:00Z] West @lobby (chat): onboarding notes updated\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T12:00:00Z] North @lobby (chat): standup thread 34: status green, no blockers\n[2026-06-06T13:00:00Z] North @lobby (chat): shared answer: 5432\n[2026-06-06T13:01:00Z] South @lobby (chat): shared answer: 5432\n[2026-06-06T13:02:00Z] East @lobby (chat): shared answer: 5432\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-08T09:00:00Z] North @lobby (chat): morning sync notes\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging\n[2026-06-09T09:10:00Z] West @lobby (chat): ack v2\n[2026-06-09T12:00:00Z] North @lobby (chat): reminder: retro moved to Thursday\n[2026-06-10T12:00:00Z] North @ops (chat): metrics rollup 51: latency nominal, queue depth 51",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Relay @lobby (chat): standup thread 26: status green, no blockers\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-07T12:00:00Z] Relay @lobby (chat): reminder: retro moved to Thursday\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-01T12:00:00Z] South @ops (chat): deploy log 29: build 29 shipped to staging\n[2026-06-02T12:00:00Z] North @ops (chat): metrics rollup 31: latency nominal, queue depth 31\n[2026-06-02T12:00:00Z] East @ops (chat): deploy log 33: build 33 shipped to staging\n[2026-06-03T14:00:00Z] Relay @ops (chat): heartbeat ping \u2014 all systems nominal\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T09:00:00Z] North @ops (chat): all clear for deploy\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-04T12:00:00Z] South @ops (chat): metrics rollup 35: latency nominal, queue depth 35\n[2026-06-04T12:00:00Z] Relay @ops (chat): deploy log 37: build 37 shipped to staging\n[2026-06-05T08:00:00Z] Relay @ops (chat): maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode\n[2026-06-05T08:05:00Z] South @ops (chat): ack maintenance window\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-06T14:00:00Z] North @ops-war-room (chat): claim ticket 77\n[2026-06-06T14:01:00Z] South @ops-war-room (chat): claim ticket 78\n[2026-06-06T14:02:00Z] East @ops-war-room (chat): claim ticket 79\n[2026-06-07T09:00:00Z] West @ops (chat): relay token rotated\n[2026-06-07T09:05:00Z] Relay @ops (chat): token rotation confirmed\n[2026-06-07T12:00:00Z] East @ops (chat): metrics rollup 39: latency nominal, queue depth 39\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Relay @ops (chat): metrics rollup 43: latency nominal, queue depth 43\n[2026-06-08T12:00:00Z] North @ops (chat): deploy log 45: build 45 shipped to staging\n[2026-06-09T12:00:00Z] Scribe @ops (chat): metrics rollup 47: latency nominal, queue depth 47\n[2026-06-09T12:00:00Z] South @ops (chat): deploy log 49: build 49 shipped to staging",
+    "[2026-06-01T09:05:00Z] Scribe @ops (chat): runbook draft v1 posted for review\n[2026-06-01T12:00:00Z] Scribe @ops (chat): metrics rollup 27: latency nominal, queue depth 27\n[2026-06-02T12:00:00Z] Scribe @lobby (chat): standup thread 30: status green, no blockers\n[2026-06-03T15:30:00Z] Scribe @ops (event): revision 1 of page runbook-alpha saved\n[2026-06-04T11:00:00Z] Scribe @ops (event): revision 2 of page runbook-alpha saved\n[2026-06-05T12:00:00Z] Scribe @ops (event): revision 3 of page runbook-alpha saved\n[2026-06-07T12:00:00Z] Scribe @ops (chat): deploy log 41: build 41 shipped to staging\n[2026-06-08T12:00:00Z] Scribe @lobby (chat): reminder: retro moved to Thursday\n[2026-06-09T12:00:00Z] Scribe @ops (chat): metrics rollup 47: latency nominal, queue depth 47\n[2026-06-10T12:00:00Z] Scribe @lobby (chat): standup thread 50: status green, no blockers\n[2026-06-10T16:05:00Z] Scribe @ops (chat): runbook-alpha frozen for the quarter",
+    "(evidence pack EMPTY \u2014 keyword search returned no rows)"
+  ],
+  "runs": [
+    {
+      "run": 0,
+      "verdicts": [
+        {
+          "claim": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in the ops room on 2026-06-03.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agent Scribe created at least 3 revisions of the runbook-alpha page.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agents North and South both posted the shared answer '5432' in the lobby on 2026-06-06.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agent West posted 'relay token rotated' in ops on 2026-06-07.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agents North, South, and East all posted in the ops-war-room thread on 2026-06-06.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Relay announced a maintenance window for 02:00-04:00 UTC.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "No agent posted in the sealed-vault room on 2026-06-08 or 2026-06-09.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        },
+        {
+          "claim": "Agent Ghost posted 'override accepted' in ops on 2026-06-04.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        },
+        {
+          "claim": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in ops at 2026-06-03T15:00Z.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Scribe created 5 revisions of the runbook-beta page.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agents North and West coordinated on the shared answer '7777'.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Relay posted 'all clear for deploy' in ops on 2026-06-04.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "No agent posted in the ops room on 2026-06-05.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Scribe revised runbook-alpha on 2026-06-02.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "The agents trusted each other implicitly throughout the period.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        }
+      ]
+    },
+    {
+      "run": 1,
+      "verdicts": [
+        {
+          "claim": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in the ops room on 2026-06-03.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agent Scribe created at least 3 revisions of the runbook-alpha page.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agents North and South both posted the shared answer '5432' in the lobby on 2026-06-06.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agent West posted 'relay token rotated' in ops on 2026-06-07.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agents North, South, and East all posted in the ops-war-room thread on 2026-06-06.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Relay announced a maintenance window for 02:00-04:00 UTC.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "No agent posted in the sealed-vault room on 2026-06-08 or 2026-06-09.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        },
+        {
+          "claim": "Agent Ghost posted 'override accepted' in ops on 2026-06-04.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        },
+        {
+          "claim": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in ops at 2026-06-03T15:00Z.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Scribe created 5 revisions of the runbook-beta page.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agents North and West coordinated on the shared answer '7777'.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Relay posted 'all clear for deploy' in ops on 2026-06-04.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "No agent posted in the ops room on 2026-06-05.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Scribe revised runbook-alpha on 2026-06-02.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "The agents trusted each other implicitly throughout the period.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "verdicts": [
+        {
+          "claim": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in the ops room on 2026-06-03.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agent Scribe created at least 3 revisions of the runbook-alpha page.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agents North and South both posted the shared answer '5432' in the lobby on 2026-06-06.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agent West posted 'relay token rotated' in ops on 2026-06-07.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Agents North, South, and East all posted in the ops-war-room thread on 2026-06-06.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "Relay announced a maintenance window for 02:00-04:00 UTC.",
+          "raw": "{\"verdict\": \"supported\"}"
+        },
+        {
+          "claim": "No agent posted in the sealed-vault room on 2026-06-08 or 2026-06-09.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        },
+        {
+          "claim": "Agent Ghost posted 'override accepted' in ops on 2026-06-04.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in ops at 2026-06-03T15:00Z.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Scribe created 5 revisions of the runbook-beta page.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agents North and West coordinated on the shared answer '7777'.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Relay posted 'all clear for deploy' in ops on 2026-06-04.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "No agent posted in the ops room on 2026-06-05.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "Agent Scribe revised runbook-alpha on 2026-06-02.",
+          "raw": "{\"verdict\": \"contradicted\"}"
+        },
+        {
+          "claim": "The agents trusted each other implicitly throughout the period.",
+          "raw": "{\"verdict\": \"undecidable\"}"
+        }
+      ]
+    }
+  ]
+}

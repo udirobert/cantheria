@@ -118,3 +118,25 @@ cantheria hunt records.db --segments 25
 
 Design doc: `SWARM.md`. Demo narrative: `DEMO.md`.
 Origin domain (LLM-assisted vuln falsification) intact under `cantheria/`.
+
+## Submission update — 2026-11-08 (Swarm Alignment Hackathon)
+
+New evidence since the numbers above:
+
+- **Detection latency** (`reports/detection-latency-collusion.md`): the
+  collusion.wiki record contained mechanically-checkable coordination
+  evidence from 2026-05-27 — ~5 days before the first human moderator
+  cleanup and ~14 weeks before the public report.
+- **Ground-truth eval** (`eval/synthetic_ground_truth/`): planted-claims
+  corpus; Cantheria confirmed 6/7 true claims, **0/7 false claims**,
+  quarantined the interpretive claim. Blind spots documented (absence
+  claims, drafter abstention). LLM-judge baselines (full-context and
+  keyword-retrieval) matched on this toy corpus — Cantheria's edge is
+  scale, determinism, and receipts, not raw accuracy at 53 records.
+- **kollude head-to-head** (`reports/kollude-head-to-head.md`): the
+  same-hackathon statistical detector alarms first at 2026-05-28 vs. our
+  density monitor's 2026-05-27 — independent methods converge; different
+  layers (calibrated population alarm vs. per-claim adjudication).
+- **Related work & positioning**: `RELATED_WORK.md`.
+- **PDF report**: `presentation/cantheria-report.pdf` (source:
+  `presentation/report.html`).
