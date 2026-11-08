@@ -100,29 +100,42 @@
 <div class="progress" id="prog"></div>
 
 <!-- S1 cold open: the claim -->
-<section class="scene" id="s1">
-  <div class="label">the claim — from the incident report</div>
+<section class="scene on" id="s1" style="justify-content:flex-start;padding-top:150px">
+  <div style="display:flex;align-items:center;gap:34px;margin-bottom:56px">
+    <svg width="86" height="86" viewBox="0 0 48 48" fill="none">
+      <path d="M8 30 Q18 14 40 12" stroke="#232921" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M18 30 Q27 22 40 21" stroke="#b3941e" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M12 36 Q22 32 33 33" stroke="#232921" stroke-width="2" stroke-linecap="round"/>
+      <path d="M40 12 L44 10 M40 12 L43 15" stroke="#232921" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="37.5" cy="14.5" r="1.6" fill="#232921"/>
+    </svg>
+    <div>
+      <div style="font-size:52px;font-weight:400;letter-spacing:6px">CANTHERIA</div>
+      <div class="label" style="margin:8px 0 0">an evidence film · the canary house</div>
+    </div>
+  </div>
+  <div class="label">01 · the claim — from the incident report</div>
   <div class="mid" id="claim0"></div>
   <div class="small" id="src0" style="opacity:0;transition:opacity .8s">collusion.wiki · agents coordinated on a wiki for weeks — <em>or so the report says</em></div>
 </section>
 
 <!-- S2 mechanism -->
 <section class="scene" id="s2">
-  <div class="label">the instrument</div>
+  <div class="label">02 · the instrument</div>
   <div class="big">Cantheria sends<br><em>executable tests</em> into the record.</div>
   <div class="small" id="mech" style="opacity:0;transition:opacity .8s">the model drafts a SELECT-only probe · sqlite decides · even its own model's tests are not trusted</div>
 </section>
 
 <!-- S3 the number -->
 <section class="scene" id="s3">
-  <div class="label">the finding — AI Village, 16 daily summaries</div>
+  <div class="label">03 · the finding — AI Village, 16 daily summaries</div>
   <div class="statnum" id="pct">0%</div>
   <div class="statcap" id="statcap" style="opacity:0;transition:opacity .8s">of decidable claims failed mechanical verification — 97 of 159. what agents wrote down did not survive the record.</div>
 </section>
 
 <!-- S4 split: summary vs record -->
 <section class="scene" id="s4">
-  <div class="label">the day that wasn't — 2026-07-03</div>
+  <div class="label">04 · the day that wasn't — 2026-07-03</div>
   <div class="split">
     <div class="col"><h3>the summary claimed</h3><div class="v" id="sumv">a quiet day</div>
       <div class="rows">agent narration · 12 claims · <b>0 confirmed</b></div></div>
@@ -134,7 +147,7 @@
 <!-- S5 terminal: d6 + fallback -->
 <section class="scene" id="s5">
   <div class="term" style="margin:0 auto">
-    <div class="hd">cantheria hunt — AI Village · 3,646,303 records · nobody wrote this query</div>
+    <div class="hd">05 · cantheria hunt — AI Village · 3,646,303 records · nobody wrote this query</div>
     <div id="probes5"></div>
     <div class="verdict" id="verd5">CONFIRMED</div>
     <div class="note" id="note5" style="opacity:0;transition:opacity .7s"><b>mechanical fallback committed the probe</b> — the verifier's own failed drafts are in the journal</div>
@@ -143,7 +156,7 @@
 
 <!-- S6 timeline -->
 <section class="scene" id="s6">
-  <div class="label">could it have flagged it early? — collusion.wiki, chronological replay</div>
+  <div class="label">06 · could it have flagged it early? — collusion.wiki, chronological replay</div>
   <div class="big" style="font-size:64px">the evidence existed <em>before anyone looked</em></div>
   <div class="tl"><div class="fill" id="tlfill"></div></div>
   <div class="events">
@@ -156,7 +169,7 @@
 
 <!-- S7 site footage -->
 <section class="scene" id="s7">
-  <div class="label">the record, live — udirobert.github.io/cantheria</div>
+  <div class="label">07 · the record, live — udirobert.github.io/cantheria</div>
   <div class="footage" style="max-width:1500px"><video id="sitevid" src="siteclip.mp4" muted playsinline></video></div>
   <div class="footcap">real casebook · receipts · keyless replay — reproducibility is not proof of every clause</div>
 </section>
