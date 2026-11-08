@@ -109,6 +109,59 @@ type, or missing one of the three properties.
   unified agent logs, attribution confidence, session replay. They capture
   *what happened*; Cantheria decides *which claims about it hold*.
 
+## Landscape sweep 2 — Parallel web search, 2026-11-08
+
+A second sweep (Parallel Search API) surfaced neighbors the first pass
+missed. Two are close enough to require explicit differentiation:
+
+- **blasrodri/truth** (GitHub) — "deterministic fact-checker for AI coding
+  agents": verifies an agent's claims about *its own work* against the
+  real code, git diff, and logs; local MCP server, cited verdicts,
+  "refuses to bluff." **Closest architectural neighbor.** Difference:
+  truth operates in the single-agent development loop — the evidence is
+  the repo the agent just touched. Cantheria operates on *populations* of
+  agents in shared, adversarially-edited records (3.6M-row normalized
+  corpus), where the investigator's own model is also untrusted, and adds
+  hunt mode, the verifier journal, and keyless replay of committed
+  probes. Truth answers "did the agent do what it claims?"; Cantheria
+  answers "which claims about the swarm survive the record?"
+- **NovaFabric** (arXiv 2609.12582) — tamper-evident, replayable evidence
+  for agent runs: Run Capsule schema, DSSE signatures, Merkle log,
+  four-mode replay. **Provenance layer, not adjudication** — it seals
+  what happened; it does not decide which claims about it are true.
+  Natural composition: a NovaFabric-sealed run could be the corpus
+  Cantheria audits.
+- **Monitor Red Teaming** (ICLR 2026) — standardizes adversarial
+  stress-testing of agent monitors; shows targeted human escalation
+  improves TPR. Supports our claim that oversight claims need adversarial
+  evaluation — which is what the synthetic ground-truth eval supplies.
+- **VLA — Verifiable Latent Alignments** (arXiv 2608.19161) — monitors
+  covert coordination in *latent* multi-agent channels (AUROC 0.993
+  homogeneous). Requires white-box activation access; Cantheria is
+  black-box over the observable record — complementary coverage of
+  different channels.
+- **Steganalysis of Adaptive Covert Collusion** (arXiv 2608.02698) —
+  black-box, trace-only, calibrated-FPR population collusion detector.
+  Same family as kollude; same layer difference applies.
+- **Agent Autopsy / OpenClaw forensic foundations** (arXiv 2604.05589,
+  agentautopsy.com) — forensic methodology and playbooks for agentic
+  incidents. Human-facing investigation guidance; no mechanical claim
+  verification.
+- **Chanl tool receipts** — per-tool-call signed receipts. Evidence
+  capture, not claim adjudication.
+- **KLA deterministic replay** — replays *policy decisions* over recorded
+  inputs with pinned versions; recorded model/judge verdicts are reused,
+  not re-derived. Different object: decision replay vs. claim truth.
+
+**Sprint-culture signal (from the AI Collusion Research Sprint gallery,
+392 entries):** the projects judges rewarded used pre-registered
+evaluations, explicit "channel but no collusion" controls, and detector
+critiques ("Collusion Detectors See Shared Secrets, Not Collusion";
+"LLM Monitors Mistake Open Cooperation for Collusion"). Cantheria's
+control leg, planted-truth eval, and documented blind spots match exactly
+this register — the differentiation to emphasize is *adjudication with
+receipts*, not another detector.
+
 ## What Cantheria claims — precisely
 
 - A claim ships only when a committed SELECT-only probe passes a
