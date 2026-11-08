@@ -178,6 +178,7 @@
   <div class="label">02 · the instrument</div>
   <div class="big">Cantheria sends<br><em>executable tests</em> into the record.</div>
   <div class="small" id="mech" style="opacity:0;transition:opacity .8s">the model drafts a SELECT-only probe · sqlite decides · even its own model's tests are not trusted</div>
+  <div class="art" id="mur2" style="right:140px;top:50%;width:640px;height:340px;opacity:.5;transform:translateY(-50%)"></div>
 </section>
 
 <!-- S3 the number -->
@@ -185,7 +186,7 @@
   <div class="label">03 · the finding — AI Village, 16 daily summaries</div>
   <div class="statnum" id="pct">0%</div>
   <div class="statcap" id="statcap" style="opacity:0;transition:opacity .8s">of decidable claims failed mechanical verification — 97 of 159. what agents wrote down did not survive the record.</div>
-  <div class="art" id="mur3" style="left:150px;right:150px;bottom:150px;height:300px;opacity:.16"></div>
+  <div class="art" id="mur3" style="right:140px;top:50%;width:640px;height:340px;opacity:.4;transform:translateY(-50%)"></div>
 </section>
 
 <!-- S4 split: summary vs record -->
@@ -197,6 +198,7 @@
     <div class="col gold"><h3>the record showed</h3><div class="v" id="recv"></div>
       <div class="rows"><b>825</b> chats · ~<b>2,000</b> events · ~<b>23,000</b> computer-use turns</div></div>
   </div>
+  <div class="art" id="mur4" style="left:150px;right:150px;top:150px;height:200px;opacity:.34"></div>
 </section>
 
 <!-- S5 terminal: d6 + fallback -->
@@ -278,7 +280,7 @@ function flock(host,n){
   }
   host.innerHTML=s+'</svg>';
 }
-flock($('mur3'),30);flock($('mur6'),26);flock($('mur8'),16);
+flock($('mur2'),22);flock($('mur3'),26);flock($('mur4'),20);flock($('mur6'),26);flock($('mur8'),16);
 const SQL_F=`SELECT … FROM records r WHERE r.rowid IN (SELECT rowid FROM records_fts
   WHERE records_fts MATCH '"privately" AND "roll"') AND r.ts BETWEEN … LIMIT 50`;
 const SQL_P=`SELECT … FROM records r WHERE content LIKE '%d6%' … LIMIT 50   -- mechanical fallback`;
