@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="80%">
+      <stop offset="0%" stop-color="#1a1e14"/>
+      <stop offset="100%" stop-color="#0d0f0c"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.08" stroke="#e8b93c" stroke-width="1">
+    <path d="M0 520 H1200 M0 540 H1200"/>
+  </g>
+  <g transform="translate(110,150) scale(6.5)" color="#e8e4d8">
+    <path d="M8 30 Q18 14 40 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M18 30 Q27 22 40 21" stroke="#e8b93c" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M12 36 Q22 32 33 33" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M40 12 L44 10 M40 12 L43 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="37.5" cy="14.5" r="1.6" fill="currentColor"/>
+  </g>
+  <text x="110" y="430" font-family="Helvetica Neue, Arial, sans-serif" font-size="86" font-weight="800" fill="#e8e4d8" letter-spacing="2">Cantheria</text>
+  <text x="114" y="478" font-family="Helvetica Neue, Arial, sans-serif" font-size="30" font-style="italic" fill="#e8b93c">An LLM proposes; the record decides.</text>
+  <text x="114" y="540" font-family="Menlo, monospace" font-size="19" fill="#8a8674">falsification pipeline for claims about multi-agent systems</text>
+  <text x="114" y="572" font-family="Menlo, monospace" font-size="17" fill="#5c594c">Swarm Alignment Hackathon · Track 4: Multi-Agent Oversight and Control</text>
+  <g transform="translate(1010,120)" opacity="0.9">
+    <rect x="0" y="0" width="70" height="70" rx="14" fill="none" stroke="#e8b93c" stroke-width="2"/>
+    <path d="M18 44 Q30 24 54 22" stroke="#e8e4d8" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M28 44 Q38 34 54 33" stroke="#e8b93c" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <circle cx="50" cy="25" r="2.4" fill="#e8e4d8"/>
+  </g>
+</svg>
