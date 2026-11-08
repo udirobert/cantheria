@@ -145,8 +145,11 @@
 </section>
 
 <!-- S5 terminal: d6 + fallback -->
-<section class="scene" id="s5">
-  <div class="term" style="margin:0 auto">
+<section class="scene" id="s5" style="background:#0b0d0a">
+  <video id="falbg" src="fal-swarm.mp4" autoplay muted loop playsinline
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42"></video>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(11,13,10,.25),rgba(11,13,10,.82))"></div>
+  <div class="term" style="margin:0 auto;position:relative;z-index:2">
     <div class="hd">05 · cantheria hunt — AI Village · 3,646,303 records · nobody wrote this query</div>
     <div id="probes5"></div>
     <div class="verdict" id="verd5">CONFIRMED</div>

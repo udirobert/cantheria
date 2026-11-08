@@ -1,0 +1,11 @@
+title = "cantheria"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Incident-evidence excerpts (third-party transcript data) and detect-secrets baseline hashes are not credentials"
+paths = [
+  '''^\.secrets\.baseline$''',
+  '''^presentation/cases/''',
+]
