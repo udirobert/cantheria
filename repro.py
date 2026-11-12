@@ -88,30 +88,36 @@ def planted() -> None:
     row(
         "confirmed precision",
         f"{tp}/{tp + fp}",
-        "6/6",
+        "7/7",
         PAPER,
-        "the 6 claims it confirmed were all true",
+        "confirms all 7 true claims",
     )
     row("false confirmations", f"{fp}/{n_false}", "0/7", PAPER, "none of the 7 false ones")
     recall = f"{tp}/{tp + fn} ({round(100 * tp / (tp + fn))}%)" if tp + fn else "n/a"
-    row("true-claim recall", recall, "6/7 (86%)", PAPER, "true-claim recall was 6 of 7")
+    row(
+        "true-claim recall",
+        recall,
+        "7/7 (100%)",
+        PAPER,
+        "Absence is decidable now, in both directions",
+    )
     row("interpretive quarantined", f"{interp}/1", "1/1", PAPER, "quarantined as unverifiable")
     row(
         "model calls / probe runs",
         f"{data.get('llm_calls')}/{data.get('probe_runs')}",
-        "18/24",
+        "28/56",
         PAPER,
-        "18 model calls and 24 probe executions",
+        "28 model calls and 56 probe executions",
     )
     row(
         "abstention taxonomy",
         tax,
-        "3 nonexistent-entity, 1 structural absence, 1 attribution-miss",
+        "0 nonexistent-entity, 1 structural absence, 0 attribution-miss",
         PAPER,
-        "3 claims naming something the record never holds",
+        "the one abstention is a structural absence",
     )
     named = "all clear for deploy" if "all clear for deploy" in attr else (attr or "(none)")
-    row("attribution-miss named", named, "all clear for deploy", PAPER, "all clear for deploy")
+    row("attribution-miss named", named, "(none)", PAPER, "no attribution miss left")
     row("planted claims", str(len(order)), "15", PAPER, "15 claims")
     db = ROOT / "eval/synthetic_ground_truth/records.db"
     if not db.is_file():
@@ -347,13 +353,19 @@ def transfer() -> None:
         PAPER,
         "none of the 7 false ones confirmed",
     )
-    row("transfer: false dismissed", str(dismissed_t), "1", PAPER, "One was dismissed")
+    row(
+        "transfer: false dismissed",
+        str(dismissed_t),
+        "7",
+        PAPER,
+        "all seven false claims were dismissed",
+    )
     row(
         "transfer: abstentions",
         str(n_false_t - fp_t - dismissed_t),
-        "6",
+        "0",
         PAPER,
-        "six of the seven false claims abstained",
+        "with no abstentions",
     )
     row(
         "transfer: interpretive",
@@ -366,10 +378,9 @@ def transfer() -> None:
     row(
         "transfer: abstention taxonomy",
         tax_t,
-        "1 attribution-trap, 1 fabricated-count, 1 false-absence, "
-        "1 nonexistent-action, 1 nonexistent-entity, 1 order-trap",
+        "",
         PAPER,
-        "1 false absence, and 1 attribution miss",
+        "no abstentions",
     )
 
     # replay: every committed probe re-decided by the oracle, no model

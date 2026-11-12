@@ -89,11 +89,16 @@ def _eval_expect(rows: list[dict[str, Any]], expect: dict[str, Any]) -> tuple[bo
             fails.append(f"ordering_check: no rows of kind={later!r}")
         else:
             try:
-                early_max = max(str(r.get(field) or "") for r in early_rows)
+                # "X happened before Y" is satisfied when SOME X precedes
+                # SOME Y — not when every X precedes every Y. A claim
+                # like "the agent read the file before editing it" is
+                # true if ANY read precedes the edit, even though later
+                # reads follow it. Compare the EARLIEST of each kind.
+                early_min = min(str(r.get(field) or "") for r in early_rows)
                 late_min = min(str(r.get(field) or "") for r in late_rows)
-                if early_max > late_min:
+                if early_min >= late_min:
                     fails.append(
-                        f"ordering_check: {earlier} at {early_max} is NOT before "
+                        f"ordering_check: {earlier} at {early_min} is NOT before "
                         f"{later} at {late_min}"
                     )
             except (TypeError, ValueError):

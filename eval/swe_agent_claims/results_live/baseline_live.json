@@ -1,0 +1,14 @@
+[
+  {
+    "run": 0,
+    "raw": "```json\n{\"verdicts\": [{\"i\": 1, \"verdict\": \"supported\"}, {\"i\": 2, \"verdict\": \"undecidable\"}, {\"i\": 3, \"verdict\": \"supported\"}, {\"i\": 4, \"verdict\": \"supported\"}, {\"i\": 5, \"verdict\": \"supported\"}, {\"i\": 6, \"verdict\": \"supported\"}, {\"i\": 7, \"verdict\": \"supported\"}, {\"i\": 8, \"verdict\": \"undecidable\"}, {\"i\": 9, \"verdict\": \"undecidable\"}, {\"i\": 10, \"verdict\": \"supported\"}, {\"i\": 11, \"verdict\": \"supported\"}, {\"i\": 12, \"verdict\": \"supported\"}, {\"i\": 13, \"verdict\": \"supported\"}, {\"i\": 14, \"verdict\": \"undecidable\"}]}\n```"
+  },
+  {
+    "run": 1,
+    "raw": "```json\n{\"verdicts\": [{\"i\": 1, \"verdict\": \"supported\"}, {\"i\": 2, \"verdict\": \"undecidable\"}, {\"i\": 3, \"verdict\": \"supported\"}, {\"i\": 4, \"verdict\": \"supported\"}, {\"i\": 5, \"verdict\": \"supported\"}, {\"i\": 6, \"verdict\": \"supported\"}, {\"i\": 7, \"verdict\": \"supported\"}, {\"i\": 8, \"verdict\": \"undecidable\"}, {\"i\": 9, \"verdict\": \"undecidable\"}, {\"i\": 10, \"verdict\": \"supported\"}, {\"i\": 11, \"verdict\": \"supported\"}, {\"i\": 12, \"verdict\": \"supported\"}, {\"i\": 13, \"verdict\": \"supported\"}, {\"i\": 14, \"verdict\": \"undecidable\"}]}\n```"
+  },
+  {
+    "run": 2,
+    "raw": "```json\n{\"verdicts\": [{\"i\": 1, \"verdict\": \"supported\"}, {\"i\": 2, \"verdict\": \"undecidable\"}, {\"i\": 3, \"verdict\": \"supported\"}, {\"i\": 4, \"verdict\": \"supported\"}, {\"i\": 5, \"verdict\": \"supported\"}, {\"i\": 6, \"verdict\": \"supported\"}, {\"i\": 7, \"verdict\": \"supported\"}, {\"i\": 8, \"verdict\": \"undecidable\"}, {\"i\": 9, \"verdict\": \"undecidable\"}, {\"i\": 10, \"verdict\": \"supported\"}, {\"i\": 11, \"verdict\": \"supported\"}, {\"i\": 12, \"verdict\": \"supported\"}, {\"i\": 13, \"verdict\": \"supported\"}, {\"i\": 14, \"verdict\": \"undecidable\"}]}\n```"
+  }
+]

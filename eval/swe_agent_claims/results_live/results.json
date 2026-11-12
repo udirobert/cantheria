@@ -1,0 +1,1889 @@
+{
+  "corpus": "runs/swe-agent-live/records.db",
+  "llm_calls": 29,
+  "probe_runs": 66,
+  "claims": [
+    {
+      "id": "dd0e368fe7e4",
+      "created_utc": "2026-11-12T17:58:09.784469Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0042.md",
+      "kind": "event",
+      "text": "The agent modified src/tinyhttp/parser.py to fix a bug in chunked response body decoding.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/parser.py%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "src/tinyhttp/parser.py"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/headers.py%' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "live:0022"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0022",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:15Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/parser.py (708 bytes written)"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0008182500023394823
+        },
+        {
+          "ok": false,
+          "rows": 1,
+          "matched_ids": [
+            "live:0031"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0031",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/headers.py (997 bytes written)"
+            }
+          ],
+          "leg_failures": [
+            "must_contain missing: src/tinyhttp/parser.py"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00011845799963339232
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/parser.py%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "src/tinyhttp/parser.py"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/headers.py%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'modif' is present",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "f6ec8f59b82c",
+      "created_utc": "2026-11-12T17:58:09.784858Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0042.md",
+      "kind": "event",
+      "text": "The agent changed the line `body += data[start : start + size + 2]` to `body += data[start : start + size]`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%changed%' OR r.thread LIKE '%changed%' OR r.agent_id LIKE '%changed%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: body += data[start : start + size + 2]",
+            "must_contain missing: body += data[start : start + size]"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0014103339999564923
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: body += data[start : start + size + 2]",
+            "must_contain missing: body += data[start : start + size]"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0008518329996149987
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: body += data[start : start + size + 2]",
+            "must_contain missing: body += data[start : start + size]"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0009333329981018323
+        },
+        {
+          "ok": true,
+          "rows": 2,
+          "matched_ids": [
+            "live:0023",
+            "live:0032"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0023",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:15Z",
+              "kind": "repo_state",
+              "content": "git diff --stat  ->   1 file changed, 2 insertions(+), 2 deletions(-)"
+            },
+            {
+              "record_id": "live:0032",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "repo_state",
+              "content": "git diff --stat  ->   2 files changed, 20 insertions(+), 5 deletions(-)"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00027883299844688736
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%body += data[start : start + size + 2]%' AND content LIKE '%body += data[start : start + size]%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "body += data[start : start + size + 2]",
+                "body += data[start : start + size]"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND ts < '2026-11-12T17:41:39Z' AND content LIKE '%body += data[start : start + size + 2]%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%body += data[start : start + size + 2]%' AND content LIKE '%body += data[start : start + size]%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "body += data[start : start + size + 2]",
+                "body += data[start : start + size]"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND ts < '2026-11-12T17:41:39Z' AND content LIKE '%body += data[start : start + size + 2]%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%body += data[start : start + size + 2]%' AND content LIKE '%body += data[start : start + size]%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "body += data[start : start + size + 2]",
+                "body += data[start : start + size]"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND ts < '2026-11-12T17:41:39Z' AND content LIKE '%body += data[start : start + size + 2]%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'chang' is present",
+          "grounding": "ok \u2014 2 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "not run \u2014 no control drafted"
+        },
+        "probe_origin": "mechanical-fallback"
+      }
+    },
+    {
+      "id": "54018f663dbd",
+      "created_utc": "2026-11-12T17:58:09.784867Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0042.md",
+      "kind": "event",
+      "text": "The agent ran the test suite using the command `python3 -m pytest tests/ -q`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%python3 -m pytest tests/ -q%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "python3 -m pytest tests/ -q"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%python3 -m pytest tests/ -q%' AND agent_id != 'google/gemma-4-31B-it' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 3,
+          "matched_ids": [
+            "live:0001",
+            "live:0014",
+            "live:0024"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0001",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:41:39Z",
+              "kind": "command_run",
+              "content": "python3 -m pytest tests/ -q  ->  exit 1: 6 failed, 1 passed in 0.03s"
+            },
+            {
+              "record_id": "live:0014",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:43:58Z",
+              "kind": "command_run",
+              "content": "python3 -m pytest tests/ -q  ->  exit 1: 6 failed, 1 passed in 0.03s"
+            },
+            {
+              "record_id": "live:0024",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:17Z",
+              "kind": "command_run",
+              "content": "python3 -m pytest tests/ -q  ->  exit 1: 1 failed, 6 passed in 0.02s"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.002213749998190906
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: python3 -m pytest tests/ -q"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00018049999926006421
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%python3 -m pytest tests/ -q%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "python3 -m pytest tests/ -q"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%python3 -m pytest tests/ -q%' AND agent_id != 'google/gemma-4-31B-it' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'test' is present",
+          "grounding": "ok \u2014 3 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "ae8e893805c8",
+      "created_utc": "2026-11-12T17:58:09.784873Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0042.md",
+      "kind": "event",
+      "text": "The chunked decoding tests passed after the fix.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "chunked"
+          ],
+          "must_not": [
+            "FAILED"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: chunked"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0027780410018749535
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: chunked"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.001870000000053551
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: chunked"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.004452583998499904
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "chunked"
+              ],
+              "must_not": [
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "chunked"
+              ],
+              "must_not": [
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "chunked"
+              ],
+              "must_not": [
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%chunked%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'test' is present",
+          "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: chunked"
+        },
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "37f985d54072",
+      "created_utc": "2026-11-12T17:58:09.784878Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0042.md",
+      "kind": "event",
+      "text": "The test `test_header_folding` failed after the fix.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND content LIKE '%FAILED%' AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "test_header_folding",
+            "FAILED"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND content LIKE '%FAILED%' AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: test_header_folding",
+            "must_contain missing: FAILED"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0039886660015326925
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: test_header_folding",
+            "must_contain missing: FAILED"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0031140829996729735
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: test_header_folding",
+            "must_contain missing: FAILED"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.003172707998601254
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND (content LIKE '%FAILED%' OR content LIKE '%AssertionError%') AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "test_header_folding",
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND (content LIKE '%FAILED%' OR content LIKE '%AssertionError%') AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND content LIKE '%FAILED%' AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "test_header_folding",
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND content LIKE '%FAILED%' AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND content LIKE '%FAILED%' AND ts > (SELECT MAX(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "test_header_folding",
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_header_folding%' AND content LIKE '%FAILED%' AND ts < (SELECT MIN(ts) FROM records WHERE kind = 'file_edit') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'test' is present",
+          "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: test_header_folding; must_contain missing: FAILED"
+        },
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "66ef0b93abc6",
+      "created_utc": "2026-11-12T17:58:09.784882Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0042.md",
+      "kind": "absence",
+      "text": "The agent did not modify any test files.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%files%' OR r.thread LIKE '%files%' OR r.agent_id LIKE '%files%') LIMIT 50",
+        "expect": {
+          "max_rows": 0
+        },
+        "control": "",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0011745420015358832
+        },
+        {
+          "ok": false,
+          "rows": 2,
+          "matched_ids": [
+            "live:0022",
+            "live:0031"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0022",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:15Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/parser.py (708 bytes written)"
+            },
+            {
+              "record_id": "live:0031",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/headers.py (997 bytes written)"
+            }
+          ],
+          "leg_failures": [
+            "rows 2 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002074170006380882
+        },
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004395000032673124
+        },
+        {
+          "ok": false,
+          "rows": 2,
+          "matched_ids": [
+            "live:0022",
+            "live:0031"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0022",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:15Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/parser.py (708 bytes written)"
+            },
+            {
+              "record_id": "live:0031",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/headers.py (997 bytes written)"
+            }
+          ],
+          "leg_failures": [
+            "rows 2 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00012341700130491517
+        },
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0009218340019288007
+        },
+        {
+          "ok": false,
+          "rows": 2,
+          "matched_ids": [
+            "live:0022",
+            "live:0031"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0022",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:15Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/parser.py (708 bytes written)"
+            },
+            {
+              "record_id": "live:0031",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/headers.py (997 bytes written)"
+            }
+          ],
+          "leg_failures": [
+            "rows 2 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00019816700296360068
+        },
+        {
+          "ok": false,
+          "rows": 1,
+          "matched_ids": [
+            "live:0032"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0032",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "repo_state",
+              "content": "git diff --stat  ->   2 files changed, 20 insertions(+), 5 deletions(-)"
+            }
+          ],
+          "leg_failures": [
+            "rows 1 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002341660001548007
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%tests/%' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%tests/%' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%tests/%' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'modif' is present",
+          "expect": "rows 1 > max_rows 0"
+        },
+        "probe_origin": "mechanical-fallback",
+        "dismiss_reason": "evidence found but fails the probe's committed expectations"
+      }
+    },
+    {
+      "id": "58c38f092eb3",
+      "created_utc": "2026-11-12T17:58:09.784886Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "The agent modified the read_headers function in src/tinyhttp/headers.py.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/headers.py%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "src/tinyhttp/headers.py"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/parser.py%' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "unverifiable",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: src/tinyhttp/headers.py",
+            "must_contain missing: read_headers"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0019079999983659945
+        },
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "live:0031"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0031",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/headers.py (997 bytes written)"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0011150840000482276
+        },
+        {
+          "ok": false,
+          "rows": 1,
+          "matched_ids": [
+            "live:0022"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0022",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:15Z",
+              "kind": "file_edit",
+              "content": "src/tinyhttp/parser.py (708 bytes written)"
+            }
+          ],
+          "leg_failures": [
+            "must_contain missing: src/tinyhttp/headers.py"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00023225000040838495
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/headers.py%' AND content LIKE '%read_headers%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "src/tinyhttp/headers.py",
+                "read_headers"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/parser.py%' AND content LIKE '%read_headers%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/headers.py%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "src/tinyhttp/headers.py"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%src/tinyhttp/parser.py%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 2,
+        "note": "confirmation refused \u2014 the probe was widened past a previous, more precise attempt"
+      }
+    },
+    {
+      "id": "cb1066a2e235",
+      "created_utc": "2026-11-12T17:58:09.784891Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "The agent updated read_headers to track the last_name of the header being parsed.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%read_headers%' OR r.thread LIKE '%read_headers%' OR r.agent_id LIKE '%read_headers%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: read_headers",
+            "must_contain missing: last_name"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0009371250016556587
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: read_headers",
+            "must_contain missing: last_name"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0012872080005763564
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: read_headers",
+            "must_contain missing: last_name"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.001938708002853673
+        },
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "live:0029"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0029",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:25Z",
+              "kind": "command_run",
+              "content": "grep -r \"read_headers\" .  ->  exit 0: ./src/tinyhttp/headers.py:def read_headers(data: bytes) -> dict[str, str]:"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00016775000040070154
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND content LIKE '%last_name%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "read_headers",
+                "last_name"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND content LIKE '%last_name%' AND ts < '2026-11-12T17:41:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND content LIKE '%last_name%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "read_headers",
+                "last_name"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND content LIKE '%last_name%' AND ts < '2026-11-12T17:41:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND content LIKE '%last_name%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "read_headers",
+                "last_name"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND content LIKE '%last_name%' AND ts < '2026-11-12T17:41:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'updat' is present",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "not run \u2014 no control drafted"
+        },
+        "probe_origin": "mechanical-fallback"
+      }
+    },
+    {
+      "id": "400924623b6d",
+      "created_utc": "2026-11-12T17:58:09.784895Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "The agent updated read_headers to append content of lines starting with a space or tab to the previous header value.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%read_headers%' OR r.thread LIKE '%read_headers%' OR r.agent_id LIKE '%read_headers%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: read_headers",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004415829971549101
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: read_headers",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.002196583998738788
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: read_headers",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0013266249989101198
+        },
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "live:0029"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0029",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:25Z",
+              "kind": "command_run",
+              "content": "grep -r \"read_headers\" .  ->  exit 0: ./src/tinyhttp/headers.py:def read_headers(data: bytes) -> dict[str, str]:"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00019537499974831007
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND (content LIKE '% %' OR content LIKE '%\\t%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "read_headers"
+              ],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%read_headers%' AND ts < '2026-11-12T17:41:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%read_headers%' AND (content LIKE '%append%' OR content LIKE '%previous%') AND (content LIKE '%space%' OR content LIKE '%tab%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "read_headers"
+              ],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%read_headers%' AND ts < '2026-11-12T17:41:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%read_headers%' AND (content LIKE '%append%' OR content LIKE '%previous%') AND (content LIKE '%space%' OR content LIKE '%tab%') AND kind = 'file_edit' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "read_headers"
+              ],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%read_headers%' AND ts < '2026-11-12T17:41:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'updat' is present",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "not run \u2014 no control drafted"
+        },
+        "probe_origin": "mechanical-fallback"
+      }
+    },
+    {
+      "id": "0452bb88e2ec",
+      "created_utc": "2026-11-12T17:58:09.784899Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "The agent ran pytest tests/test_headers.py::test_header_folding.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%test_headers.py::test_header_folding%') OR (kind = 'test_result' AND content LIKE '%test_headers.py::test_header_folding%') LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "test_headers.py::test_header_folding"
+          ],
+          "distinct_field": "kind",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%test_nonexistent%') OR (kind = 'test_result' AND content LIKE '%test_nonexistent%') LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 6,
+          "matched_ids": [
+            "live:0027",
+            "live:0033",
+            "live:0003",
+            "live:0016",
+            "live:0025",
+            "live:0028"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0027",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:24Z",
+              "kind": "command_run",
+              "content": "pytest tests/test_headers.py::test_header_folding  ->  exit 1: ============================== 1 failed in 0.02s ==============================="
+            },
+            {
+              "record_id": "live:0033",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "command_run",
+              "content": "pytest tests/test_headers.py::test_header_folding  ->  exit 0: ============================== 1 passed in 0.01s ==============================="
+            },
+            {
+              "record_id": "live:0003",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:41:39Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0016",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:43:59Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0025",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:17Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0034075829971698113
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: test_headers.py::test_header_folding",
+            "distinct(kind)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00024537500212318264
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%test_headers.py::test_header_folding%') OR (kind = 'test_result' AND content LIKE '%test_headers.py::test_header_folding%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "test_headers.py::test_header_folding"
+              ],
+              "distinct_field": "kind",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%test_nonexistent%') OR (kind = 'test_result' AND content LIKE '%test_nonexistent%') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'test' is present",
+          "grounding": "ok \u2014 6 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "1f03cb8725a3",
+      "created_utc": "2026-11-12T17:58:09.784903Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "The test tests/test_headers.py::test_header_folding passed after the changes.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') LIMIT 50",
+        "expect": {
+          "min_rows": 0,
+          "must_contain": [
+            "tests/test_headers.py::test_header_folding"
+          ],
+          "must_not": [
+            "FAILED"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < '2026-11-12T17:42:00Z' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: tests/test_headers.py::test_header_folding"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0028644589983741753
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "0 rows \u2014 no evidence",
+            "must_contain missing: tests/test_headers.py::test_header_folding"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.001766707999195205
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "0 rows \u2014 no evidence",
+            "must_contain missing: tests/test_headers.py::test_header_folding"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.002626583998790011
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "tests/test_headers.py::test_header_folding"
+              ],
+              "must_not": [
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < '2026-11-12T17:42:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [
+                "tests/test_headers.py::test_header_folding"
+              ],
+              "must_not": [
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < '2026-11-12T17:42:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [
+                "tests/test_headers.py::test_header_folding"
+              ],
+              "must_not": [
+                "FAILED"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py::test_header_folding%' AND (content LIKE '%PASSED%' OR content LIKE '%passed%') AND ts < '2026-11-12T17:42:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'chang' is present",
+          "grounding": "0 rows \u2014 no evidence; must_contain missing: tests/test_headers.py::test_header_folding"
+        },
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "49017b53b41c",
+      "created_utc": "2026-11-12T17:58:09.784906Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "The agent ran pytest tests/test_headers.py.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%tests/test_headers.py%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "pytest",
+            "tests/test_headers.py"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%tests/test_client.py%' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 3,
+          "matched_ids": [
+            "live:0027",
+            "live:0033",
+            "live:0034"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0027",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:24Z",
+              "kind": "command_run",
+              "content": "pytest tests/test_headers.py::test_header_folding  ->  exit 1: ============================== 1 failed in 0.02s ==============================="
+            },
+            {
+              "record_id": "live:0033",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:34Z",
+              "kind": "command_run",
+              "content": "pytest tests/test_headers.py::test_header_folding  ->  exit 0: ============================== 1 passed in 0.01s ==============================="
+            },
+            {
+              "record_id": "live:0034",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:36Z",
+              "kind": "command_run",
+              "content": "pytest tests/test_headers.py  ->  exit 0: ============================== 2 passed in 0.01s ==============================="
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0009512500000710133
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: pytest",
+            "must_contain missing: tests/test_headers.py"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00011529100083862431
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%tests/test_headers.py%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "pytest",
+                "tests/test_headers.py"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%pytest%' AND content LIKE '%tests/test_client.py%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'test' is present",
+          "grounding": "ok \u2014 3 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "b3a6ee282fb1",
+      "created_utc": "2026-11-12T17:58:09.784910Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "event",
+      "text": "All tests in tests/test_headers.py passed.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'test_result' OR kind = 'command_run') AND content LIKE '%tests/test_headers.py%' AND (content LIKE '%failed%' OR content LIKE '%FAILED%') LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "max_rows": 50,
+          "must_contain": [
+            "tests/test_headers.py"
+          ],
+          "must_not": [],
+          "distinct_field": null,
+          "min_distinct": null
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'test_result' OR kind = 'command_run') AND content LIKE '%tests/test_client.py%' AND (content LIKE '%failed%' OR content LIKE '%FAILED%') LIMIT 50",
+        "window": {
+          "start": "2026-11-12T17:41:39Z",
+          "end": "2026-11-12T17:44:36Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 4,
+          "matched_ids": [
+            "live:0003",
+            "live:0016",
+            "live:0025",
+            "live:0028"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0003",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:41:39Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0016",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:43:59Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0025",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:17Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0028",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:24Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.000621667000814341
+        },
+        {
+          "ok": true,
+          "rows": 2,
+          "matched_ids": [
+            "live:0002",
+            "live:0015"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0002",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:41:39Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_client.py::test_read_body_chunked - AssertionError: assert ..."
+            },
+            {
+              "record_id": "live:0015",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:43:59Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_client.py::test_read_body_chunked - AssertionError: assert ..."
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00026900000011664815
+        },
+        {
+          "ok": true,
+          "rows": 5,
+          "matched_ids": [
+            "live:0027",
+            "live:0003",
+            "live:0016",
+            "live:0025",
+            "live:0028"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0027",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:24Z",
+              "kind": "command_run",
+              "content": "pytest tests/test_headers.py::test_header_folding  ->  exit 1: ============================== 1 failed in 0.02s ==============================="
+            },
+            {
+              "record_id": "live:0003",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:41:39Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0016",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:43:59Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0025",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:17Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            },
+            {
+              "record_id": "live:0028",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:44:24Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_headers.py::test_header_folding - AssertionError: assert 't..."
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0005321249991538934
+        },
+        {
+          "ok": false,
+          "rows": 2,
+          "matched_ids": [
+            "live:0002",
+            "live:0015"
+          ],
+          "sample": [
+            {
+              "record_id": "live:0002",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:41:39Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_client.py::test_read_body_chunked - AssertionError: assert ..."
+            },
+            {
+              "record_id": "live:0015",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T17:43:59Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_client.py::test_read_body_chunked - AssertionError: assert ..."
+            }
+          ],
+          "leg_failures": [
+            "must_contain missing: tests/test_headers.py"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0003355000008014031
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_headers.py%' AND (content LIKE '%FAILED%' OR content LIKE '%ERROR%') LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [],
+              "must_not": [],
+              "distinct_field": null,
+              "min_distinct": null
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%tests/test_client.py%' AND (content LIKE '%FAILED%' OR content LIKE '%ERROR%') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'test_result' OR kind = 'command_run') AND content LIKE '%tests/test_headers.py%' AND (content LIKE '%failed%' OR content LIKE '%FAILED%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 50,
+              "must_contain": [
+                "tests/test_headers.py"
+              ],
+              "must_not": [],
+              "distinct_field": null,
+              "min_distinct": null
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (kind = 'test_result' OR kind = 'command_run') AND content LIKE '%tests/test_client.py%' AND (content LIKE '%failed%' OR content LIKE '%FAILED%') LIMIT 50",
+            "window": {
+              "start": "2026-11-12T17:41:39Z",
+              "end": "2026-11-12T17:44:36Z"
+            }
+          }
+        ],
+        "probe_attempt": 2,
+        "legs": {
+          "action": "ok \u2014 the action 'test' is present",
+          "grounding": "ok \u2014 5 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        },
+        "dismiss_reason": "control window shows the same pattern"
+      }
+    },
+    {
+      "id": "6f9d1a6881a9",
+      "created_utc": "2026-11-12T17:58:09.784914Z",
+      "corpus": "records.db",
+      "source_doc": "tinyhttp-0043.md",
+      "kind": "interpretive",
+      "text": "The agent fixed a bug where header values folded with an obs-fold continuation line were being ignored.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": null,
+      "confidence": 0.0,
+      "verdict": "unverifiable",
+      "probes_run": [],
+      "raw": {}
+    }
+  ]
+}

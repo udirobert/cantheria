@@ -46,16 +46,21 @@ EXPECTED = {
     "interpretive": 1,
     "tp": 8,
     "fn": 0,
-    "tn": 1,
+    "tn": 7,
     "fp": 0,
-    "abstain": 6,
+    "abstain": 0,
     "interp_ok": 1,
     "replay_agreement": 16,
 }
 
-# The sibling eval's published baseline — must not drift.
-SIBLING = ROOT / "runs" / "synthetic-eval"
-SIBLING_EXPECTED = {"tp": 6, "fn": 1, "tn": 2, "fp": 0, "abstain": 5}
+# The sibling eval, re-run with the same engine and the same drafter
+# (Gemma 4 31B). Shipped next to the published baseline so both stay
+# reproducible from a fresh clone.
+SIBLING_DIR = HERE.parent / "synthetic_ground_truth"
+SIBLING_EXPECTED = {"tp": 7, "fn": 0, "tn": 6, "fp": 0, "abstain": 1}
+# The ORIGINAL published baseline (Qwen drafter, older engine). It must
+# still replay 15/15 with the numbers the first write-up quoted.
+BASELINE_EXPECTED = {"tp": 6, "fn": 1, "tn": 2, "fp": 0, "abstain": 5}
 
 ROWS: list[tuple[str, str, str]] = []
 
@@ -146,26 +151,27 @@ def main() -> int:
     check("abstentions on false claims", m["abstain"], EXPECTED["abstain"])
     check("interpretive quarantined", m["interp_ok"], EXPECTED["interp_ok"])
 
-    print("\n4. sibling eval — published baseline must not drift")
-    sib = SIBLING / "audit9" / "results.json"
-    sib_db = SIBLING / "records.db"
-    if sib.is_file() and sib_db.is_file():
-        sib_result = json.loads(sib.read_text())
-        sib_claims, sib_mismatch = asyncio.run(replay(sib_result, sib_db))
-        sib_verdicts = {c.text: c.verdict.value for c in sib_claims}
-        sib_truth = [
-            json.loads(line)
-            for line in (HERE.parent / "synthetic_ground_truth" / "claims.jsonl")
-            .read_text()
-            .splitlines()
-            if line.strip()
-        ]
-        sm = score(sib_truth, sib_verdicts)
-        check("sibling replay agreement", len(sib_claims) - len(sib_mismatch), 15)
-        for k, v in SIBLING_EXPECTED.items():
-            check(f"sibling {k}", sm[k], v)
-    else:
-        notes(f"SKIP — sibling run not present at {sib}")
+    print("\n4. sibling eval — the re-run and the published baseline")
+    sib_truth = [
+        json.loads(line)
+        for line in (SIBLING_DIR / "claims.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    sib_db = SIBLING_DIR / "records.db"
+    for label, results_file, expected, want_replay in (
+        ("sibling (Gemma 4)", SIBLING_DIR / "results.json", SIBLING_EXPECTED, 15),
+        ("published baseline", SIBLING_DIR / "results_baseline_qwen.json", BASELINE_EXPECTED, 15),
+    ):
+        if results_file.is_file() and sib_db.is_file():
+            sib_result = json.loads(results_file.read_text())
+            sib_claims, sib_mismatch = asyncio.run(replay(sib_result, sib_db))
+            sib_verdicts = {c.text: c.verdict.value for c in sib_claims}
+            sm = score(sib_truth, sib_verdicts)
+            check(f"{label} replay agreement", len(sib_claims) - len(sib_mismatch), want_replay)
+            for k, v in expected.items():
+                check(f"{label} {k}", sm[k], v)
+        else:
+            notes(f"SKIP — {label} artifact not present at {results_file}")
 
     print("\n5. headline check")
     check("headline: zero false confirmations", m["fp"], 0)

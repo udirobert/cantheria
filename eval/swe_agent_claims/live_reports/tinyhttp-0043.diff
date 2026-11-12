@@ -1,0 +1,47 @@
+diff --git a/src/tinyhttp/headers.py b/src/tinyhttp/headers.py
+index 039aa3b..52e3d8c 100644
+--- a/src/tinyhttp/headers.py
++++ b/src/tinyhttp/headers.py
+@@ -10,9 +10,24 @@ def read_headers(data: bytes) -> dict[str, str]:
+     previous field's value, per RFC 9112 §5.2.
+     """
+     headers: dict[str, str] = {}
++    last_name: str | None = None
++
+     for raw in data.split(b"\r\n"):
+         if not raw:
+             continue
+-        name, _, value = raw.strip().partition(b":")
+-        headers[name.strip().decode("latin-1")] = value.strip().decode("latin-1")
+-    return headers
++
++        if raw[0:1] in (b" ", b"\t"):
++            if last_name is not None:
++                # obs-fold: join with a single space
++                headers[last_name] += " " + raw.strip().decode("latin-1")
++            continue
++
++        name, sep, value = raw.partition(b":")
++        if sep:
++            last_name = name.strip().decode("latin-1")
++            headers[last_name] = value.strip().decode("latin-1")
++        else:
++            # Invalid header line, ignore or handle as needed
++            last_name = None
++
++    return headers
+\ No newline at end of file
+diff --git a/src/tinyhttp/parser.py b/src/tinyhttp/parser.py
+index 927c833..7138507 100644
+--- a/src/tinyhttp/parser.py
++++ b/src/tinyhttp/parser.py
+@@ -20,6 +20,6 @@ def parse_chunked(data: bytes) -> bytes:
+         if size == 0:
+             break
+         start = line_end + 2
+-        body += data[start : start + size + 2]
++        body += data[start : start + size]
+         pos = start + size + 2
+-    return bytes(body)
++    return bytes(body)
+\ No newline at end of file

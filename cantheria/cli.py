@@ -252,8 +252,14 @@ def audit_cmd(
                     except Exception as exc:  # backend flake — one claim dies, not the batch
                         from cantheria.swarm.schemas import Verdict
 
-                        c.verdict = Verdict.flaky
+                        # A backend error is NOT a verdict on the claim: the
+                        # probe never ran, so nothing was measured. Calling
+                        # it `flaky` ("the evidence was too thin to call")
+                        # reads as a measurement; `unverifiable` is the
+                        # honest label, and it replays as such.
+                        c.verdict = Verdict.unverifiable
                         c.raw["backend_error"] = str(exc)[:500]
+                        c.raw["note"] = "backend error — the probe never ran; nothing measured"
                         journal.log(c, "backend_error")
                         return c
 

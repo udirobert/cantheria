@@ -27,7 +27,18 @@ from cantheria.journal import Journal
 from cantheria.sie import SIEClient
 from cantheria.swarm.corpus import ts_unix
 from cantheria.swarm.oracle import EvidenceOracle, meaningful_subjects
-from cantheria.swarm.schemas import Claim, ClaimKind, Probe, Verdict
+from cantheria.swarm.schemas import (
+    Claim,
+    ClaimKind,
+    Probe,
+    Verdict,
+)
+from cantheria.swarm.schemas import (
+    claim_action_verb as _shared_action_verb,
+)
+from cantheria.swarm.schemas import (
+    claim_is_absence as _shared_is_absence,
+)
 from cantheria.swarm.segment import Segment
 
 PROBE_SYSTEM = """\
@@ -79,7 +90,11 @@ Rules:
 - ABSENCE claims ("never", "no other", "did not") are decided by
   max_rows: 0 over a predicate that WOULD match the thing if it existed.
   The probe must find the forbidden evidence — then it fails, and the
-  claim is dismissed. A probe that finds nothing proves nothing.
+  claim is dismissed. A probe that finds nothing proves nothing: zero
+  rows with max_rows: 0 means the claim HOLDS, so the predicate has to
+  name the thing the record actually does — use the record's own words
+  (the diagnostics show what is really there), not a list of names you
+  expect to find.
 - ORDER claims ("before", "after", "first", "then") are NOT decided by
   returning rows sorted by ts, and NOT by distinct_field/min_distinct —
   a probe that returns both kinds of row passes whether or not the order
@@ -98,6 +113,12 @@ Rules:
 - Use one `content LIKE '%term%'` per needle. A single pattern like
   '%a%b%c%' forces the terms to appear in that exact order — it will miss
   records that contain all the terms in a different order.
+- Search the column the term actually lives in. A ROOM, a thread, a page
+  title or a file path is usually in `thread` (or in `content` for file
+  names) — not in the message text. `SELECT ... WHERE content LIKE
+  '%ops%'` finds nothing when the records carry the room in `thread`.
+  Use `thread LIKE '%...%'` for rooms and threads, `content LIKE` for
+  what was said.
 - At most 2 AND-ed content needles — evidence rarely repeats every claim
   detail verbatim. Pick the RAREST tokens (numbers, ids, rare names like
   '843', 'fullerene'), and OR the synonymous forms of actions:
@@ -286,6 +307,24 @@ def _probe_diagnostics(db_path: Path | str, claim: Claim, expect: dict) -> dict:
                     f" FROM records WHERE {where} LIMIT 5",
                     [f"%{n}%" for n in needles],
                 ).fetchall()
+            # The drafter must name the thing the record actually holds —
+            # otherwise its predicate simply misses the evidence (searching
+            # "lint" when the record says "ruff", or "chunked" when the
+            # file_edit row only carries the path) and the claim looks
+            # undecidable or, worse, confirmed. Show the corpus's real
+            # vocabulary: the kinds it uses and what a row of each says.
+            diag["corpus_vocabulary"] = conn.execute(
+                "SELECT kind, COUNT(*), group_concat(DISTINCT substr(content,1,60))"  # noqa: E608
+                " FROM records GROUP BY kind ORDER BY 2 DESC LIMIT 8"
+            ).fetchall()
+            # ROOMS and THREADS live in `thread`, not in the message text.
+            # A claim about "the ops room" is checked by looking at
+            # `thread`, and a probe that searches `content` for the room
+            # name finds nothing however loudly the claim insists.
+            diag["thread_vocabulary"] = conn.execute(
+                "SELECT thread, COUNT(*) FROM records WHERE thread IS NOT NULL"
+                " GROUP BY thread ORDER BY 2 DESC LIMIT 10"
+            ).fetchall()
             has_fts = conn.execute(
                 "SELECT 1 FROM sqlite_master WHERE name='records_fts'"
             ).fetchone()
@@ -326,6 +365,9 @@ async def _draft_probe(
 ) -> dict | None:
     diag = ""
     if db_path:
+        # pass the claim kind through so an ABSENCE claim gets the corpus
+        # vocabulary on the FIRST draft too — the drafter has to know the
+        # record says "ruff" before it can write a predicate that finds it
         d = _probe_diagnostics(db_path, claim, {})
         if d:
             diag = (
@@ -452,7 +494,10 @@ def _normalize_expect(claim: Claim, expect: dict, db_path: Path | str | None = N
     # happen, a zero ceiling is nonsense: it would forbid the very rows
     # the claim needs. Drop it there (the claim's own semantics decide),
     # rather than letting a stray 0 turn the probe into a guaranteed fail.
-    if expect.get("max_rows") == 0 and not _claim_is_absence(claim.text):
+    # The claim KIND is the authority; the text heuristic only covers a
+    # claim typed as something else that still denies an event.
+    is_absence_claim = claim.kind is ClaimKind.absence or _claim_is_absence(claim.text)
+    if expect.get("max_rows") == 0 and not is_absence_claim:
         expect.pop("max_rows", None)
     if (
         claim.kind is ClaimKind.event
@@ -465,6 +510,18 @@ def _normalize_expect(claim: Claim, expect: dict, db_path: Path | str | None = N
             f"min_distinct {expect['min_distinct']} exceeds {len(claim.subjects)} named subjects"
         )
         expect["min_distinct"] = len(claim.subjects)
+    # POLARITY comes from the claim, not from the drafter. A claim that
+    # denies an event ("did not run a linter") is true when the forbidden
+    # evidence is ABSENT, so its expectation must be a ceiling
+    # (max_rows: 0), whatever the model wrote. A drafter that inverts the
+    # polarity — asking for the evidence it is supposed to be able to
+    # confirm — would otherwise turn a false claim into a confirmation.
+    if is_absence_claim:
+        expect.pop("min_rows", None)
+        expect["max_rows"] = 0
+        expect["_normalized"] = (
+            expect.get("_normalized", "") + " " if expect.get("_normalized") else ""
+        ) + "absence claim: expectation forced to max_rows 0 (polarity from the claim)"
     needles = [str(n) for n in expect.get("must_contain") or []]
     if len(needles) > 2:
         counts = _needle_counts(db_path, needles) if db_path else {}
@@ -517,64 +574,36 @@ def _pair_cooccur_like(db_path: Path | str, a: str, b: str) -> int:
         return 0
 
 
-# Verbs that assert an ACTION on an object. A claim built on one of these
-# needs the record to show the action, not merely to mention the object.
-# Kept to verbs whose object is a separate artifact (file, command, test)
-# so that "the agent said X" is not mistaken for an action claim.
-_ACTION_VERBS = (
-    "edit",
-    "creat",
-    "delet",
-    "modif",
-    "renam",
-    "mov",
-    "writ",
-    "add",
-    "remov",
-    "updat",
-    "chang",
-    "fix",
-    "commit",
-    "push",
-    "run",
-    "execut",
-    "test",
-    "build",
-    "install",
-    "refactor",
-    "implement",
-)
-
-# Verbs that assert the ABSENCE of an action — "never", "no other", "did not".
-_ABSENCE_MARKERS = ("never", "no other", "did not", "didn't", "not run", "without")
-
-
 def _claim_action_verb(text: str) -> str:
-    """The STEM of the action verb a claim asserts, if any — so the record
-    can carry it in any inflection ("edited"/"edits"/"editing").
+    """The action-verb stem a claim asserts ("" when it asserts none)."""
+    return _shared_action_verb(text)
 
-    Stems are matched against the claim's words, longest first, so "creat"
-    wins over a shorter accidental prefix. Returns "" when the claim
-    asserts no action (a description, a state, a quote)."""
-    low = " " + text.lower() + " "
-    best_stem = ""
-    best_len = 0
-    for stem in sorted(_ACTION_VERBS, key=len, reverse=True):
-        for m in re.finditer(r"\b" + stem + r"[a-z]*\b", low):
-            word = m.group(0).strip()
-            # the LONGEST inflection wins ("editing" over "fixed"), so the
-            # stem we keep is the one the claim leans on hardest
-            if len(word) > best_len:
-                best_stem, best_len = stem, len(word)
-            break
-    return best_stem
+
+def _like_counts(db_path: Path | str, needles: list[str]) -> dict[str, int]:
+    """Corpus frequency per needle under LIKE semantics — the same
+    semantics the fallback's own query uses. FTS tokenizes "s3cr3t-fl4g"
+    into pieces and reports zero hits for a token that is plainly in the
+    corpus, which would make a discriminating term look absent."""
+    out: dict[str, int] = {}
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=10)
+        try:
+            for n in needles:
+                out[n] = conn.execute(
+                    "SELECT COUNT(*) FROM records WHERE content LIKE ?"
+                    " OR thread LIKE ? OR agent_id LIKE ?",
+                    (f"%{n}%", f"%{n}%", f"%{n}%"),
+                ).fetchone()[0]
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        pass
+    return out
 
 
 def _claim_is_absence(text: str) -> bool:
-    """True when the claim denies an action — "never edited", "did not run".
-    An absence claim is decided by finding the forbidden evidence."""
-    low = text.lower()
-    return any(m in low for m in _ABSENCE_MARKERS)
+    """True when the claim denies an action."""
+    return _shared_is_absence(text)
 
 
 def _corpus_has_kind_verb(db_path: Path | str, verb: str) -> bool:
@@ -655,13 +684,24 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
     vocab = _claim_vocab(claim, limit=8)
     if not vocab:
         return None
-    counts = _needle_counts(db_path, vocab)
-    hits = sorted((w for w in vocab if counts.get(w, 0) > 0), key=lambda w: counts[w])
-    if not hits:
+    # Count under LIKE semantics, the same semantics the fallback's own
+    # query uses — FTS tokenizes "s3cr3t-fl4g" into pieces and reports
+    # zero hits for a token that is plainly in the corpus.
+    counts = _like_counts(db_path, vocab)
+    # The fallback must use the claim's DISCRIMINATING terms. A claim's
+    # rarest words are its specific ones ("created", "reverted"); its
+    # common ones ("test", "file") appear everywhere and match anything.
+    # So: keep only terms that are both PRESENT (the claim's specific
+    # object is in the record) and RARE (they do not match everything).
+    specific = [w for w in vocab if 0 < counts.get(w, 0) <= 2]
+    if not specific:
+        # no term of this claim both discriminates and appears — a
+        # vocabulary match here would say nothing about the claim, so
+        # the fallback declines instead of confirming on a common word
         return None
-    terms = hits[:1]
+    terms = [specific[0]]
     ranked = sorted(
-        (n, a, b) for a, b in combinations(hits[:8], 2) if (n := _pair_cooccur(db_path, a, b))
+        (n, a, b) for a, b in combinations(specific[:4], 2) if (n := _pair_cooccur(db_path, a, b))
     )
     # verify the best-ranked pairs under substring semantics — FTS ranks
     # fast, but its tokenization misses terms embedded in compound names
@@ -797,6 +837,15 @@ async def audit_claim(
             )
             data = await _repair_probe(sie, claim, prev, failure, hint, budget)
         if not data or not data.get("query"):
+            # The drafter declined to write another probe. If an earlier
+            # attempt already EARNED a verdict on the evidence — it found
+            # the refuting row and failed the claim's own expectation —
+            # that verdict stands. A decline means "I cannot express a
+            # test", not "the evidence supports the claim", and it must
+            # not overwrite a dismissal the record already produced.
+            if claim.verdict is Verdict.dismissed and claim.raw.get("legs", {}).get("expect"):
+                journal.log(claim, claim.verdict.value)
+                return claim
             claim.verdict = Verdict.unverifiable
             claim.raw["note"] = "drafter declined — no probe can decide this claim"
             journal.log(claim, "unverifiable")

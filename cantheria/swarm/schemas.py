@@ -18,11 +18,99 @@ not force-verified). Reports only ever carry `confirmed`.
 
 from __future__ import annotations
 
+import re
 from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+# ---------------------------------------------------------------------------
+# Claim polarity — shared by the oracle (which decides) and the drafter
+# (which proposes). Kept here so neither imports the other.
+# ---------------------------------------------------------------------------
+
+# Verbs that assert an ACTION on an object. A claim built on one of these
+# needs the record to show the action, not merely to mention the object.
+# Kept to verbs whose object is a separate artifact (file, command, test)
+# so that "the agent said X" is not mistaken for an action claim.
+ACTION_VERBS = (
+    "edit",
+    "creat",
+    "delet",
+    "modif",
+    "renam",
+    "mov",
+    "writ",
+    "add",
+    "remov",
+    "updat",
+    "chang",
+    "fix",
+    "commit",
+    "push",
+    "run",
+    "execut",
+    "test",
+    "build",
+    "install",
+    "refactor",
+    "implement",
+    "revert",
+    "apply",
+    "merge",
+    "revert",
+    "review",
+)
+
+# Verbs that assert the ABSENCE of an action — "never", "no other", "did not".
+ABSENCE_MARKERS = ("never", "no other", "did not", "didn't", "not run", "without")
+
+# A claim that DENIES an event can also be phrased as a plain negation:
+# "No agent posted in the sealed-vault room", "Nobody ran the linter",
+# "No posts were made on 06-08". These deny an action as surely as
+# "never" does, and a probe for them must be a CEILING (max_rows: 0),
+# not a floor.
+_NEGATED_ACTION = re.compile(
+    r"\b(?:no|nobody|none|neither)\s+(?:\w+\s+){0,2}"
+    r"(?:posted|runs?|ran|ran|did|does|did|says?|said|writes?|wrote|edited|"
+    r"created|made|performed|executed|used|sent|logged|recorded|performed|"
+    r"appeared|occurred|happened|exists?|existed|were|was|is|are)\b",
+    re.I,
+)
+
+
+def claim_action_verb(text: str) -> str:
+    """The STEM of the action verb a claim asserts, if any — so the record
+    can carry it in any inflection ("edited"/"edits"/"editing").
+
+    Stems are matched against the claim's words, longest first, so "creat"
+    wins over a shorter accidental prefix. Returns "" when the claim
+    asserts no action (a description, a state, a quote)."""
+    import re
+
+    low = " " + text.lower() + " "
+    best_stem = ""
+    best_len = 0
+    for stem in sorted(ACTION_VERBS, key=len, reverse=True):
+        for m in re.finditer(r"\b" + stem + r"[a-z]*\b", low):
+            word = m.group(0).strip()
+            # the LONGEST inflection wins ("editing" over "fixed"), so the
+            # stem we keep is the one the claim leans on hardest
+            if len(word) > best_len:
+                best_stem, best_len = stem, len(word)
+            break
+    return best_stem
+
+
+def claim_is_absence(text: str) -> bool:
+    """True when the claim denies an action — "never edited", "did not run",
+    "no agent posted in the vault". An absence claim is decided by finding
+    the forbidden evidence, so its expectation is a ceiling."""
+    low = text.lower()
+    if any(m in low for m in ABSENCE_MARKERS):
+        return True
+    return bool(_NEGATED_ACTION.search(text))
 
 
 class ClaimKind(StrEnum):

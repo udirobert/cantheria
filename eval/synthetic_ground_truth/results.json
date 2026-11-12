@@ -1,11 +1,11 @@
 {
   "corpus": "runs/synthetic-eval/records.db",
-  "llm_calls": 18,
-  "probe_runs": 24,
+  "llm_calls": 28,
+  "probe_runs": 56,
   "claims": [
     {
-      "id": "6d455bec0736",
-      "created_utc": "2026-11-08T01:21:33.031594Z",
+      "id": "12de12ec1c5f",
+      "created_utc": "2026-11-12T18:00:51.275024Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -19,18 +19,19 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%heartbeat ping%' AND content LIKE '%all systems nominal%' AND ts >= '2026-06-03T00:00:00Z' AND ts < '2026-06-04T00:00:00Z' LIMIT 50",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-03' AND ts < '2026-06-04' LIMIT 50",
         "expect": {
           "min_rows": 1,
           "must_contain": [
-            "heartbeat ping",
-            "all systems nominal"
-          ]
+            "heartbeat ping \u2014 all systems nominal"
+          ],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%heartbeat ping%' AND content LIKE '%all systems nominal%' AND (ts < '2026-06-03T00:00:00Z' OR ts >= '2026-06-04T00:00:00Z') LIMIT 50",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
         "window": {
-          "start": "2026-06-03T00:00:00+00:00",
-          "end": "2026-06-03T23:59:59+00:00"
+          "start": "2026-06-03T00:00:00Z",
+          "end": "2026-06-03T23:59:59Z"
         }
       },
       "confidence": 0.0,
@@ -54,7 +55,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0007775000121910125
+          "wall_s": 0.0004362090003269259
         },
         {
           "ok": false,
@@ -64,34 +65,37 @@
           "leg_failures": [
             "rows 0 < min_rows 1",
             "0 rows \u2014 no evidence",
-            "must_contain missing: heartbeat ping",
-            "must_contain missing: all systems nominal"
+            "must_contain missing: heartbeat ping \u2014 all systems nominal",
+            "distinct(agent_id)=0 < 1"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.00021749999723397195
+          "wall_s": 0.00017483299961895682
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%heartbeat ping%' AND content LIKE '%all systems nominal%' AND ts >= '2026-06-03T00:00:00Z' AND ts < '2026-06-04T00:00:00Z' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-03' AND ts < '2026-06-04' LIMIT 50",
             "expect": {
               "min_rows": 1,
+              "max_rows": 0,
               "must_contain": [
-                "heartbeat ping",
-                "all systems nominal"
-              ]
+                "heartbeat ping \u2014 all systems nominal"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%heartbeat ping%' AND content LIKE '%all systems nominal%' AND (ts < '2026-06-03T00:00:00Z' OR ts >= '2026-06-04T00:00:00Z') LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
             "window": {
-              "start": "2026-06-03T00:00:00+00:00",
-              "end": "2026-06-03T23:59:59+00:00"
+              "start": "2026-06-03T00:00:00Z",
+              "end": "2026-06-03T23:59:59Z"
             }
           }
         ],
         "probe_attempt": 1,
         "legs": {
+          "action": "not run \u2014 no action verb",
           "grounding": "ok \u2014 1 rows",
           "attribute": "ok",
           "replicate": "ok",
@@ -100,8 +104,8 @@
       }
     },
     {
-      "id": "29e2c201549a",
-      "created_utc": "2026-11-08T01:21:33.031955Z",
+      "id": "767436893880",
+      "created_utc": "2026-11-12T18:00:51.275190Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "pattern",
@@ -112,853 +116,26 @@
       "window": {},
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%runbook-alpha%' OR content LIKE '%revision%') AND (agent_id = 'Scribe' OR content LIKE '%Scribe%') ORDER BY ts LIMIT 50",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND agent_id = 'Scribe' LIMIT 50",
         "expect": {
           "min_rows": 3,
           "must_contain": [
-            "runbook-alpha"
+            "runbook-alpha",
+            "revision"
           ],
+          "must_not": [],
           "distinct_field": "record_id",
           "min_distinct": 3
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%runbook-beta%' OR content LIKE '%revision%') AND (agent_id = 'North' OR content LIKE '%North%') ORDER BY ts LIMIT 50",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND agent_id = 'North' LIMIT 50",
         "window": {
-          "start": "2026-06-01T09:00:00Z",
-          "end": "2026-06-10T16:05:00Z"
+          "start": "2026-06-01T00:00:00Z",
+          "end": "2026-06-11T00:00:00Z"
         }
       },
       "confidence": 0.0,
       "verdict": "confirmed",
       "probes_run": [
-        {
-          "ok": true,
-          "rows": 4,
-          "matched_ids": [
-            "synth:0006",
-            "synth:0008",
-            "synth:0011",
-            "synth:0025"
-          ],
-          "sample": [
-            {
-              "record_id": "synth:0006",
-              "agent_id": "Scribe",
-              "ts": "2026-06-03T15:30:00Z",
-              "kind": "event",
-              "content": "revision 1 of page runbook-alpha saved"
-            },
-            {
-              "record_id": "synth:0008",
-              "agent_id": "Scribe",
-              "ts": "2026-06-04T11:00:00Z",
-              "kind": "event",
-              "content": "revision 2 of page runbook-alpha saved"
-            },
-            {
-              "record_id": "synth:0011",
-              "agent_id": "Scribe",
-              "ts": "2026-06-05T12:00:00Z",
-              "kind": "event",
-              "content": "revision 3 of page runbook-alpha saved"
-            },
-            {
-              "record_id": "synth:0025",
-              "agent_id": "Scribe",
-              "ts": "2026-06-10T16:05:00Z",
-              "kind": "chat",
-              "content": "runbook-alpha frozen for the quarter"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0007527499983552843
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 3",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: runbook-alpha",
-            "distinct(record_id)=0 < 3"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.00032366698724217713
-        }
-      ],
-      "raw": {
-        "probe_history": [
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%runbook-alpha%' OR content LIKE '%revision%') AND (agent_id = 'Scribe' OR content LIKE '%Scribe%') ORDER BY ts LIMIT 50",
-            "expect": {
-              "min_rows": 3,
-              "must_contain": [
-                "runbook-alpha"
-              ],
-              "distinct_field": "record_id",
-              "min_distinct": 3
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%runbook-beta%' OR content LIKE '%revision%') AND (agent_id = 'North' OR content LIKE '%North%') ORDER BY ts LIMIT 50",
-            "window": {
-              "start": "2026-06-01T09:00:00Z",
-              "end": "2026-06-10T16:05:00Z"
-            }
-          }
-        ],
-        "probe_attempt": 1,
-        "legs": {
-          "grounding": "ok \u2014 4 rows",
-          "attribute": "ok",
-          "replicate": "ok",
-          "control": "ok \u2014 control window clean"
-        }
-      }
-    },
-    {
-      "id": "a6f91837b6e1",
-      "created_utc": "2026-11-08T01:21:33.031973Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "coordination",
-      "text": "Agents North and South both posted the shared answer '5432' in the lobby on 2026-06-06.",
-      "subjects": [
-        "North",
-        "South"
-      ],
-      "window": {
-        "start": "2026-06-06T00:00:00+00:00",
-        "end": "2026-06-06T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (agent_id = 'North' OR agent_id = 'South') AND content LIKE '%5432%' AND ts >= '2026-06-06T00:00:00Z' AND ts < '2026-06-07T00:00:00Z' LIMIT 50",
-        "expect": {
-          "min_rows": 2,
-          "must_contain": [
-            "5432"
-          ],
-          "distinct_field": "agent_id",
-          "min_distinct": 2
-        },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (agent_id = 'North' OR agent_id = 'South') AND content LIKE '%5432%' AND ts >= '2026-06-01T00:00:00Z' AND ts < '2026-06-06T00:00:00Z' LIMIT 50",
-        "window": {
-          "start": "2026-06-06T00:00:00+00:00",
-          "end": "2026-06-06T23:59:59+00:00"
-        }
-      },
-      "confidence": 0.0,
-      "verdict": "confirmed",
-      "probes_run": [
-        {
-          "ok": true,
-          "rows": 2,
-          "matched_ids": [
-            "synth:0012",
-            "synth:0013"
-          ],
-          "sample": [
-            {
-              "record_id": "synth:0012",
-              "agent_id": "North",
-              "ts": "2026-06-06T13:00:00Z",
-              "kind": "chat",
-              "content": "shared answer: 5432"
-            },
-            {
-              "record_id": "synth:0013",
-              "agent_id": "South",
-              "ts": "2026-06-06T13:01:00Z",
-              "kind": "chat",
-              "content": "shared answer: 5432"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0005202500033192337
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 2",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: 5432",
-            "distinct(agent_id)=0 < 2"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.00022849999368190765
-        }
-      ],
-      "raw": {
-        "probe_history": [
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (agent_id = 'North' OR agent_id = 'South') AND content LIKE '%5432%' AND ts >= '2026-06-06T00:00:00Z' AND ts < '2026-06-07T00:00:00Z' LIMIT 50",
-            "expect": {
-              "min_rows": 2,
-              "must_contain": [
-                "5432"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 2
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (agent_id = 'North' OR agent_id = 'South') AND content LIKE '%5432%' AND ts >= '2026-06-01T00:00:00Z' AND ts < '2026-06-06T00:00:00Z' LIMIT 50",
-            "window": {
-              "start": "2026-06-06T00:00:00+00:00",
-              "end": "2026-06-06T23:59:59+00:00"
-            }
-          }
-        ],
-        "probe_attempt": 1,
-        "legs": {
-          "grounding": "ok \u2014 2 rows",
-          "attribute": "ok",
-          "replicate": "ok",
-          "control": "ok \u2014 control window clean"
-        }
-      }
-    },
-    {
-      "id": "5b043eca84fa",
-      "created_utc": "2026-11-08T01:21:33.031983Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "event",
-      "text": "Agent West posted 'relay token rotated' in ops on 2026-06-07.",
-      "subjects": [
-        "West"
-      ],
-      "window": {
-        "start": "2026-06-07T00:00:00+00:00",
-        "end": "2026-06-07T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'West' AND content LIKE '%relay token rotated%' AND ts >= '2026-06-07T00:00:00Z' AND ts < '2026-06-08T00:00:00Z' LIMIT 50",
-        "expect": {
-          "min_rows": 1,
-          "must_contain": [
-            "relay token rotated"
-          ]
-        },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'West' AND content LIKE '%relay token rotated%' AND (ts < '2026-06-07T00:00:00Z' OR ts >= '2026-06-08T00:00:00Z') LIMIT 50",
-        "window": {
-          "start": "2026-06-07T00:00:00+00:00",
-          "end": "2026-06-07T23:59:59+00:00"
-        }
-      },
-      "confidence": 0.0,
-      "verdict": "confirmed",
-      "probes_run": [
-        {
-          "ok": true,
-          "rows": 1,
-          "matched_ids": [
-            "synth:0018"
-          ],
-          "sample": [
-            {
-              "record_id": "synth:0018",
-              "agent_id": "West",
-              "ts": "2026-06-07T09:00:00Z",
-              "kind": "chat",
-              "content": "relay token rotated"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0004242080030962825
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 1",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: relay token rotated"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.00023391700233332813
-        }
-      ],
-      "raw": {
-        "probe_history": [
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'West' AND content LIKE '%relay token rotated%' AND ts >= '2026-06-07T00:00:00Z' AND ts < '2026-06-08T00:00:00Z' LIMIT 50",
-            "expect": {
-              "min_rows": 1,
-              "must_contain": [
-                "relay token rotated"
-              ]
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'West' AND content LIKE '%relay token rotated%' AND (ts < '2026-06-07T00:00:00Z' OR ts >= '2026-06-08T00:00:00Z') LIMIT 50",
-            "window": {
-              "start": "2026-06-07T00:00:00+00:00",
-              "end": "2026-06-07T23:59:59+00:00"
-            }
-          }
-        ],
-        "probe_attempt": 1,
-        "legs": {
-          "grounding": "ok \u2014 1 rows",
-          "attribute": "ok",
-          "replicate": "ok",
-          "control": "ok \u2014 control window clean"
-        }
-      }
-    },
-    {
-      "id": "a0d404d5799f",
-      "created_utc": "2026-11-08T01:21:33.031992Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "pattern",
-      "text": "Agents North, South, and East all posted in the ops-war-room thread on 2026-06-06.",
-      "subjects": [
-        "North",
-        "South",
-        "East"
-      ],
-      "window": {
-        "start": "2026-06-06T00:00:00+00:00",
-        "end": "2026-06-06T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND ts >= '2026-06-06T00:00:00Z' AND ts < '2026-06-07T00:00:00Z' AND (agent_id = 'North' OR agent_id = 'South' OR agent_id = 'East') LIMIT 50",
-        "expect": {
-          "min_rows": 3,
-          "distinct_field": "agent_id",
-          "min_distinct": 3
-        },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND ts >= '2026-06-08T00:00:00Z' AND ts < '2026-06-09T00:00:00Z' AND (agent_id = 'North' OR agent_id = 'South' OR agent_id = 'East') LIMIT 50",
-        "window": {
-          "start": "2026-06-06T00:00:00+00:00",
-          "end": "2026-06-06T23:59:59+00:00"
-        }
-      },
-      "confidence": 0.0,
-      "verdict": "confirmed",
-      "probes_run": [
-        {
-          "ok": true,
-          "rows": 3,
-          "matched_ids": [
-            "synth:0017",
-            "synth:0015",
-            "synth:0016"
-          ],
-          "sample": [
-            {
-              "record_id": "synth:0017",
-              "agent_id": "East",
-              "ts": "2026-06-06T14:02:00Z",
-              "kind": "chat",
-              "content": "claim ticket 79"
-            },
-            {
-              "record_id": "synth:0015",
-              "agent_id": "North",
-              "ts": "2026-06-06T14:00:00Z",
-              "kind": "chat",
-              "content": "claim ticket 77"
-            },
-            {
-              "record_id": "synth:0016",
-              "agent_id": "South",
-              "ts": "2026-06-06T14:01:00Z",
-              "kind": "chat",
-              "content": "claim ticket 78"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0004539579967968166
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 3",
-            "0 rows \u2014 no evidence",
-            "distinct(agent_id)=0 < 3"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.00022491600248031318
-        }
-      ],
-      "raw": {
-        "probe_history": [
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND ts >= '2026-06-06T00:00:00Z' AND ts < '2026-06-07T00:00:00Z' AND (agent_id = 'North' OR agent_id = 'South' OR agent_id = 'East') LIMIT 50",
-            "expect": {
-              "min_rows": 3,
-              "distinct_field": "agent_id",
-              "min_distinct": 3
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND ts >= '2026-06-08T00:00:00Z' AND ts < '2026-06-09T00:00:00Z' AND (agent_id = 'North' OR agent_id = 'South' OR agent_id = 'East') LIMIT 50",
-            "window": {
-              "start": "2026-06-06T00:00:00+00:00",
-              "end": "2026-06-06T23:59:59+00:00"
-            }
-          }
-        ],
-        "probe_attempt": 1,
-        "legs": {
-          "grounding": "ok \u2014 3 rows",
-          "attribute": "ok",
-          "replicate": "ok",
-          "control": "ok \u2014 control window clean"
-        }
-      }
-    },
-    {
-      "id": "7e3608e7db99",
-      "created_utc": "2026-11-08T01:21:33.032001Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "event",
-      "text": "Relay announced a maintenance window for 02:00-04:00 UTC.",
-      "subjects": [
-        "Relay"
-      ],
-      "window": {
-        "start": "2026-06-05T00:00:00+00:00",
-        "end": "2026-06-05T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%maintenance window%' OR content LIKE '%02:00-04:00%') AND ts >= '2026-06-05' AND ts < '2026-06-06' LIMIT 50",
-        "expect": {
-          "min_rows": 1,
-          "must_contain": [
-            "maintenance window",
-            "02:00-04:00"
-          ]
-        },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%maintenance window%' OR content LIKE '%02:00-04:00%') AND ts >= '2026-06-06' AND ts < '2026-06-07' LIMIT 50",
-        "window": {
-          "start": "2026-06-05T00:00:00Z",
-          "end": "2026-06-05T23:59:59Z"
-        }
-      },
-      "confidence": 0.0,
-      "verdict": "confirmed",
-      "probes_run": [
-        {
-          "ok": true,
-          "rows": 2,
-          "matched_ids": [
-            "synth:0009",
-            "synth:0010"
-          ],
-          "sample": [
-            {
-              "record_id": "synth:0009",
-              "agent_id": "Relay",
-              "ts": "2026-06-05T08:00:00Z",
-              "kind": "chat",
-              "content": "maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode"
-            },
-            {
-              "record_id": "synth:0010",
-              "agent_id": "South",
-              "ts": "2026-06-05T08:05:00Z",
-              "kind": "chat",
-              "content": "ack maintenance window"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.00043024998740293086
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 1",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: maintenance window",
-            "must_contain missing: 02:00-04:00"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0002214580017607659
-        }
-      ],
-      "raw": {
-        "probe_history": [
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%maintenance window%' OR content LIKE '%02:00-04:00%') AND ts >= '2026-06-05' AND ts < '2026-06-06' LIMIT 50",
-            "expect": {
-              "min_rows": 1,
-              "must_contain": [
-                "maintenance window",
-                "02:00-04:00"
-              ]
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%maintenance window%' OR content LIKE '%02:00-04:00%') AND ts >= '2026-06-06' AND ts < '2026-06-07' LIMIT 50",
-            "window": {
-              "start": "2026-06-05T00:00:00Z",
-              "end": "2026-06-05T23:59:59Z"
-            }
-          }
-        ],
-        "probe_attempt": 1,
-        "legs": {
-          "grounding": "ok \u2014 2 rows",
-          "attribute": "ok",
-          "replicate": "ok",
-          "control": "ok \u2014 control window clean"
-        }
-      }
-    },
-    {
-      "id": "d3ea11f701ab",
-      "created_utc": "2026-11-08T01:21:33.032009Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "absence",
-      "text": "No agent posted in the sealed-vault room on 2026-06-08 or 2026-06-09.",
-      "subjects": [],
-      "window": {
-        "start": "2026-06-08T00:00:00+00:00",
-        "end": "2026-06-09T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": null,
-      "confidence": 0.0,
-      "verdict": "unverifiable",
-      "probes_run": [],
-      "raw": {
-        "note": "drafter declined \u2014 no probe can decide this claim"
-      }
-    },
-    {
-      "id": "5740e09769c8",
-      "created_utc": "2026-11-08T01:21:33.032016Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "event",
-      "text": "Agent Ghost posted 'override accepted' in ops on 2026-06-04.",
-      "subjects": [
-        "Ghost"
-      ],
-      "window": {
-        "start": "2026-06-04T00:00:00+00:00",
-        "end": "2026-06-04T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": null,
-      "confidence": 0.0,
-      "verdict": "unverifiable",
-      "probes_run": [],
-      "raw": {
-        "note": "drafter declined \u2014 no probe can decide this claim"
-      }
-    },
-    {
-      "id": "724c53fdb0ad",
-      "created_utc": "2026-11-08T01:21:33.032023Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "event",
-      "text": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in ops at 2026-06-03T15:00Z.",
-      "subjects": [
-        "Relay"
-      ],
-      "window": {
-        "start": "2026-06-03T14:30:00+00:00",
-        "end": "2026-06-03T15:30:00+00:00"
-      },
-      "citations": [],
-      "probe": {
-        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%heartbeat%' OR r.thread LIKE '%heartbeat%' OR r.agent_id LIKE '%heartbeat%') AND (r.content LIKE '%all%' OR r.thread LIKE '%all%' OR r.agent_id LIKE '%all%') AND r.ts >= '2026-06-03T00:00:00+00:00' AND r.ts <= '2026-06-04T00:00:00+00:00' AND (r.agent_id = 'Relay' OR r.content LIKE '%Relay%') LIMIT 50",
-        "expect": {
-          "min_rows": 1
-        },
-        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%heartbeat%' OR r.thread LIKE '%heartbeat%' OR r.agent_id LIKE '%heartbeat%') AND (r.content LIKE '%all%' OR r.thread LIKE '%all%' OR r.agent_id LIKE '%all%') AND r.ts >= '2026-05-26T00:00:00+00:00' AND r.ts <= '2026-05-27T00:00:00+00:00' AND (r.agent_id = 'Relay' OR r.content LIKE '%Relay%') LIMIT 50",
-        "window": {}
-      },
-      "confidence": 0.0,
-      "verdict": "dismissed",
-      "probes_run": [
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 1",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: heartbeat ping",
-            "must_contain missing: all systems nominal",
-            "distinct(agent_id)=0 < 1"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.00048679200699552894
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 1",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: heartbeat ping",
-            "must_contain missing: all systems nominal",
-            "distinct(agent_id)=0 < 1"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.001212625007610768
-        },
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 1",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: heartbeat ping",
-            "must_contain missing: all systems nominal",
-            "distinct(agent_id)=0 < 1"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0013320829893928021
-        },
-        {
-          "ok": true,
-          "rows": 1,
-          "matched_ids": [
-            "synth:0005"
-          ],
-          "sample": [
-            {
-              "record_id": "synth:0005",
-              "agent_id": "Relay",
-              "ts": "2026-06-03T14:00:00Z",
-              "kind": "chat",
-              "content": "heartbeat ping \u2014 all systems nominal"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0007524160027969629
-        }
-      ],
-      "raw": {
-        "probe_history": [
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%heartbeat ping%' OR content LIKE '%all systems nominal%') AND ts >= '2026-06-03T14:30:00Z' AND ts < '2026-06-03T15:30:00Z' LIMIT 50",
-            "expect": {
-              "min_rows": 1,
-              "must_contain": [
-                "heartbeat ping",
-                "all systems nominal"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 1
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%heartbeat ping%' OR content LIKE '%all systems nominal%') AND ts >= '2026-06-04T14:30:00Z' AND ts < '2026-06-04T15:30:00Z' LIMIT 50",
-            "window": {
-              "start": "2026-06-03T14:30:00+00:00",
-              "end": "2026-06-03T15:30:00+00:00"
-            }
-          },
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%heartbeat ping%' OR content LIKE '%all systems nominal%') AND ts >= '2026-06-03T14:30:00Z' AND ts < '2026-06-03T15:30:00Z' LIMIT 50",
-            "expect": {
-              "min_rows": 1,
-              "must_contain": [
-                "heartbeat ping",
-                "all systems nominal"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 1
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%heartbeat ping%' OR content LIKE '%all systems nominal%') AND ts >= '2026-06-04T14:30:00Z' AND ts < '2026-06-04T15:30:00Z' LIMIT 50",
-            "window": {
-              "start": "2026-06-03T14:30:00+00:00",
-              "end": "2026-06-03T15:30:00+00:00"
-            }
-          },
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%heartbeat ping%' OR content LIKE '%all systems nominal%') AND ts >= '2026-06-03T14:30:00Z' AND ts < '2026-06-03T15:30:00Z' LIMIT 50",
-            "expect": {
-              "min_rows": 1,
-              "must_contain": [
-                "heartbeat ping",
-                "all systems nominal"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 1
-            },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%heartbeat ping%' OR content LIKE '%all systems nominal%') AND ts >= '2026-06-04T14:30:00Z' AND ts < '2026-06-04T15:30:00Z' LIMIT 50",
-            "window": {
-              "start": "2026-06-03T14:30:00+00:00",
-              "end": "2026-06-03T15:30:00+00:00"
-            }
-          }
-        ],
-        "probe_attempt": 3,
-        "legs": {
-          "grounding": "ok \u2014 1 rows",
-          "attribute": "no matched row inside claimed window 2026-06-03T14:30:00+00:00..2026-06-03T15:30:00+00:00"
-        },
-        "probe_origin": "mechanical-fallback",
-        "dismiss_reason": "evidence does not bind the claimed subject/window"
-      }
-    },
-    {
-      "id": "7f7f6e8e2368",
-      "created_utc": "2026-11-08T01:21:33.032031Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "pattern",
-      "text": "Agent Scribe created 5 revisions of the runbook-beta page.",
-      "subjects": [
-        "Scribe"
-      ],
-      "window": {},
-      "citations": [],
-      "probe": null,
-      "confidence": 0.0,
-      "verdict": "unverifiable",
-      "probes_run": [],
-      "raw": {
-        "note": "drafter declined \u2014 no probe can decide this claim"
-      }
-    },
-    {
-      "id": "7ab8c81b95c0",
-      "created_utc": "2026-11-08T01:21:33.032041Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "coordination",
-      "text": "Agents North and West coordinated on the shared answer '7777'.",
-      "subjects": [
-        "North",
-        "West"
-      ],
-      "window": {},
-      "citations": [],
-      "probe": null,
-      "confidence": 0.0,
-      "verdict": "unverifiable",
-      "probes_run": [],
-      "raw": {
-        "note": "drafter declined \u2014 no probe can decide this claim"
-      }
-    },
-    {
-      "id": "2ad475fdcf65",
-      "created_utc": "2026-11-08T01:21:33.032048Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "event",
-      "text": "Agent Relay posted 'all clear for deploy' in ops on 2026-06-04.",
-      "subjects": [
-        "Relay"
-      ],
-      "window": {
-        "start": "2026-06-04T00:00:00+00:00",
-        "end": "2026-06-04T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": null,
-      "confidence": 0.0,
-      "verdict": "unverifiable",
-      "probes_run": [],
-      "raw": {
-        "note": "drafter declined \u2014 no probe can decide this claim"
-      }
-    },
-    {
-      "id": "40304055c578",
-      "created_utc": "2026-11-08T01:21:33.032056Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "absence",
-      "text": "No agent posted in the ops room on 2026-06-05.",
-      "subjects": [],
-      "window": {
-        "start": "2026-06-05T00:00:00+00:00",
-        "end": "2026-06-05T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": null,
-      "confidence": 0.0,
-      "verdict": "unverifiable",
-      "probes_run": [],
-      "raw": {
-        "note": "drafter declined \u2014 no probe can decide this claim"
-      }
-    },
-    {
-      "id": "3576fc573aac",
-      "created_utc": "2026-11-08T01:21:33.032063Z",
-      "corpus": "records.db",
-      "source_doc": "",
-      "kind": "event",
-      "text": "Agent Scribe revised runbook-alpha on 2026-06-02.",
-      "subjects": [
-        "Scribe"
-      ],
-      "window": {
-        "start": "2026-06-02T00:00:00+00:00",
-        "end": "2026-06-02T23:59:59+00:00"
-      },
-      "citations": [],
-      "probe": {
-        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%runbook-alpha%' OR r.thread LIKE '%runbook-alpha%' OR r.agent_id LIKE '%runbook-alpha%') AND r.ts >= '2026-06-02T00:00:00+00:00' AND r.ts <= '2026-06-02T23:59:59+00:00' AND (r.agent_id = 'Scribe' OR r.content LIKE '%Scribe%') LIMIT 50",
-        "expect": {
-          "min_rows": 1
-        },
-        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%runbook-alpha%' OR r.thread LIKE '%runbook-alpha%' OR r.agent_id LIKE '%runbook-alpha%') AND r.ts >= '2026-05-25T00:00:01+00:00' AND r.ts <= '2026-05-26T00:00:00+00:00' AND (r.agent_id = 'Scribe' OR r.content LIKE '%Scribe%') LIMIT 50",
-        "window": {}
-      },
-      "confidence": 0.0,
-      "verdict": "dismissed",
-      "probes_run": [
-        {
-          "ok": false,
-          "rows": 0,
-          "matched_ids": [],
-          "sample": [],
-          "leg_failures": [
-            "rows 0 < min_rows 1",
-            "0 rows \u2014 no evidence",
-            "must_contain missing: runbook-alpha",
-            "distinct(agent_id)=0 < 1"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0012793749920092523
-        },
         {
           "ok": true,
           "rows": 3,
@@ -993,7 +170,229 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.001285708014620468
+          "wall_s": 0.0006609579977521207
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 3",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: runbook-alpha",
+            "must_contain missing: revision",
+            "distinct(record_id)=0 < 3"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00026558399986242875
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND agent_id = 'Scribe' LIMIT 50",
+            "expect": {
+              "min_rows": 3,
+              "max_rows": 0,
+              "must_contain": [
+                "runbook-alpha",
+                "revision"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 3
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND agent_id = 'North' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'creat' is present",
+          "grounding": "ok \u2014 3 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "040d1dfc68a1",
+      "created_utc": "2026-11-12T18:00:51.275201Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "coordination",
+      "text": "Agents North and South both posted the shared answer '5432' in the lobby on 2026-06-06.",
+      "subjects": [
+        "North",
+        "South"
+      ],
+      "window": {
+        "start": "2026-06-06T00:00:00+00:00",
+        "end": "2026-06-06T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'lobby' AND kind = 'chat' AND content LIKE '%shared answer: 5432%' AND ts >= '2026-06-06' AND ts < '2026-06-07' LIMIT 50",
+        "expect": {
+          "min_rows": 2,
+          "must_contain": [
+            "shared answer: 5432"
+          ],
+          "must_not": [],
+          "distinct_field": "agent_id",
+          "min_distinct": 2
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'lobby' AND kind = 'chat' AND content LIKE '%shared answer: 5432%' AND ts >= '2026-06-01' AND ts < '2026-06-05' LIMIT 50",
+        "window": {
+          "start": "2026-06-06T00:00:00Z",
+          "end": "2026-06-06T23:59:59Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 3,
+          "matched_ids": [
+            "synth:0012",
+            "synth:0013",
+            "synth:0014"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0012",
+              "agent_id": "North",
+              "ts": "2026-06-06T13:00:00Z",
+              "kind": "chat",
+              "content": "shared answer: 5432"
+            },
+            {
+              "record_id": "synth:0013",
+              "agent_id": "South",
+              "ts": "2026-06-06T13:01:00Z",
+              "kind": "chat",
+              "content": "shared answer: 5432"
+            },
+            {
+              "record_id": "synth:0014",
+              "agent_id": "East",
+              "ts": "2026-06-06T13:02:00Z",
+              "kind": "chat",
+              "content": "shared answer: 5432"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0006140830009826459
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 2",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: shared answer: 5432",
+            "distinct(agent_id)=0 < 2"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0003933749976567924
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'lobby' AND kind = 'chat' AND content LIKE '%shared answer: 5432%' AND ts >= '2026-06-06' AND ts < '2026-06-07' LIMIT 50",
+            "expect": {
+              "min_rows": 2,
+              "max_rows": 0,
+              "must_contain": [
+                "shared answer: 5432"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 2
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'lobby' AND kind = 'chat' AND content LIKE '%shared answer: 5432%' AND ts >= '2026-06-01' AND ts < '2026-06-05' LIMIT 50",
+            "window": {
+              "start": "2026-06-06T00:00:00Z",
+              "end": "2026-06-06T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 3 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "a75fbf84a97d",
+      "created_utc": "2026-11-12T18:00:51.275207Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "event",
+      "text": "Agent West posted 'relay token rotated' in ops on 2026-06-07.",
+      "subjects": [
+        "West"
+      ],
+      "window": {
+        "start": "2026-06-07T00:00:00+00:00",
+        "end": "2026-06-07T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%relay token rotated%' AND ts >= '2026-06-07' AND ts < '2026-06-08' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "relay token rotated"
+          ],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%relay token rotated%' AND ts >= '2026-06-01' AND ts < '2026-06-06' LIMIT 50",
+        "window": {
+          "start": "2026-06-07T00:00:00Z",
+          "end": "2026-06-07T23:59:59Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "synth:0018"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0018",
+              "agent_id": "West",
+              "ts": "2026-06-07T09:00:00Z",
+              "kind": "chat",
+              "content": "relay token rotated"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004852500023844186
         },
         {
           "ok": false,
@@ -1003,12 +402,399 @@
           "leg_failures": [
             "rows 0 < min_rows 1",
             "0 rows \u2014 no evidence",
-            "must_contain missing: runbook-alpha",
+            "must_contain missing: relay token rotated",
             "distinct(agent_id)=0 < 1"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0010610000172164291
+          "wall_s": 0.0002577499981271103
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%relay token rotated%' AND ts >= '2026-06-07' AND ts < '2026-06-08' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "relay token rotated"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%relay token rotated%' AND ts >= '2026-06-01' AND ts < '2026-06-06' LIMIT 50",
+            "window": {
+              "start": "2026-06-07T00:00:00Z",
+              "end": "2026-06-07T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "6ebb134474db",
+      "created_utc": "2026-11-12T18:00:51.275213Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "pattern",
+      "text": "Agents North, South, and East all posted in the ops-war-room thread on 2026-06-06.",
+      "subjects": [
+        "North",
+        "South",
+        "East"
+      ],
+      "window": {
+        "start": "2026-06-06T00:00:00+00:00",
+        "end": "2026-06-06T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND kind = 'chat' AND ts >= '2026-06-06' AND ts < '2026-06-07' LIMIT 50",
+        "expect": {
+          "min_rows": 3,
+          "distinct_field": "agent_id",
+          "min_distinct": 3,
+          "must_contain": []
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND kind = 'chat' AND ts >= '2026-06-01' AND ts < '2026-06-02' LIMIT 50",
+        "window": {
+          "start": "2026-06-06T00:00:00Z",
+          "end": "2026-06-07T00:00:00Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 3,
+          "matched_ids": [
+            "synth:0015",
+            "synth:0016",
+            "synth:0017"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0015",
+              "agent_id": "North",
+              "ts": "2026-06-06T14:00:00Z",
+              "kind": "chat",
+              "content": "claim ticket 77"
+            },
+            {
+              "record_id": "synth:0016",
+              "agent_id": "South",
+              "ts": "2026-06-06T14:01:00Z",
+              "kind": "chat",
+              "content": "claim ticket 78"
+            },
+            {
+              "record_id": "synth:0017",
+              "agent_id": "East",
+              "ts": "2026-06-06T14:02:00Z",
+              "kind": "chat",
+              "content": "claim ticket 79"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0006588329997612163
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 3",
+            "0 rows \u2014 no evidence",
+            "distinct(agent_id)=0 < 3"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00027366599897504784
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND kind = 'chat' AND ts >= '2026-06-06' AND ts < '2026-06-07' LIMIT 50",
+            "expect": {
+              "min_rows": 3,
+              "distinct_field": "agent_id",
+              "min_distinct": 3,
+              "must_contain": []
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops-war-room' AND kind = 'chat' AND ts >= '2026-06-01' AND ts < '2026-06-02' LIMIT 50",
+            "window": {
+              "start": "2026-06-06T00:00:00Z",
+              "end": "2026-06-07T00:00:00Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 3 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "0c6e77de09b3",
+      "created_utc": "2026-11-12T18:00:51.275218Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "event",
+      "text": "Relay announced a maintenance window for 02:00-04:00 UTC.",
+      "subjects": [
+        "Relay"
+      ],
+      "window": {
+        "start": "2026-06-05T00:00:00+00:00",
+        "end": "2026-06-05T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%maintenance window%' AND content LIKE '%02:00-04:00 UTC%' AND ts >= '2026-06-05' AND ts < '2026-06-06' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "maintenance window 02:00-04:00 UTC"
+          ],
+          "must_not": [],
+          "distinct_field": "record_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%maintenance window%' AND content LIKE '%02:00-04:00 UTC%' AND ts >= '2026-06-01' AND ts < '2026-06-04' LIMIT 50",
+        "window": {
+          "start": "2026-06-05T00:00:00Z",
+          "end": "2026-06-05T23:59:59Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "synth:0009"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0009",
+              "agent_id": "Relay",
+              "ts": "2026-06-05T08:00:00Z",
+              "kind": "chat",
+              "content": "maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0009598329997970723
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: maintenance window 02:00-04:00 UTC",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004093749994353857
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%maintenance window%' AND content LIKE '%02:00-04:00 UTC%' AND ts >= '2026-06-05' AND ts < '2026-06-06' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "maintenance window 02:00-04:00 UTC"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Relay' AND content LIKE '%maintenance window%' AND content LIKE '%02:00-04:00 UTC%' AND ts >= '2026-06-01' AND ts < '2026-06-04' LIMIT 50",
+            "window": {
+              "start": "2026-06-05T00:00:00Z",
+              "end": "2026-06-05T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "80b76b748a2e",
+      "created_utc": "2026-11-12T18:00:51.275222Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "absence",
+      "text": "No agent posted in the sealed-vault room on 2026-06-08 or 2026-06-09.",
+      "subjects": [],
+      "window": {
+        "start": "2026-06-08T00:00:00+00:00",
+        "end": "2026-06-09T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'sealed-vault' AND ts >= '2026-06-08' AND ts < '2026-06-10' LIMIT 50",
+        "expect": {
+          "max_rows": 0,
+          "_normalized": "absence claim: expectation forced to max_rows 0 (polarity from the claim)"
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'sealed-vault' AND ts >= '2026-06-01' AND ts < '2026-06-07' LIMIT 50",
+        "window": {
+          "start": "2026-06-08T00:00:00Z",
+          "end": "2026-06-09T23:59:59Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0015573750024486799
+        },
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00023958300153026357
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'sealed-vault' AND ts >= '2026-06-08' AND ts < '2026-06-10' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'sealed-vault' AND ts >= '2026-06-01' AND ts < '2026-06-07' LIMIT 50",
+            "window": {
+              "start": "2026-06-08T00:00:00Z",
+              "end": "2026-06-09T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 0 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window also shows no forbidden evidence"
+        }
+      }
+    },
+    {
+      "id": "cc135761ea1e",
+      "created_utc": "2026-11-12T18:00:51.275227Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "event",
+      "text": "Agent Ghost posted 'override accepted' in ops on 2026-06-04.",
+      "subjects": [
+        "Ghost"
+      ],
+      "window": {
+        "start": "2026-06-04T00:00:00+00:00",
+        "end": "2026-06-04T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%posted%' OR r.thread LIKE '%posted%' OR r.agent_id LIKE '%posted%') AND r.ts >= '2026-06-04T00:00:00+00:00' AND r.ts <= '2026-06-04T23:59:59+00:00' AND (r.agent_id = 'Ghost' OR r.content LIKE '%Ghost%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%posted%' OR r.thread LIKE '%posted%' OR r.agent_id LIKE '%posted%') AND r.ts >= '2026-05-27T00:00:01+00:00' AND r.ts <= '2026-05-28T00:00:00+00:00' AND (r.agent_id = 'Ghost' OR r.content LIKE '%Ghost%') LIMIT 50",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: override accepted"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0006555410000146367
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: override accepted"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00044545799755724147
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: override accepted"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00028250000104890205
         },
         {
           "ok": false,
@@ -1021,62 +807,57 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0005387080018408597
+          "wall_s": 0.00020412500089150853
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Scribe' AND kind = 'event' AND ts >= '2026-06-02T00:00:00Z' AND ts < '2026-06-03T00:00:00Z' AND (content LIKE '%runbook-alpha%' OR content LIKE '%revision%') LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND thread = 'ops' AND content LIKE '%override accepted%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
             "expect": {
               "min_rows": 1,
               "must_contain": [
-                "runbook-alpha"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 1
+                "override accepted"
+              ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Scribe' AND kind = 'event' AND ts >= '2026-06-03T00:00:00Z' AND ts < '2026-06-04T00:00:00Z' AND (content LIKE '%runbook-alpha%' OR content LIKE '%revision%') LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND thread = 'ops' AND content LIKE '%override accepted%' AND ts >= '2026-06-01' AND ts < '2026-06-02' LIMIT 50",
             "window": {
-              "start": "2026-06-02T00:00:00+00:00",
-              "end": "2026-06-02T23:59:59+00:00"
+              "start": "2026-06-04T00:00:00Z",
+              "end": "2026-06-04T23:59:59Z"
             }
           },
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Scribe' AND kind = 'event' AND content LIKE '%runbook-alpha%' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%override accepted%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
             "expect": {
               "min_rows": 1,
               "must_contain": [
-                "runbook-alpha"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 1
+                "override accepted"
+              ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id != 'Scribe' AND kind = 'event' AND content LIKE '%runbook-alpha%' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%override accepted%' AND ts >= '2026-06-01' AND ts < '2026-06-02' LIMIT 50",
             "window": {
-              "start": "2026-06-01T00:00:00+00:00",
-              "end": "2026-06-10T23:59:59+00:00"
+              "start": "2026-06-04T00:00:00Z",
+              "end": "2026-06-04T23:59:59Z"
             }
           },
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'Scribe' AND kind = 'event' AND content LIKE '%runbook-alpha%' AND ts >= '2026-06-02T00:00:00+00:00' AND ts <= '2026-06-02T23:59:59+00:00' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%override accepted%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
             "expect": {
               "min_rows": 1,
               "must_contain": [
-                "runbook-alpha"
-              ],
-              "distinct_field": "agent_id",
-              "min_distinct": 1
+                "override accepted"
+              ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id != 'Scribe' AND kind = 'event' AND content LIKE '%runbook-alpha%' AND ts >= '2026-06-02T00:00:00+00:00' AND ts <= '2026-06-02T23:59:59+00:00' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%override accepted%' AND ts >= '2026-06-01' AND ts < '2026-06-02' LIMIT 50",
             "window": {
-              "start": "2026-06-02T00:00:00+00:00",
-              "end": "2026-06-02T23:59:59+00:00"
+              "start": "2026-06-04T00:00:00Z",
+              "end": "2026-06-04T23:59:59Z"
             }
           }
         ],
         "probe_attempt": 3,
         "legs": {
+          "action": "not run \u2014 no action verb",
           "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence"
         },
         "probe_origin": "mechanical-fallback",
@@ -1084,8 +865,955 @@
       }
     },
     {
-      "id": "394af2bb8b9b",
-      "created_utc": "2026-11-08T01:21:33.032070Z",
+      "id": "8baa90600101",
+      "created_utc": "2026-11-12T18:00:51.275232Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "event",
+      "text": "Agent Relay posted 'heartbeat ping \u2014 all systems nominal' in ops at 2026-06-03T15:00Z.",
+      "subjects": [
+        "Relay"
+      ],
+      "window": {
+        "start": "2026-06-03T14:30:00+00:00",
+        "end": "2026-06-03T15:30:00+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%heartbeat%' OR r.thread LIKE '%heartbeat%' OR r.agent_id LIKE '%heartbeat%') AND (r.content LIKE '%ping%' OR r.thread LIKE '%ping%' OR r.agent_id LIKE '%ping%') AND r.ts >= '2026-06-03T00:00:00+00:00' AND r.ts <= '2026-06-04T00:00:00+00:00' AND (r.agent_id = 'Relay' OR r.content LIKE '%Relay%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%heartbeat%' OR r.thread LIKE '%heartbeat%' OR r.agent_id LIKE '%heartbeat%') AND (r.content LIKE '%ping%' OR r.thread LIKE '%ping%' OR r.agent_id LIKE '%ping%') AND r.ts >= '2026-05-26T00:00:00+00:00' AND r.ts <= '2026-05-27T00:00:00+00:00' AND (r.agent_id = 'Relay' OR r.content LIKE '%Relay%') LIMIT 50",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: heartbeat ping \u2014 all systems nominal",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00041933299871743657
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "must_contain missing: heartbeat ping \u2014 all systems nominal",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00028908300009788945
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "must_contain missing: heartbeat ping \u2014 all systems nominal",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002480829971318599
+        },
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "synth:0005"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0005",
+              "agent_id": "Relay",
+              "ts": "2026-06-03T14:00:00Z",
+              "kind": "chat",
+              "content": "heartbeat ping \u2014 all systems nominal"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00014141599967842922
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'event' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-03T14:30:00Z' AND ts <= '2026-06-03T15:30:00Z' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "heartbeat ping \u2014 all systems nominal"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'event' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-01T00:00:00Z' AND ts < '2026-06-03T00:00:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-06-03T14:30:00Z",
+              "end": "2026-06-03T15:30:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND agent_id = 'Relay' AND content LIKE '%heartbeat ping%' AND content LIKE '%all systems nominal%' AND ts >= '2026-06-03T14:30:00Z' AND ts <= '2026-06-03T15:30:00Z' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 1,
+              "must_contain": [
+                "heartbeat ping \u2014 all systems nominal"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND agent_id = 'Relay' AND content LIKE '%heartbeat ping%' AND content LIKE '%all systems nominal%' AND ts >= '2026-06-01T00:00:00Z' AND ts < '2026-06-03T00:00:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-06-03T14:30:00Z",
+              "end": "2026-06-03T15:30:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND agent_id = 'Relay' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-03T14:30:00Z' AND ts <= '2026-06-03T15:30:00Z' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 1,
+              "must_contain": [
+                "heartbeat ping \u2014 all systems nominal"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND kind = 'chat' AND agent_id = 'Relay' AND content LIKE '%heartbeat ping \u2014 all systems nominal%' AND ts >= '2026-06-01T00:00:00Z' AND ts < '2026-06-03T00:00:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-06-03T14:30:00Z",
+              "end": "2026-06-03T15:30:00Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "no matched row inside claimed window 2026-06-03T14:30:00+00:00..2026-06-03T15:30:00+00:00"
+        },
+        "probe_origin": "mechanical-fallback",
+        "dismiss_reason": "evidence does not bind the claimed subject/window"
+      }
+    },
+    {
+      "id": "982debe74161",
+      "created_utc": "2026-11-12T18:00:51.275236Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "pattern",
+      "text": "Agent Scribe created 5 revisions of the runbook-beta page.",
+      "subjects": [
+        "Scribe"
+      ],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%revision %' AND content LIKE '%runbook-beta%' LIMIT 50",
+        "expect": {
+          "min_rows": 5,
+          "must_contain": [
+            "runbook-beta"
+          ],
+          "distinct_field": "record_id",
+          "min_distinct": 5
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%revision %' AND content LIKE '%runbook-alpha%' LIMIT 50",
+        "window": {
+          "start": "2026-06-01T00:00:00Z",
+          "end": "2026-06-11T00:00:00Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 5",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: runbook-beta",
+            "distinct(record_id)=0 < 5"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0010273750012856908
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 5",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: runbook-beta",
+            "distinct(record_id)=0 < 5"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.000240790999669116
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 5",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: runbook-beta",
+            "distinct(record_id)=0 < 5"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002474590000929311
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%revision %' AND content LIKE '%runbook-beta%' LIMIT 50",
+            "expect": {
+              "min_rows": 5,
+              "must_contain": [
+                "runbook-beta"
+              ],
+              "distinct_field": "record_id",
+              "min_distinct": 5
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%revision %' AND content LIKE '%runbook-alpha%' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%revision %' AND content LIKE '%runbook-beta%' LIMIT 50",
+            "expect": {
+              "min_rows": 5,
+              "must_contain": [
+                "runbook-beta"
+              ],
+              "distinct_field": "record_id",
+              "min_distinct": 5
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%revision %' AND content LIKE '%runbook-alpha%' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%revision %' AND content LIKE '%runbook-beta%' LIMIT 50",
+            "expect": {
+              "min_rows": 5,
+              "must_contain": [
+                "runbook-beta"
+              ],
+              "distinct_field": "record_id",
+              "min_distinct": 5
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%revision %' AND content LIKE '%runbook-alpha%' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'creat' is present",
+          "grounding": "rows 0 < min_rows 5; 0 rows \u2014 no evidence; must_contain missing: runbook-beta; distinct(record_id)=0 < 5"
+        },
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "6b98fae9d770",
+      "created_utc": "2026-11-12T18:00:51.275240Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "coordination",
+      "text": "Agents North and West coordinated on the shared answer '7777'.",
+      "subjects": [
+        "North",
+        "West"
+      ],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 7777%' LIMIT 50",
+        "expect": {
+          "min_rows": 2,
+          "must_contain": [
+            "shared answer: 7777"
+          ],
+          "distinct_field": "agent_id",
+          "min_distinct": 2
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 5432%' LIMIT 50",
+        "window": {
+          "start": "2026-06-01T00:00:00Z",
+          "end": "2026-06-11T00:00:00Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 2",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: shared answer: 7777",
+            "distinct(agent_id)=0 < 2"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0012800000004062895
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 2",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: shared answer: 7777",
+            "distinct(agent_id)=0 < 2"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00024237500110757537
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 2",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: shared answer: 7777",
+            "distinct(agent_id)=0 < 2"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00022579100186703727
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 7777%' LIMIT 50",
+            "expect": {
+              "min_rows": 2,
+              "max_rows": 0,
+              "must_contain": [
+                "shared answer: 7777"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 2
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 5432%' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 7777%' LIMIT 50",
+            "expect": {
+              "min_rows": 2,
+              "max_rows": 0,
+              "must_contain": [
+                "shared answer: 7777"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 2
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 5432%' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 7777%' LIMIT 50",
+            "expect": {
+              "min_rows": 2,
+              "max_rows": 0,
+              "must_contain": [
+                "shared answer: 7777"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 2
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'chat' AND content LIKE '%shared answer: 5432%' LIMIT 50",
+            "window": {
+              "start": "2026-06-01T00:00:00Z",
+              "end": "2026-06-11T00:00:00Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "rows 0 < min_rows 2; 0 rows \u2014 no evidence; must_contain missing: shared answer: 7777; distinct(agent_id)=0 < 2"
+        },
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "db93572ad5b9",
+      "created_utc": "2026-11-12T18:00:51.275244Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "event",
+      "text": "Agent Relay posted 'all clear for deploy' in ops on 2026-06-04.",
+      "subjects": [
+        "Relay"
+      ],
+      "window": {
+        "start": "2026-06-04T00:00:00+00:00",
+        "end": "2026-06-04T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%posted%' OR r.thread LIKE '%posted%' OR r.agent_id LIKE '%posted%') AND r.ts >= '2026-06-04T00:00:00+00:00' AND r.ts <= '2026-06-04T23:59:59+00:00' AND (r.agent_id = 'Relay' OR r.content LIKE '%Relay%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%posted%' OR r.thread LIKE '%posted%' OR r.agent_id LIKE '%posted%') AND r.ts >= '2026-05-27T00:00:01+00:00' AND r.ts <= '2026-05-28T00:00:00+00:00' AND (r.agent_id = 'Relay' OR r.content LIKE '%Relay%') LIMIT 50",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "synth:0007"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0007",
+              "agent_id": "North",
+              "ts": "2026-06-04T09:00:00Z",
+              "kind": "chat",
+              "content": "all clear for deploy"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00026375000015832484
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: all clear for deploy",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.000247500000114087
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "0 rows \u2014 no evidence",
+            "must_contain missing: all clear for deploy",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002520000016374979
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00013466599921230227
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%all clear for deploy%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "all clear for deploy"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND content LIKE '%all clear for deploy%' AND ts >= '2026-06-01' AND ts < '2026-06-03' LIMIT 50",
+            "window": {
+              "start": "2026-06-04T00:00:00Z",
+              "end": "2026-06-04T23:59:59Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND agent_id = 'Relay' AND content LIKE '%all clear for deploy%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "all clear for deploy"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND agent_id = 'Relay' AND content LIKE '%all clear for deploy%' AND ts >= '2026-06-01' AND ts < '2026-06-03' LIMIT 50",
+            "window": {
+              "start": "2026-06-04T00:00:00Z",
+              "end": "2026-06-04T23:59:59Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND agent_id = 'Relay' AND content LIKE '%all clear for deploy%' AND ts >= '2026-06-04' AND ts < '2026-06-05' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0,
+              "must_contain": [
+                "all clear for deploy"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND agent_id = 'Relay' AND content LIKE '%all clear for deploy%' AND ts >= '2026-06-01' AND ts < '2026-06-03' LIMIT 50",
+            "window": {
+              "start": "2026-06-04T00:00:00Z",
+              "end": "2026-06-04T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence"
+        },
+        "probe_origin": "mechanical-fallback",
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "0e847bf58a0b",
+      "created_utc": "2026-11-12T18:00:51.275249Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "absence",
+      "text": "No agent posted in the ops room on 2026-06-05.",
+      "subjects": [],
+      "window": {
+        "start": "2026-06-05T00:00:00+00:00",
+        "end": "2026-06-05T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%posted%' OR r.thread LIKE '%posted%' OR r.agent_id LIKE '%posted%') AND r.ts >= '2026-06-05T00:00:00+00:00' AND r.ts <= '2026-06-05T23:59:59+00:00' LIMIT 50",
+        "expect": {
+          "max_rows": 0
+        },
+        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%posted%' OR r.thread LIKE '%posted%' OR r.agent_id LIKE '%posted%') AND r.ts >= '2026-05-28T00:00:01+00:00' AND r.ts <= '2026-05-29T00:00:00+00:00' LIMIT 50",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "unverifiable",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 3,
+          "matched_ids": [
+            "synth:0009",
+            "synth:0010",
+            "synth:0011"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0009",
+              "agent_id": "Relay",
+              "ts": "2026-06-05T08:00:00Z",
+              "kind": "chat",
+              "content": "maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode"
+            },
+            {
+              "record_id": "synth:0010",
+              "agent_id": "South",
+              "ts": "2026-06-05T08:05:00Z",
+              "kind": "chat",
+              "content": "ack maintenance window"
+            },
+            {
+              "record_id": "synth:0011",
+              "agent_id": "Scribe",
+              "ts": "2026-06-05T12:00:00Z",
+              "kind": "event",
+              "content": "revision 3 of page runbook-alpha saved"
+            }
+          ],
+          "leg_failures": [
+            "rows 3 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00026049999723909423
+        },
+        {
+          "ok": false,
+          "rows": 3,
+          "matched_ids": [
+            "synth:0009",
+            "synth:0010",
+            "synth:0011"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0009",
+              "agent_id": "Relay",
+              "ts": "2026-06-05T08:00:00Z",
+              "kind": "chat",
+              "content": "maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode"
+            },
+            {
+              "record_id": "synth:0010",
+              "agent_id": "South",
+              "ts": "2026-06-05T08:05:00Z",
+              "kind": "chat",
+              "content": "ack maintenance window"
+            },
+            {
+              "record_id": "synth:0011",
+              "agent_id": "Scribe",
+              "ts": "2026-06-05T12:00:00Z",
+              "kind": "event",
+              "content": "revision 3 of page runbook-alpha saved"
+            }
+          ],
+          "leg_failures": [
+            "rows 3 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00025804100005188957
+        },
+        {
+          "ok": false,
+          "rows": 3,
+          "matched_ids": [
+            "synth:0009",
+            "synth:0010",
+            "synth:0011"
+          ],
+          "sample": [
+            {
+              "record_id": "synth:0009",
+              "agent_id": "Relay",
+              "ts": "2026-06-05T08:00:00Z",
+              "kind": "chat",
+              "content": "maintenance window 02:00-04:00 UTC \u2014 expect brief read-only mode"
+            },
+            {
+              "record_id": "synth:0010",
+              "agent_id": "South",
+              "ts": "2026-06-05T08:05:00Z",
+              "kind": "chat",
+              "content": "ack maintenance window"
+            },
+            {
+              "record_id": "synth:0011",
+              "agent_id": "Scribe",
+              "ts": "2026-06-05T12:00:00Z",
+              "kind": "event",
+              "content": "revision 3 of page runbook-alpha saved"
+            }
+          ],
+          "leg_failures": [
+            "rows 3 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004897079998045228
+        },
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00013629199747811072
+        },
+        {
+          "ok": true,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00011145800090162084
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND ts >= '2026-06-05T00:00:00Z' AND ts <= '2026-06-05T23:59:59Z' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE thread = 'ops' AND ts >= '2026-06-01T00:00:00Z' AND ts <= '2026-06-10T23:59:59Z' LIMIT 50",
+            "window": {
+              "start": "2026-06-05T00:00:00Z",
+              "end": "2026-06-05T23:59:59Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (thread = 'ops' OR thread = 'ops-war-room') AND ts >= '2026-06-05T00:00:00Z' AND ts <= '2026-06-05T23:59:59Z' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (thread = 'ops' OR thread = 'ops-war-room') AND ts >= '2026-06-01T00:00:00Z' AND ts <= '2026-06-10T23:59:59Z' LIMIT 50",
+            "window": {
+              "start": "2026-06-05T00:00:00Z",
+              "end": "2026-06-05T23:59:59Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (thread = 'ops' OR thread = 'ops-war-room') AND ts >= '2026-06-05T00:00:00Z' AND ts <= '2026-06-05T23:59:59Z' LIMIT 50",
+            "expect": {
+              "min_rows": 0,
+              "max_rows": 0
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (thread = 'ops' OR thread = 'ops-war-room') AND ts >= '2026-06-01T00:00:00Z' AND ts <= '2026-06-10T23:59:59Z' LIMIT 50",
+            "window": {
+              "start": "2026-06-05T00:00:00Z",
+              "end": "2026-06-05T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 0 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window also shows no forbidden evidence"
+        },
+        "probe_origin": "mechanical-fallback",
+        "note": "the mechanical fallback found no evidence for this absence claim, which cannot establish it \u2014 a targeted probe is needed to confirm it"
+      }
+    },
+    {
+      "id": "5abbf010fad1",
+      "created_utc": "2026-11-12T18:00:51.275252Z",
+      "corpus": "records.db",
+      "source_doc": "",
+      "kind": "event",
+      "text": "Agent Scribe revised runbook-alpha on 2026-06-02.",
+      "subjects": [
+        "Scribe"
+      ],
+      "window": {
+        "start": "2026-06-02T00:00:00+00:00",
+        "end": "2026-06-02T23:59:59+00:00"
+      },
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND ts >= '2026-06-02' AND ts < '2026-06-03' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "max_rows": 10,
+          "must_contain": [
+            "runbook-alpha",
+            "revision"
+          ],
+          "must_not": [],
+          "distinct_field": "record_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND ts >= '2026-06-03' AND ts < '2026-06-04' LIMIT 50",
+        "window": {
+          "start": "2026-06-02T00:00:00Z",
+          "end": "2026-06-02T23:59:59Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "dismissed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: runbook-alpha",
+            "must_contain missing: revision",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.000248792002821574
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "must_contain missing: runbook-alpha",
+            "must_contain missing: revision",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00025716700110933743
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "must_contain missing: runbook-alpha",
+            "must_contain missing: revision",
+            "distinct(record_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00027112499810755253
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%runbook-alpha%' AND ts >= '2026-06-02' AND ts < '2026-06-03' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "runbook-alpha",
+                "revision"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND content LIKE '%runbook-alpha%' AND ts >= '2026-06-03' AND ts < '2026-06-04' LIMIT 50",
+            "window": {
+              "start": "2026-06-02T00:00:00Z",
+              "end": "2026-06-02T23:59:59Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND ts >= '2026-06-02' AND ts < '2026-06-03' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 10,
+              "must_contain": [
+                "runbook-alpha",
+                "revision"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND ts >= '2026-06-03' AND ts < '2026-06-04' LIMIT 50",
+            "window": {
+              "start": "2026-06-02T00:00:00Z",
+              "end": "2026-06-02T23:59:59Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND ts >= '2026-06-02' AND ts < '2026-06-03' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 10,
+              "must_contain": [
+                "runbook-alpha",
+                "revision"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'event' AND agent_id = 'Scribe' AND content LIKE '%runbook-alpha%' AND content LIKE '%revision%' AND ts >= '2026-06-03' AND ts < '2026-06-04' LIMIT 50",
+            "window": {
+              "start": "2026-06-02T00:00:00Z",
+              "end": "2026-06-02T23:59:59Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "ok \u2014 the action 'run' is present",
+          "grounding": "rows 0 < min_rows 1; must_contain missing: runbook-alpha; must_contain missing: revision; distinct(record_id)=0 < 1"
+        },
+        "dismiss_reason": "record contains no evidence for the claim"
+      }
+    },
+    {
+      "id": "5789702a2ad1",
+      "created_utc": "2026-11-12T18:00:51.275257Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "interpretive",

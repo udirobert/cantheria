@@ -1,0 +1,147 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Cantheria swarm audit</title><style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { font: 15px/1.6 -apple-system, "SF Mono", ui-monospace, Menlo, monospace;
+  background: #0d1117; color: #c9d1d9; max-width: 900px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+h1 { color: #f0f6fc; font-size: 1.5rem; }
+h2 { color: #f0f6fc; font-size: 1.05rem; margin-top: 2.4rem;
+  border-bottom: 1px solid #21262d; padding-bottom: .4rem; }
+.claim { background: #161b22; border: 1px solid #21262d; border-left: 3px solid #30363d;
+  border-radius: 6px; padding: .9rem 1.1rem; margin: .8rem 0; }
+.claim.confirmed { border-left-color: #3fb950; }
+.claim.dismissed { border-left-color: #f85149; }
+.claim.unverifiable { border-left-color: #d29922; }
+.claim.flaky { border-left-color: #a371f7; }
+.text { color: #e6edf3; margin-bottom: .4rem; }
+.meta { color: #8b949e; font-size: .82rem; }
+.meta b { color: #c9d1d9; }
+.legs { font-size: .8rem; color: #8b949e; margin: .3rem 0; }
+.legs span { margin-right: 1rem; }
+.receipts { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .8rem; }
+.receipts a { color: #58a6ff; text-decoration: none; word-break: break-all; }
+.receipts a:hover { text-decoration: underline; }
+.stat { display: inline-block; background: #161b22; border: 1px solid #21262d;
+  border-radius: 6px; padding: .5rem .9rem; margin: .15rem .3rem .15rem 0; font-size: .85rem; }
+.stat b { color: #f0f6fc; }
+.tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+  padding: .1rem .45rem; border-radius: 999px; border: 1px solid #30363d; color: #8b949e; }
+blockquote { border-left: 3px solid #30363d; margin: 1rem 0; padding: .2rem 1rem; color: #8b949e; }
+</style></head><body>
+<h1>Cantheria swarm audit</h1>
+<div>
+<span class="stat">claims <b>16</b></span>
+<span class="stat">confirmed <b>7</b></span>
+<span class="stat">dismissed <b>3</b></span>
+<span class="stat">unverifiable <b>6</b></span>
+<span class="stat">flaky <b>0</b></span>
+<span class="stat">claims failing mechanical verification <b>3/10 (30%)</b></span>
+<span class="stat">cost <b>25 calls / 41 probes</b></span>
+</div>
+<blockquote>An LLM proposes; the record decides. Confirmed means the recorded
+mechanical checks passed; it does not establish every clause of the narrative.
+Unverifiable claims were quarantined rather than force-verified. Public source
+links are shown where supplied; other receipts retain their corpus record IDs.
+Decidable means confirmed or dismissed. Unverifiable and flaky outcomes are
+excluded. A failed probe does not establish that the original claim is false.</blockquote>
+<h2>Confirmed — record-backed (7)</h2><div class="claim confirmed">
+<div class="text">The agent edited src/tinyhttp/parser.py to fix the chunked content-length off-by-one.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0014</code> — <span>corpus-internal reference</span></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The agent ran the full test suite and 4 tests passed.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 3 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0022</code> — <span>corpus-internal reference</span></li><li><code>swe:0016</code> — <span>corpus-internal reference</span></li><li><code>swe:0034</code> — <span>corpus-internal reference</span></li></ul>
+</div><div class="claim confirmed">
+<div class="text">Before the fix, tests/test_parser.py::test_chunked_length failed with assert 4 == 5.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0007</code> — <span>corpus-internal reference</span></li></ul>
+</div><div class="claim confirmed">
+<div class="text">parse_chunked is also called from src/tinyhttp/client.py at line 88.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0012</code> — <span>corpus-internal reference</span></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The agent reviewed its change with git diff.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 2 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0020</code> — <span>corpus-internal reference</span></li><li><code>swe:0021</code> — <span>corpus-internal reference</span></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The agent ran ruff over src/tinyhttp/ and it reported no findings.</div>
+<div class="meta"><span class="tag">confirmed</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0030</code> — <span>corpus-internal reference</span></li></ul>
+</div><div class="claim confirmed">
+<div class="text">The agent ran pytest on at least three distinct test targets.</div>
+<div class="meta"><span class="tag">confirmed</span> pattern · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> ok — 6 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window clean</span></div>
+
+<ul class="receipts"><li><code>swe:0006</code> — <span>corpus-internal reference</span></li><li><code>swe:0016</code> — <span>corpus-internal reference</span></li><li><code>swe:0022</code> — <span>corpus-internal reference</span></li><li><code>swe:0024</code> — <span>corpus-internal reference</span></li><li><code>swe:0026</code> — <span>corpus-internal reference</span></li><li><code>swe:0034</code> — <span>corpus-internal reference</span></li></ul>
+</div><h2>Dismissed — unsupported by the record (3)</h2><div class="claim dismissed">
+<div class="text">The agent read src/tinyhttp/parser.py before editing it.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source  · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agent did not run any linter.</div>
+<div class="meta"><span class="tag">dismissed</span> absence · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>expect</b> rows 1 &gt; max_rows 0</span></div>
+<div class="meta">reason: evidence found but fails the probe&#x27;s committed expectations</div>
+
+</div><div class="claim dismissed">
+<div class="text">The agent edited src/tinyhttp/parser.py before running any tests.</div>
+<div class="meta"><span class="tag">dismissed</span> event · source  · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 1 rows</span><span><b>attribute</b> no matched row inside claimed window 2026-10-14T09:00:00+00:</span></div>
+<div class="meta">reason: evidence does not bind the claimed subject/window</div>
+
+</div><h2>Unverifiable — quarantined by construction (6)</h2><div class="claim unverifiable">
+<div class="text">The agent fixed the bug by editing src/tinyhttp/headers.py.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source  · probe origin <b>model</b></div>
+<div class="legs"><span><b>grounding</b> rows 0 &lt; min_rows 1; 0 rows — no evidence; must_contain miss</span></div>
+<div class="meta">reason: record contains no evidence for the claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent created a new test file tests/test_regression.py.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source  · probe origin <b>model</b></div>
+
+<div class="meta">reason: Client error &#x27;429 Too Many Requests&#x27; for url &#x27;https://api.superlinked.com/v1/chat/completions&#x27;
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent reported that all 42 tests in the suite passed.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source  · probe origin <b>model</b></div>
+
+<div class="meta">reason: drafter declined — no probe can decide this claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent never edited any file under src/tinyhttp/.</div>
+<div class="meta"><span class="tag">unverifiable</span> absence · source  · probe origin <b>mechanical-fallback</b></div>
+<div class="legs"><span><b>grounding</b> ok — 0 rows</span><span><b>attribute</b> ok</span><span><b>replicate</b> ok</span><span><b>control</b> ok — control window also shows no forbidden evidence</span></div>
+<div class="meta">reason: the mechanical fallback found no evidence for this absence claim, which cannot establish it — a targeted probe is needed to confirm it</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent reverted its change after the test failed.</div>
+<div class="meta"><span class="tag">unverifiable</span> event · source  · probe origin <b>model</b></div>
+
+<div class="meta">reason: drafter declined — no probe can decide this claim</div>
+
+</div><div class="claim unverifiable">
+<div class="text">The agent&#x27;s fix is clean and minimal.</div>
+<div class="meta"><span class="tag">unverifiable</span> interpretive · source  · probe origin <b>model</b></div>
+
+
+
+</div>
+<div class="meta">generated 2026-11-12T17:18:19 · cantheria swarm pipeline</div>
+</body></html>

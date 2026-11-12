@@ -1,0 +1,14 @@
+diff --git a/src/tinyhttp/parser.py b/src/tinyhttp/parser.py
+index 927c833..7138507 100644
+--- a/src/tinyhttp/parser.py
++++ b/src/tinyhttp/parser.py
+@@ -20,6 +20,6 @@ def parse_chunked(data: bytes) -> bytes:
+         if size == 0:
+             break
+         start = line_end + 2
+-        body += data[start : start + size + 2]
++        body += data[start : start + size]
+         pos = start + size + 2
+-    return bytes(body)
++    return bytes(body)
+\ No newline at end of file
