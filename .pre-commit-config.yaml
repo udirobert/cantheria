@@ -31,7 +31,9 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
+        exclude: '(^runs/|^eval/.*/(REPORT\.md|results\.json)$)'
       - id: end-of-file-fixer
+        exclude: '(^runs/|^eval/.*/(REPORT\.md|results\.json)$)'
       - id: check-yaml
         args: [--allow-multiple-documents]
       - id: check-toml
