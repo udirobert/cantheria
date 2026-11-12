@@ -81,24 +81,30 @@ def planted() -> None:
         f"{buckets['structural-absence']} structural absence, "
         f"{buckets['attribution-miss']} attribution-miss"
     )
-    row("confirmed precision", f"{tp}/{tp + fp}", "6/6", PAPER, "6/6")
-    row("false confirmations", f"{fp}/{n_false}", "0/7", PAPER, "0 of 7 false claims")
+    row(
+        "confirmed precision",
+        f"{tp}/{tp + fp}",
+        "6/6",
+        PAPER,
+        "the 6 claims it confirmed were all true",
+    )
+    row("false confirmations", f"{fp}/{n_false}", "0/7", PAPER, "none of the 7 false ones")
     recall = f"{tp}/{tp + fn} ({round(100 * tp / (tp + fn))}%)" if tp + fn else "n/a"
-    row("true-claim recall", recall, "6/7 (86%)", PAPER, "6/7 (86%)")
-    row("interpretive quarantined", f"{interp}/1", "1/1", PAPER, "1/1")
+    row("true-claim recall", recall, "6/7 (86%)", PAPER, "true-claim recall was 6 of 7")
+    row("interpretive quarantined", f"{interp}/1", "1/1", PAPER, "quarantined as unverifiable")
     row(
         "model calls / probe runs",
         f"{data.get('llm_calls')}/{data.get('probe_runs')}",
         "18/24",
         PAPER,
-        "18 model calls, 24 probe executions",
+        "18 model calls and 24 probe executions",
     )
     row(
         "abstention taxonomy",
         tax,
         "3 nonexistent-entity, 1 structural absence, 1 attribution-miss",
         PAPER,
-        "3 nonexistent-entity, 1 structural absence, 1 attribution-miss",
+        "3 claims naming something the record never holds",
     )
     named = "all clear for deploy" if "all clear for deploy" in attr else (attr or "(none)")
     row("attribution-miss named", named, "all clear for deploy", PAPER, "all clear for deploy")
@@ -136,7 +142,7 @@ def village() -> None:
         expect,
         PAPER,
         "180 claims",
-        "62 confirmed, 97 dismissed, 21 unverifiable",
+        "62 confirmed, 21 unverifiable",
         "61%",
     )
 
@@ -161,20 +167,20 @@ def auditor() -> None:
         PAPER,
         "29 supported, 9 falsified, 10 inconclusive",
     )
-    row("paper dirs", str(len(reports)), "9", PAPER, "nine `papers/*/results/audit_report.json`")
+    row("paper dirs", str(len(reports)), "9", PAPER, "nine `audit_report.json` files")
     judges = sorted(LEMMA.glob("*/judge_report.json"))
     n_pass = sum(
         1
         for p in judges
         if (j := load(p)) and j.get("verdict") == "PASS" and j.get("score") == "5/5"
     )
-    row("judge runs", f"{n_pass} PASS 5/5 of {len(judges)}", "7 PASS 5/5 of 7", PAPER, "PASS 5/5")
+    row("judge runs", f"{n_pass} PASS 5/5 of {len(judges)}", "7 PASS 5/5 of 7", PAPER, "passed 5/5")
     row(
         "partial, no judge",
         str(len(reports) - len(judges)),
         "2",
         PAPER,
-        "Two papers are partial and have no judge report",
+        "two partial and unjudged",
     )
     imp_p = LEMMA / "jmlr-22-1228-ca-grokking-beam/results/improve_20261022-164946.json"
     imp = load(imp_p)
@@ -305,21 +311,37 @@ def transfer() -> None:
                 else:
                     buckets_t["other"] += 1
 
-    row("transfer: claims", str(len(order_t)), "16", PAPER, "16 atomic claims")
+    row("transfer: claims", str(len(order_t)), "16", PAPER, "16 of them")
     row("transfer: true claims", str(tp_t + fn_t), "8", PAPER, "8 true")
     row("transfer: false claims", str(n_false_t), "7", PAPER, "7 false")
-    row("transfer: true confirmed", f"{tp_t}/{tp_t + fn_t}", "7/8", PAPER, "7 of the 8 true claims")
-    row("transfer: false confirmed", f"{fp_t}/{n_false_t}", "0/7", PAPER, "none of the 7 false")
     row(
-        "transfer: false dismissed", str(dismissed_t), "2", PAPER, "Two false claims were dismissed"
+        "transfer: true confirmed",
+        f"{tp_t}/{tp_t + fn_t}",
+        "7/8",
+        PAPER,
+        "7 of 8 true claims confirmed",
     )
-    row("transfer: abstentions", str(n_false_t - fp_t - dismissed_t), "5", PAPER, "five abstained")
+    row(
+        "transfer: false confirmed",
+        f"{fp_t}/{n_false_t}",
+        "0/7",
+        PAPER,
+        "none of the 7 false ones confirmed",
+    )
+    row("transfer: false dismissed", str(dismissed_t), "2", PAPER, "linter that actually ran")
+    row(
+        "transfer: abstentions",
+        str(n_false_t - fp_t - dismissed_t),
+        "5",
+        PAPER,
+        "five of the seven false claims abstained",
+    )
     row(
         "transfer: interpretive",
         f"{interp_t}/1",
         "1/1",
         PAPER,
-        "interpretive claim was quarantined",
+        "interpretive (1)",
     )
     tax_t = ", ".join(f"{v} {k}" for k, v in sorted(buckets_t.items()))
     row(
@@ -328,7 +350,7 @@ def transfer() -> None:
         "1 attribution-trap, 1 fabricated-count, 1 false-absence, "
         "1 nonexistent-action, 1 nonexistent-entity",
         PAPER,
-        "attribution trap the drafter could not bind",
+        "1 false absence, and 1 attribution miss",
     )
 
     # replay: every committed probe re-decided by the oracle, no model
@@ -342,7 +364,7 @@ def transfer() -> None:
         f"{len(claims_r) - len(mism)}/{len(claims_r)}",
         "16/16",
         PAPER,
-        "16 verdicts replay",
+        "replays every committed probe",
     )
     for c, rec in mism:
         print(f"    MISMATCH {c.text[:70]}: recorded={rec.value} replayed={c.verdict.value}")
