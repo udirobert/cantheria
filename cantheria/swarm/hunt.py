@@ -13,6 +13,7 @@ a verdict on the claim. The verdict comes only from legs that ran.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
@@ -33,7 +34,8 @@ PROBE_SYSTEM = """\
 You are drafting a verification probe for a claim about a group of AI agents.
 The corpus is a sqlite table `records` with columns:
   record_id, corpus, ts (ISO text), ts_unix (epoch), agent_id, thread,
-  kind (chat|event|turn|memory|summary|post|payload|session|goal),
+  kind (the corpus's own record types — read them from the Corpus block
+  below; do NOT assume a fixed vocabulary),
   content, parent_id, source_uri, raw
 An FTS5 index `records_fts` covers `content` — use it for text search
 (LIKE '%x%' over the full table is slow and may hit the time budget):
@@ -48,10 +50,12 @@ You have NO tools — the query runs after you reply. Reply with a single JSON
 object only, no prose, no markdown fence:
   {"query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content
              FROM records WHERE ... LIMIT 50",
-   "expect": {"min_rows": 1,
+   "expect": {"min_rows": 1, "max_rows": 0,
               "must_contain": ["needle", ...],
               "must_not": [...],
-              "distinct_field": "agent_id", "min_distinct": 2},
+              "distinct_field": "agent_id", "min_distinct": 2,
+              "ordering_check": {"field": "ts", "first_kind": "file_edit",
+                                 "last_kind_in_set": "test_result"}},
    "control": "same-shaped query over a DISJOINT window/agent",
    "window": {"start": "...", "end": "..."}}
 
@@ -59,8 +63,34 @@ Rules:
 - SELECT only. Always select record_id — matched ids are the claim's receipts.
 - Write the query to TEST the claim, not to assume it: prefer predicates that
   would return rows exactly when the claim is true.
-- Do NOT filter on `kind` unless the claim names a specific record type.
-  Agent messages live in kind='chat' — when unsure, leave kind out.
+- Match the claim's VERB to the record TYPE it needs. A claim that the
+  subject EDITED a file is not evidenced by a record that merely READ it;
+  a claim that the subject RAN something is not evidenced by a record
+  that merely MENTIONED it. Use the corpus's own `kind` values for this
+  (the Corpus block lists them) and require the verb in the content.
+- `expect` is the claim, restated as a test:
+    "min_rows": 1     the claim is true ⇒ at least one row must match
+    "max_rows": 0     the claim is true ⇒ ZERO rows may match (absence
+                      claims: "never did X", "no other Y exists").
+                      Use max_rows: 0 — min_rows: 0 matches everything.
+    "must_contain": [str]   every needle appears in the matched content
+    "must_not": [str]       no needle appears in the matched content
+    "distinct_field"/"min_distinct" — the replicate leg
+- ABSENCE claims ("never", "no other", "did not") are decided by
+  max_rows: 0 over a predicate that WOULD match the thing if it existed.
+  The probe must find the forbidden evidence — then it fails, and the
+  claim is dismissed. A probe that finds nothing proves nothing.
+- ORDER claims ("before", "after", "first", "then") are NOT decided by
+  returning rows sorted by ts, and NOT by distinct_field/min_distinct —
+  a probe that returns both kinds of row passes whether or not the order
+  is right. Make the query return ONLY the rows that satisfy the claimed
+  order, by bounding one event's timestamp against the other's:
+    SELECT ... FROM records a
+      WHERE a.kind='file_edit' AND a.content LIKE '%parser.py%'
+        AND a.ts < (SELECT MIN(b.ts) FROM records b
+                     WHERE b.kind='command_run' AND b.content LIKE '%pytest%')
+  That returns 0 rows when the order is violated (the claim is then
+  dismissed) and the matching rows when it holds.
 - Do NOT constrain agent_id to the claimed subject unless the claim is
   about what the subject WROTE. Evidence for "X did Y" usually sits in
   records ABOUT X — other agents' chat, their memories, the event stream.
@@ -84,6 +114,10 @@ Rules:
   min_rows>=3 or distinct_field+min_distinct>=2; a singular event needs rows
   across kinds (e.g. a chat narration AND a matching event/turn) — express
   that in the query itself.
+- "ordering_check" is available for ORDER claims: it compares the
+  timestamps of the two kinds of row your query returns and FAILS the
+  expectation unless the first_kind rows all come at or before the
+  last_kind rows. Use it together with a query that returns both kinds.
 - control is a NEGATIVE TEST: the same probe over a different time window or
   agent where the claim should NOT hold. If it satisfies expect there too,
   the probe proves nothing. Omit only if no sensible control exists.
@@ -112,7 +146,16 @@ that forced needle order (split into one LIKE per term), over-specific
 must_contain needles, a time window that missed the record's ts, or the
 claim needs a two-step verification expressed as one JOIN/EXISTS. Do not
 weaken the probe into matching anything just to get rows — return
-{"query": "", ...} if the claim isn't decidable by this record."""
+{"query": "", ...} if the claim isn't decidable by this record.
+
+CRITICAL — a revision may only be MORE SPECIFIC, never LESS. If your
+previous probe returned 0 rows because the corpus contains no evidence
+for the claim, that IS the answer: the claim is false, and the correct
+revision keeps every predicate that made the probe precise. Dropping a
+content needle, dropping a kind predicate, or widening a time window
+turns a correct "no such evidence" into a false confirmation on some
+unrelated row. To re-check the same question, change only how you ASK
+it — the same claim, the same binding terms."""
 
 SEGMENT_SYSTEM = """\
 You are reviewing one slice of an autonomous-agent group's record — messages
@@ -160,7 +203,8 @@ def _schema_hint(db_path: Path | str) -> str:
         span = conn.execute("SELECT MIN(ts), MAX(ts) FROM records").fetchone()
     finally:
         conn.close()
-    return f"kinds: {kinds}\ntop agents: {[a for a, _ in agents]}\nspan: {span[0]} .. {span[1]}"
+    kind_list = ", ".join(f"{k} ({c})" for k, c in kinds)
+    return f"kinds: {kind_list}\ntop agents: {[a for a, _ in agents]}\nspan: {span[0]} .. {span[1]}"
 
 
 _STOP = {
@@ -302,6 +346,11 @@ async def _draft_probe(
                 ),
             },
         ],
+        # temperature 0: the drafter's probe is committed to the record
+        # and replayed against it, so the same claim must yield the same
+        # probe on every run. Sampling made the verdict drift between
+        # identical runs — the drafter's own noise, not the record's.
+        temperature=0.0,
     )
     return _extract_json(raw)
 
@@ -389,6 +438,18 @@ def _normalize_expect(claim: Claim, expect: dict, db_path: Path | str | None = N
     reported as corroboration, never gating. Raw draft stays in
     probe_history; this only fixes the spec."""
     expect = dict(expect or {})
+    # A null/absent max_rows means "no ceiling", not "at most zero rows" —
+    # the drafter emits it as null when it has no ceiling in mind, and
+    # reading it as 0 turns every such probe into a guaranteed failure.
+    if expect.get("max_rows") is None:
+        expect.pop("max_rows", None)
+    # A zero ceiling means "the claim holds only if the forbidden thing is
+    # absent" — an ABSENCE claim. On a claim that asserts something DID
+    # happen, a zero ceiling is nonsense: it would forbid the very rows
+    # the claim needs. Drop it there (the claim's own semantics decide),
+    # rather than letting a stray 0 turn the probe into a guaranteed fail.
+    if expect.get("max_rows") == 0 and not _claim_is_absence(claim.text):
+        expect.pop("max_rows", None)
     if (
         claim.kind is ClaimKind.event
         and expect.get("distinct_field") == "agent_id"
@@ -452,6 +513,122 @@ def _pair_cooccur_like(db_path: Path | str, a: str, b: str) -> int:
         return 0
 
 
+# Verbs that assert an ACTION on an object. A claim built on one of these
+# needs the record to show the action, not merely to mention the object.
+# Kept to verbs whose object is a separate artifact (file, command, test)
+# so that "the agent said X" is not mistaken for an action claim.
+_ACTION_VERBS = (
+    "edit",
+    "creat",
+    "delet",
+    "modif",
+    "renam",
+    "mov",
+    "writ",
+    "add",
+    "remov",
+    "updat",
+    "chang",
+    "fix",
+    "commit",
+    "push",
+    "run",
+    "execut",
+    "test",
+    "build",
+    "install",
+    "refactor",
+    "implement",
+)
+
+# Verbs that assert the ABSENCE of an action — "never", "no other", "did not".
+_ABSENCE_MARKERS = ("never", "no other", "did not", "didn't", "not run", "without")
+
+
+def _claim_action_verb(text: str) -> str:
+    """The STEM of the action verb a claim asserts, if any — so the record
+    can carry it in any inflection ("edited"/"edits"/"editing").
+
+    Stems are matched against the claim's words, longest first, so "creat"
+    wins over a shorter accidental prefix. Returns "" when the claim
+    asserts no action (a description, a state, a quote)."""
+    low = " " + text.lower() + " "
+    best_stem = ""
+    best_len = 0
+    for stem in sorted(_ACTION_VERBS, key=len, reverse=True):
+        for m in re.finditer(r"\b" + stem + r"[a-z]*\b", low):
+            word = m.group(0).strip()
+            # the LONGEST inflection wins ("editing" over "fixed"), so the
+            # stem we keep is the one the claim leans on hardest
+            if len(word) > best_len:
+                best_stem, best_len = stem, len(word)
+            break
+    return best_stem
+
+
+def _claim_is_absence(text: str) -> bool:
+    """True when the claim denies an action — "never edited", "did not run".
+    An absence claim is decided by finding the forbidden evidence."""
+    low = text.lower()
+    return any(m in low for m in _ABSENCE_MARKERS)
+
+
+def _corpus_has_kind_verb(db_path: Path | str, verb: str) -> bool:
+    """True when the corpus's own record types express this action — e.g.
+    a kind named file_edit for the verb "edit". Decides whether the verb
+    filter is meaningful for this corpus or would filter everything out."""
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=10)
+        try:
+            kinds = conn.execute("SELECT DISTINCT kind FROM records").fetchall()
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return False
+    return any(verb in str(k[0]).lower() for k in kinds if k and k[0])
+
+
+def _query_predicates(query: str) -> set[str]:
+    """The binding literals a probe's WHERE clause names — the needles and
+    kind predicates it commits to. Used to detect a revision that widened
+    the question (dropping a term) instead of re-asking it."""
+    out: set[str] = set()
+    for m in re.finditer(r"LIKE\s+'%([^']*)%'", query, re.I):
+        if m.group(1).strip():
+            out.add(m.group(1).strip().lower())
+    for m in re.finditer(r"\bkind\s*=\s*'([^']*)'", query, re.I):
+        out.add(f"kind={m.group(1).strip().lower()}")
+    return out
+
+
+def _widened_from(history: list[dict[str, Any]], new: dict[str, Any]) -> bool:
+    """True when this revision dropped a binding predicate that a previous
+    attempt had — i.e. it asks a WEAKER question than the one that came
+    back empty.
+
+    A previous attempt that matched nothing is a real answer ("the record
+    holds no such evidence"). Widening the probe to find *something* turns
+    that answer into a false confirmation on an unrelated row, so the
+    oracle must not accept the result.
+    """
+    if not history:
+        return False
+    prev_q = str(history[-1].get("query") or "")
+    new_q = str(new.get("query") or "")
+    if not prev_q or not new_q:
+        return False
+    prev_pred = _query_predicates(prev_q)
+    new_pred = _query_predicates(new_q)
+    if not prev_pred:
+        return False
+    dropped = prev_pred - new_pred
+    # dropping a kind predicate alone is a legitimate repair (the corpus
+    # may express the record under another kind) — what is NOT legitimate
+    # is dropping the CONTENT needle that binds the claim to its object.
+    content_dropped = {p for p in dropped if not p.startswith("kind=")}
+    return bool(content_dropped)
+
+
 def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
     """When the drafter can't express the test, the corpus gets a direct
     vote: a probe built mechanically from the claim's rarest vocabulary
@@ -459,7 +636,20 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
     just rarity — narrative embellishments are individually rare but don't
     co-occur in the records (only in the summary being audited, which is
     excluded as circular evidence). No model judgment — the same oracle
-    legs apply, and the control is the same terms on a shifted window."""
+    legs apply, and the control is the same terms on a shifted window.
+
+    The fallback relaxes the SEARCH, never the DECISION. Two rules keep it
+    from confirming a claim the record does not support:
+
+    1. A claim that asserts an ACTION ("edited X", "ran Y") needs the
+       record to show that action, not merely to mention X — a row that
+       READS a file does not evidence a claim that the file was EDITED.
+       The fallback therefore requires the claim's action verb to appear
+       alongside the term, when the claim has one.
+    2. An absence claim ("never did X") is decided by the presence of the
+       forbidden evidence, so the fallback looks FOR the thing the claim
+       denies — and the expectation is inverted to max_rows: 0.
+    """
     vocab = _claim_vocab(claim, limit=8)
     if not vocab:
         return None
@@ -511,6 +701,19 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
             f"r.agent_id = '{esc(s)}' OR r.content LIKE '%{esc(s)}%'" for s in subjects[:3]
         )
         clauses.append(f"({subj})")
+    # Action claims need the ACTION, not just the object: a row that read
+    # src/x.py does not evidence "the agent edited src/x.py". The verb is
+    # matched against the row's kind and content together.
+    #
+    # The filter applies only when the corpus's own record types express
+    # that action — a corpus whose kinds are chat/event/memory records
+    # actions in prose ("created" → "saved"), and there a mention of the
+    # object is the best evidence available. Where a kind does express it
+    # (file_edit vs tool_call), the verb filter is decisive.
+    verb = _claim_action_verb(claim.text)
+    if verb and _corpus_has_kind_verb(db_path, verb):
+        v = esc(verb)
+        clauses.append(f"(r.kind LIKE '%{v}%' OR r.content LIKE '%{v}%')")
     query = (
         "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content"  # noqa: S608
         " FROM records r WHERE " + " AND ".join(clauses) + " LIMIT 50"
@@ -530,7 +733,11 @@ def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
         # no must_contain: the MATCH already proves the terms co-occur;
         # re-checking them as raw substrings fails on tokenizer/punctuation
         # differences (e.g. "no-trading" vs "no trading")
-        expect={"min_rows": 1},
+        expect=(
+            # an absence claim is TRUE when the forbidden evidence is
+            # absent — so the expectation inverts: zero rows may match
+            {"max_rows": 0} if _claim_is_absence(claim.text) else {"min_rows": 1}
+        ),
         control=control,
         window={},
     )
@@ -593,6 +800,7 @@ async def audit_claim(
             return claim
         prev = data
         claim.raw.setdefault("probe_history", []).append(data)
+        widened = _widened_from(claim.raw["probe_history"][:-1], data)
         claim.probe = Probe(
             query=str(data["query"])[:4000],
             expect=_normalize_expect(
@@ -611,6 +819,20 @@ async def audit_claim(
         budget.probe_runs = before + len(claim.probes_run)
         journal.log(claim, claim.verdict.value)
         if claim.verdict in (Verdict.confirmed, Verdict.unverifiable):
+            if widened and claim.verdict is Verdict.confirmed:
+                # The probe got LESS precise and now matches something. A
+                # confirmation that only exists because the probe was
+                # widened is not evidence — it is the drafter talking the
+                # oracle into agreeing. Refuse it: the claim stays
+                # undecided, and the journal keeps both probes.
+                claim.verdict = Verdict.unverifiable
+                claim.raw["note"] = (
+                    "confirmation refused — the probe was widened past a "
+                    "previous, more precise attempt"
+                )
+                claim.raw.pop("legs", None)
+                claim.raw.pop("dismiss_reason", None)
+                journal.log(claim, "unverifiable")
             return claim
         # dismissed / flaky / errored probe → the failure goes back to the
         # drafter. A wrong probe falsifies the probe, not the claim — same

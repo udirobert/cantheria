@@ -54,7 +54,10 @@ def _eval_expect(rows: list[dict[str, Any]], expect: dict[str, Any]) -> tuple[bo
         fails.append(f"rows {n} < min_rows {expect['min_rows']}")
     if "max_rows" in expect and n > int(expect["max_rows"]):
         fails.append(f"rows {n} > max_rows {expect['max_rows']}")
-    if not expect.get("max_rows") and n == 0:
+    if "max_rows" not in expect and n == 0:
+        # no ceiling was committed, so zero rows is the absence of evidence.
+        # With max_rows: 0 the zero-row result is the CLAIM holding
+        # ("the forbidden thing is not there") — not a failure.
         fails.append("0 rows — no evidence")
     blob = "\n".join(str(v) for r in rows for v in r.values()).lower()
     for needle in expect.get("must_contain", []) or []:
@@ -69,6 +72,32 @@ def _eval_expect(rows: list[dict[str, Any]], expect: dict[str, Any]) -> tuple[bo
         need = int(expect.get("min_distinct", 2))
         if len(distinct) < need:
             fails.append(f"distinct({field})={len(distinct)} < {need}")
+    if (order := expect.get("ordering_check")) and isinstance(order, dict):
+        # Order claims ("X before Y") are decided by TIMESTAMPS, not by row
+        # count: the check fails unless the earlier event's rows all carry
+        # a ts at or before the later event's first ts. A row-count check
+        # cannot decide order — two events in the wrong order match just
+        # as well as two events in the right one.
+        earlier = str(order.get("first_kind") or "")
+        later = str(order.get("last_kind_in_set") or order.get("last_kind") or "")
+        field = str(order.get("field") or "ts")
+        early_rows = [r for r in rows if earlier and str(r.get("kind")) == earlier]
+        late_rows = [r for r in rows if later and str(r.get("kind")) in later.split(",")]
+        if not early_rows:
+            fails.append(f"ordering_check: no rows of kind={earlier!r}")
+        elif not late_rows:
+            fails.append(f"ordering_check: no rows of kind={later!r}")
+        else:
+            try:
+                early_max = max(str(r.get(field) or "") for r in early_rows)
+                late_min = min(str(r.get(field) or "") for r in late_rows)
+                if early_max > late_min:
+                    fails.append(
+                        f"ordering_check: {earlier} at {early_max} is NOT before "
+                        f"{later} at {late_min}"
+                    )
+            except (TypeError, ValueError):
+                fails.append("ordering_check: non-comparable timestamps")
     return not fails, fails
 
 

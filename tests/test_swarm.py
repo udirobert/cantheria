@@ -208,7 +208,7 @@ class _StubSIE:
     def __init__(self) -> None:
         self.calls = 0
 
-    async def chat(self, model, messages):
+    async def chat(self, model, messages, temperature=0.2, max_tokens=2048):
         self.calls += 1
         if self.calls == 1:
             return json.dumps({"query": "SELECT nope FROM records", "expect": {}})
@@ -248,7 +248,7 @@ async def test_audit_claim_repair_loop(corpus, tmp_path):
 @pytest.mark.asyncio
 async def test_audit_claim_unverifiable_decline(corpus, tmp_path):
     class _DeclineSIE:
-        async def chat(self, model, messages):
+        async def chat(self, model, messages, temperature=0.2, max_tokens=2048):
             return json.dumps({"query": "", "expect": {}, "control": ""})
 
     from cantheria.journal import Journal
@@ -307,7 +307,7 @@ async def test_fallback_probe_confirms_when_drafter_fails(corpus, tmp_path):
     db.close()
 
     class _BadSIE:
-        async def chat(self, model, messages):
+        async def chat(self, model, messages, temperature=0.2, max_tokens=2048):
             return json.dumps({"query": "SELECT nope FROM records", "expect": {}})
 
     from cantheria.journal import Journal
@@ -335,7 +335,7 @@ async def test_fallback_probe_also_dismisses_fabrication(corpus, tmp_path):
     db.close()
 
     class _BadSIE:
-        async def chat(self, model, messages):
+        async def chat(self, model, messages, temperature=0.2, max_tokens=2048):
             return json.dumps(
                 {
                     "query": (
