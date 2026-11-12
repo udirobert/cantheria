@@ -26,13 +26,16 @@ Source of truth: `runs/synthetic-eval/audit2/results.json` +
 `eval/synthetic_ground_truth/claims.jsonl` + `score.py` logic.
 Recompute and assert:
 
-- precision on confirmed: 6/6 (100%)
+- precision on confirmed: 7/7
 - false confirmations: 0/7
-- true-claim recall: 6/7 (86%)
+- true-claim recall: 7/7
+- false dismissed: 6/7
 - interpretive quarantined: 1/1
-- abstention taxonomy (paper §3.2 / §6): of the 5 false-claim
-  abstentions — 3 nonexistent-entity, 1 false-absence (structural),
-  1 attribution trap (decidable miss — print it, don't hide it)
+- abstention taxonomy: 0 nonexistent-entity, 1 structural absence,
+  0 attribution-miss
+- the older Qwen file `results_baseline_qwen.json` is a separate replay:
+  6/7 true confirmed, 2/7 false dismissed, 5 abstentions. It is not the
+  headline the paper prints.
 
 ### 2. Probe pipeline — real agent text
 
@@ -70,7 +73,7 @@ section prints `SKIP — eval pending`. Never fabricate.
 repro.py — reprinting headline numbers (no model calls, no network)
 
 [1] probe pipeline / planted truth
-    confirmed precision ......... 6/6   MATCH
+    confirmed precision ......... 7/7   MATCH
     false confirmations ......... 0/7   MATCH
     ...
     abstention taxonomy ......... 3 nonexistent, 1 absence, 1 attribution-miss   MATCH

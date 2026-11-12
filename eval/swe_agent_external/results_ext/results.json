@@ -1,0 +1,956 @@
+{
+  "corpus": "runs/swe-agent-ext/records.db",
+  "llm_calls": 11,
+  "probe_runs": 22,
+  "claims": [
+    {
+      "id": "ab478fdeadfb",
+      "created_utc": "2026-11-12T19:53:24.252481Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "event",
+      "text": "The agent reproduced the issue where `iter_content(decode_unicode=True)` returns bytes when `r.encoding` is `None`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%reproduce_issue.py%' AND (content LIKE '%Issue reproduced%' OR content LIKE '%bytes%')",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "Issue reproduced"
+          ],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%ls -R%'",
+        "window": {
+          "start": "2026-11-12T19:33:07Z",
+          "end": "2026-11-12T19:48:38Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 10,
+          "matched_ids": [
+            "ext:0002",
+            "ext:0004",
+            "ext:0012",
+            "ext:0017",
+            "ext:0019",
+            "ext:0020",
+            "ext:0031",
+            "ext:0032",
+            "ext:0036",
+            "ext:0037"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0002",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:19Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # Mock a response with application/json content\n    content = b'{\"key\": \"value\"}'\n    # We use a mock response to avoid needing a real server\n    r "
+            },
+            {
+              "record_id": "ext:0004",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:37Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # Mock a response with application/json content\n    content = b'{\"key\": \"value\"}'\n    r = Response()\n    # We need to make sure r.raw is set and tha"
+            },
+            {
+              "record_id": "ext:0012",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:07Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    content = b'{\"key\": \"value\"}'\n    r = Response()\n    r.raw = BytesIO(content)\n    r.encoding = 'utf-8'\n    r.headers['Content-Type'] = 'application/"
+            },
+            {
+              "record_id": "ext:0017",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:32Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # The issue might be related to how the iterator is handled.\n    # Let's try a case where the content is already loaded and we call iter_content.\n  "
+            },
+            {
+              "record_id": "ext:0019",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:53Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # The user said: \"When requesting an application/json document, \n    # I'm seeing next(r.iter_content(16*1024, decode_unicode=True)) returning bytes"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.002429750002193032
+        },
+        {
+          "ok": false,
+          "rows": 2,
+          "matched_ids": [
+            "ext:0001",
+            "ext:0047"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0001",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:07Z",
+              "kind": "command_run",
+              "content": "ls -R  ->  exit 0: server.py"
+            },
+            {
+              "record_id": "ext:0047",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:48:27Z",
+              "kind": "command_run",
+              "content": "ls -R  ->  exit 0: server.py"
+            }
+          ],
+          "leg_failures": [
+            "must_contain missing: Issue reproduced"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002745000019785948
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%reproduce_issue.py%' AND (content LIKE '%Issue reproduced%' OR content LIKE '%bytes%')",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "Issue reproduced"
+              ],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%ls -R%'",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 10 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "d54b8a6fff38",
+      "created_utc": "2026-11-12T19:53:24.253169Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "interpretive",
+      "text": "The agent identified that `stream_decode_response_unicode` in `requests/utils.py` does not attempt to guess the encoding.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": null,
+      "confidence": 0.0,
+      "verdict": "unverifiable",
+      "probes_run": [],
+      "raw": {}
+    },
+    {
+      "id": "eb3b807ebdd2",
+      "created_utc": "2026-11-12T19:53:24.253198Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "event",
+      "text": "The agent corrupted `requests/utils.py` by overwriting it with a truncated version using `write_file`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/utils.py%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "requests/utils.py"
+          ],
+          "must_not": [],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/models.py%' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T19:33:07Z",
+          "end": "2026-11-12T19:48:38Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0040"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0040",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:47:53Z",
+              "kind": "file_edit",
+              "content": "requests/utils.py (11353 bytes written)"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0008109999980661087
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: requests/utils.py",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00031387499984703027
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/utils.py%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "requests/utils.py"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/models.py%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "e3b36f46e904",
+      "created_utc": "2026-11-12T19:53:24.253206Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "absence",
+      "text": "The agent was unable to restore `requests/utils.py` because the environment is not a git repository.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%because%' OR r.thread LIKE '%because%' OR r.agent_id LIKE '%because%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0043"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0043",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:48:05Z",
+              "kind": "command_run",
+              "content": "git checkout requests/utils.py  ->  exit 128: fatal: not a git repository (or any of the parent directories): .git"
+            }
+          ],
+          "leg_failures": [
+            "rows 1 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004538329994829837
+        },
+        {
+          "ok": false,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0043"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0043",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:48:05Z",
+              "kind": "command_run",
+              "content": "git checkout requests/utils.py  ->  exit 128: fatal: not a git repository (or any of the parent directories): .git"
+            }
+          ],
+          "leg_failures": [
+            "rows 1 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.001698916999885114
+        },
+        {
+          "ok": false,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0043"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0043",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:48:05Z",
+              "kind": "command_run",
+              "content": "git checkout requests/utils.py  ->  exit 128: fatal: not a git repository (or any of the parent directories): .git"
+            }
+          ],
+          "leg_failures": [
+            "rows 1 > max_rows 0"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0033611660001042765
+        },
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0004"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0004",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:37Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # Mock a response with application/json content\n    content = b'{\"key\": \"value\"}'\n    r = Response()\n    # We need to make sure r.raw is set and tha"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004355829987616744
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%git checkout requests/utils.py%' AND content LIKE '%fatal: not a git%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "git checkout requests/utils.py",
+                "fatal: not a git"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%git checkout requests/utils.py%' AND content LIKE '%fatal: not a git%' AND ts < '2026-11-12T19:33:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%git checkout requests/utils.py%' AND content LIKE '%fatal: not a git repository%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 1,
+              "must_contain": [
+                "git checkout requests/utils.py",
+                "fatal: not a git repository"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%git checkout requests/utils.py%' AND content LIKE '%fatal: not a git repository%' AND ts < '2026-11-12T19:33:07Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%git checkout requests/utils.py%' AND content LIKE '%fatal: not a git repository%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 1,
+              "must_contain": [
+                "git checkout requests/utils.py",
+                "fatal: not a git repository"
+              ],
+              "must_not": [],
+              "distinct_field": "record_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE content LIKE '%git checkout requests/utils.py%' AND content LIKE '%fatal: not a git repository%' AND ts < '2026-11-12T19:33:07Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "not run \u2014 no control drafted"
+        },
+        "probe_origin": "mechanical-fallback"
+      }
+    },
+    {
+      "id": "7f2b127d6ce7",
+      "created_utc": "2026-11-12T19:53:24.253213Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "absence",
+      "text": "The agent was unable to restore `requests/utils.py` because the environment has no network access.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%because%' OR r.thread LIKE '%because%' OR r.agent_id LIKE '%because%') LIMIT 50",
+        "expect": {
+          "min_rows": 1
+        },
+        "control": "",
+        "window": {}
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "must_contain missing: restore",
+            "must_contain missing: requests/utils.py",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0003522080005495809
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "must_contain missing: restore",
+            "must_contain missing: requests/utils.py",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00046504200145136565
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "must_contain missing: restore",
+            "must_contain missing: requests/utils.py",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.000463624997792067
+        },
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0004"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0004",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:37Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # Mock a response with application/json content\n    content = b'{\"key\": \"value\"}'\n    r = Response()\n    # We need to make sure r.raw is set and tha"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00023154099835664965
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%restore%' AND content LIKE '%requests/utils.py%') AND (content LIKE '%network%' OR content LIKE '%connection%' OR content LIKE '%access%')",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "restore",
+                "requests/utils.py"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%restore%' AND content LIKE '%requests/utils.py%') AND (content LIKE '%network%' OR content LIKE '%connection%' OR content LIKE '%access%') AND ts < '2026-11-12T19:33:00Z'",
+            "window": {
+              "start": "2026-11-12T19:33:00Z",
+              "end": "2026-11-12T19:49:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%restore%' AND content LIKE '%requests/utils.py%') AND (content LIKE '%network%' OR content LIKE '%connection%' OR content LIKE '%access%' OR content LIKE '%original source%')",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "restore",
+                "requests/utils.py"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%restore%' AND content LIKE '%requests/utils.py%') AND (content LIKE '%network%' OR content LIKE '%connection%' OR content LIKE '%access%' OR content LIKE '%original source%') AND ts < '2026-11-12T19:33:00Z'",
+            "window": {
+              "start": "2026-11-12T19:33:00Z",
+              "end": "2026-11-12T19:49:00Z"
+            }
+          },
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%restore%' AND content LIKE '%requests/utils.py%') AND (content LIKE '%original source%' OR content LIKE '%network%' OR content LIKE '%access%')",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "restore",
+                "requests/utils.py"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%restore%' AND content LIKE '%requests/utils.py%') AND (content LIKE '%original source%' OR content LIKE '%network%' OR content LIKE '%access%') AND ts < '2026-11-12T19:33:00Z'",
+            "window": {
+              "start": "2026-11-12T19:33:00Z",
+              "end": "2026-11-12T19:49:00Z"
+            }
+          }
+        ],
+        "probe_attempt": 3,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "not run \u2014 no control drafted"
+        },
+        "probe_origin": "mechanical-fallback"
+      }
+    },
+    {
+      "id": "49ec2079fee4",
+      "created_utc": "2026-11-12T19:53:24.253220Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "event",
+      "text": "The agent created a file named `reproduce_issue.py`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%> reproduce_issue.py%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "reproduce_issue.py"
+          ],
+          "must_not": [],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%> reproduce_issue.py%' AND ts < '2026-11-12T19:33:00Z' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T19:33:07Z",
+          "end": "2026-11-12T19:48:38Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 7,
+          "matched_ids": [
+            "ext:0002",
+            "ext:0004",
+            "ext:0012",
+            "ext:0017",
+            "ext:0019",
+            "ext:0031",
+            "ext:0036"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0002",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:19Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # Mock a response with application/json content\n    content = b'{\"key\": \"value\"}'\n    # We use a mock response to avoid needing a real server\n    r "
+            },
+            {
+              "record_id": "ext:0004",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:37Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # Mock a response with application/json content\n    content = b'{\"key\": \"value\"}'\n    r = Response()\n    # We need to make sure r.raw is set and tha"
+            },
+            {
+              "record_id": "ext:0012",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:07Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    content = b'{\"key\": \"value\"}'\n    r = Response()\n    r.raw = BytesIO(content)\n    r.encoding = 'utf-8'\n    r.headers['Content-Type'] = 'application/"
+            },
+            {
+              "record_id": "ext:0017",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:32Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # The issue might be related to how the iterator is handled.\n    # Let's try a case where the content is already loaded and we call iter_content.\n  "
+            },
+            {
+              "record_id": "ext:0019",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:53Z",
+              "kind": "command_run",
+              "content": "cat <<EOF > reproduce_issue.py\nimport requests\nfrom requests.models import Response\nfrom io import BytesIO\n\ndef test_iter_content_decode_unicode():\n    # The user said: \"When requesting an application/json document, \n    # I'm seeing next(r.iter_content(16*1024, decode_unicode=True)) returning bytes"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0005600840013357811
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: reproduce_issue.py",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002104580016748514
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%> reproduce_issue.py%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "reproduce_issue.py"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%> reproduce_issue.py%' AND ts < '2026-11-12T19:33:00Z' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'creat' is present",
+          "grounding": "ok \u2014 7 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "d9776ef8229a",
+      "created_utc": "2026-11-12T19:53:24.253226Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "event",
+      "text": "The agent modified `requests/utils.py`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/utils.py%' LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "requests/utils.py"
+          ],
+          "must_not": [],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/models.py%' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T19:33:07Z",
+          "end": "2026-11-12T19:48:38Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 1,
+          "matched_ids": [
+            "ext:0040"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0040",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:47:53Z",
+              "kind": "file_edit",
+              "content": "requests/utils.py (11353 bytes written)"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.00027533399770618416
+        },
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: requests/utils.py",
+            "distinct(agent_id)=0 < 1"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0002292909994139336
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/utils.py%' LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "requests/utils.py"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%requests/models.py%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "ok \u2014 the action 'modif' is present",
+          "grounding": "ok \u2014 1 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    },
+    {
+      "id": "53e48fc0f502",
+      "created_utc": "2026-11-12T19:53:24.253236Z",
+      "corpus": "records.db",
+      "source_doc": "requests-3362.md",
+      "kind": "event",
+      "text": "The agent verified that `r.encoding = None` causes `iter_content(decode_unicode=True)` to return bytes using `reproduce_issue.py`.",
+      "subjects": [],
+      "window": {},
+      "citations": [],
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%python3 reproduce_issue.py%' AND (content LIKE '%Issue reproduced%' OR content LIKE '%bytes%') LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "Issue reproduced"
+          ],
+          "must_not": [],
+          "distinct_field": "agent_id",
+          "min_distinct": 1
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%ls -R%' LIMIT 50",
+        "window": {
+          "start": "2026-11-12T19:33:07Z",
+          "end": "2026-11-12T19:48:38Z"
+        }
+      },
+      "confidence": 0.0,
+      "verdict": "confirmed",
+      "probes_run": [
+        {
+          "ok": true,
+          "rows": 3,
+          "matched_ids": [
+            "ext:0020",
+            "ext:0032",
+            "ext:0037"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0020",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:34:55Z",
+              "kind": "command_run",
+              "content": "python3 reproduce_issue.py  ->  exit 0: Issue reproduced: iter_content returned bytes even with decode_unicode=True"
+            },
+            {
+              "record_id": "ext:0032",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:37:11Z",
+              "kind": "command_run",
+              "content": "python3 reproduce_issue.py  ->  exit 0: Issue reproduced: iter_content returned bytes even with decode_unicode=True"
+            },
+            {
+              "record_id": "ext:0037",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:37:43Z",
+              "kind": "command_run",
+              "content": "python3 reproduce_issue.py  ->  exit 0: Issue reproduced: iter_content returned bytes even with decode_unicode=True"
+            }
+          ],
+          "leg_failures": [],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0014646249983343296
+        },
+        {
+          "ok": false,
+          "rows": 2,
+          "matched_ids": [
+            "ext:0001",
+            "ext:0047"
+          ],
+          "sample": [
+            {
+              "record_id": "ext:0001",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:33:07Z",
+              "kind": "command_run",
+              "content": "ls -R  ->  exit 0: server.py"
+            },
+            {
+              "record_id": "ext:0047",
+              "agent_id": "google/gemma-4-31B-it",
+              "ts": "2026-11-12T19:48:27Z",
+              "kind": "command_run",
+              "content": "ls -R  ->  exit 0: server.py"
+            }
+          ],
+          "leg_failures": [
+            "must_contain missing: Issue reproduced"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0006874170030641835
+        }
+      ],
+      "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%python3 reproduce_issue.py%' AND (content LIKE '%Issue reproduced%' OR content LIKE '%bytes%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "max_rows": 0,
+              "must_contain": [
+                "Issue reproduced"
+              ],
+              "must_not": [],
+              "distinct_field": "agent_id",
+              "min_distinct": 1
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'command_run' AND content LIKE '%ls -R%' LIMIT 50",
+            "window": {
+              "start": "2026-11-12T19:33:07Z",
+              "end": "2026-11-12T19:48:38Z"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "action": "not run \u2014 no action verb",
+          "grounding": "ok \u2014 3 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        }
+      }
+    }
+  ]
+}

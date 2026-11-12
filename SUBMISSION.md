@@ -128,8 +128,11 @@ New evidence since the numbers above:
   evidence from 2026-05-27 — ~5 days before the first human moderator
   cleanup and ~14 weeks before the public report.
 - **Ground-truth eval** (`eval/synthetic_ground_truth/`): planted-claims
-  corpus; Cantheria confirmed 6/7 true claims, **0/7 false claims**,
-  quarantined the interpretive claim. Blind spots documented (absence
+  corpus. This 2026-11-08 note recorded the Qwen run: 6/7 true confirmed,
+  **0/7 false claims** confirmed, five false claims abstained. The file
+  `results.json` that `repro.py` scores is the later Gemma re-run: 7/7
+  true confirmed, 6/7 false dismissed, one false absence abstained,
+  **0/7 false claims** confirmed. Blind spots documented (absence
   claims, drafter abstention). LLM-judge baselines (full-context and
   keyword-retrieval) matched on this toy corpus — Cantheria's edge is
   scale, determinism, and receipts, not raw accuracy at 53 records.

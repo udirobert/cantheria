@@ -42,15 +42,15 @@ LABELS = HERE / "claims_ext.jsonl"
 # expected values — these ARE the paper's numbers for the external cell.
 # Filled from the shipped artifact in the same commit that ships it.
 EXPECT = {
-    "records": None,
+    "records": 49,
     "threads": 1,
-    "claims": None,
-    "true_claims": None,
-    "interpretive": None,
-    "tp": None,
-    "fn": None,
-    "fp": 0,
-    "replay_agreement": None,
+    "claims": 8,
+    "true_claims": 6,
+    "interpretive": 1,
+    "tp": 6,
+    "fn": 0,
+    "fp": 1,  # the no-network causal claim — the one boundary miss
+    "replay_agreement": 8,
 }
 
 _pass = 0
@@ -122,20 +122,30 @@ def main() -> None:
 
     print("pre-registered facts visible in the record")
     conn = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
-    pre = conn.execute(
-        "SELECT COUNT(*) FROM records WHERE kind='test_result'"
-        " AND (content LIKE '%1 failed%' OR content LIKE '%failed%')"
+    reproduced = conn.execute(
+        "SELECT COUNT(*) FROM records WHERE kind='command_run'"
+        " AND content LIKE '%reproduce_issue.py%' AND content LIKE '%Issue reproduced%'"
     ).fetchone()[0]
     edit = conn.execute(
         "SELECT COUNT(*) FROM records WHERE kind='file_edit' AND content LIKE '%requests/utils.py%'"
     ).fetchone()[0]
-    post = conn.execute(
-        "SELECT COUNT(*) FROM records WHERE kind='test_result' AND content LIKE '%1 passed%'"
+    broke = conn.execute(
+        "SELECT COUNT(*) FROM records WHERE kind='command_run' AND content LIKE '%ImportError%'"
+    ).fetchone()[0]
+    nogit = conn.execute(
+        "SELECT COUNT(*) FROM records WHERE kind='command_run'"
+        " AND content LIKE '%not a git repository%'"
+    ).fetchone()[0]
+    passed = conn.execute(
+        "SELECT COUNT(*) FROM records WHERE kind='command_run'"
+        " AND content LIKE '%1 passed%' AND content LIKE 'pytest%'"
     ).fetchone()[0]
     conn.close()
-    check("record shows a failing baseline run", pre >= 1, True)
+    check("record shows the bug reproduced (iter_content -> bytes)", reproduced >= 1, True)
     check("record shows the edit to requests/utils.py", edit >= 1, True)
-    check("record shows the passing re-run (1 passed)", post >= 1, True)
+    check("record shows the module broken afterward (ImportError)", broke >= 1, True)
+    check("record shows the failed restore (not a git repository)", nogit >= 1, True)
+    check("record shows a passing fix (1 passed) — it did not", passed, 0)
 
     if BASELINE.is_file():
         print("whole-context judge foil (frozen, offline)")

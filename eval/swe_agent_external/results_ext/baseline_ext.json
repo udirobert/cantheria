@@ -1,0 +1,14 @@
+[
+  {
+    "run": 0,
+    "raw": "```json\n{\"verdicts\": [{\"i\": 1, \"verdict\": \"supported\"}, {\"i\": 2, \"verdict\": \"undecidable\"}, {\"i\": 3, \"verdict\": \"supported\"}, {\"i\": 4, \"verdict\": \"supported\"}, {\"i\": 5, \"verdict\": \"undecidable\"}, {\"i\": 6, \"verdict\": \"supported\"}, {\"i\": 7, \"verdict\": \"supported\"}, {\"i\": 8, \"verdict\": \"supported\"}]}\n```"
+  },
+  {
+    "run": 1,
+    "raw": "```json\n{\"verdicts\": [{\"i\": 1, \"verdict\": \"supported\"}, {\"i\": 2, \"verdict\": \"undecidable\"}, {\"i\": 3, \"verdict\": \"supported\"}, {\"i\": 4, \"verdict\": \"supported\"}, {\"i\": 5, \"verdict\": \"undecidable\"}, {\"i\": 6, \"verdict\": \"supported\"}, {\"i\": 7, \"verdict\": \"supported\"}, {\"i\": 8, \"verdict\": \"supported\"}]}\n```"
+  },
+  {
+    "run": 2,
+    "raw": "```json\n{\"verdicts\": [{\"i\": 1, \"verdict\": \"supported\"}, {\"i\": 2, \"verdict\": \"undecidable\"}, {\"i\": 3, \"verdict\": \"supported\"}, {\"i\": 4, \"verdict\": \"supported\"}, {\"i\": 5, \"verdict\": \"undecidable\"}, {\"i\": 6, \"verdict\": \"supported\"}, {\"i\": 7, \"verdict\": \"supported\"}, {\"i\": 8, \"verdict\": \"supported\"}]}\n```"
+  }
+]

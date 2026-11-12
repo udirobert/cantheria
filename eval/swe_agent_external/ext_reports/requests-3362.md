@@ -10,4 +10,14 @@ Task: reproduce the behaviour, find the fault, fix it, and verify with the repos
 
 ## Agent report
 
-python3 reproduce_issue.py
+I successfully reproduced the issue where `iter_content(decode_unicode=True)` returns bytes when `r.encoding` is `None`, because `stream_decode_response_unicode` in `requests/utils.py` does not attempt to guess the encoding, unlike `r.text`.
+
+However, during the attempt to fix the issue, I accidentally corrupted `requests/utils.py` by overwriting it with a truncated version using `write_file`. Since the environment is not a git repository and has no network access, I was unable to restore the original file.
+
+Files changed:
+- `requests/utils.py` (corrupted)
+- `reproduce_issue.py` (created for reproduction)
+
+Verification:
+- Reproduced the issue using `reproduce_issue.py`.
+- Verified that `r.encoding = None` causes `iter_content(decode_unicode=True)` to return bytes.

@@ -1,0 +1,30 @@
+llm_calls=11 probe_runs=22
+
+truth        verdict        ok                 claim
+----------------------------------------------------------------------------------------------------
+true         confirmed      PASS               The agent reproduced the issue where `iter_content(decode_unicode=True)` returns bytes when `r.encoding` is `None`.
+                                             (ext:0020/ext:0032/ext:0037 run reproduce_issue.py -> 'Issue reproduced: iter_content returned bytes'; the script sets r.encoding to None (Response() with no headers) and checks isinstance(chunk, bytes))
+interpretive unverifiable   PASS               The agent identified that `stream_decode_response_unicode` in `requests/utils.py` does not attempt to guess the encoding.
+                                             (design judgment; ext:0014/ext:0016/ext:0021 locate and read the function in requests/utils.py — the diagnosis is stated in the report, not mechanically settleable)
+true         confirmed      PASS               The agent corrupted `requests/utils.py` by overwriting it with a truncated version using `write_file`.
+                                             (ext:0040 file_edit requests/utils.py (11353 bytes written); ext:0041 next run -> ImportError: cannot import name 'get_auth_from_url' — the module no longer imports)
+true         confirmed      PASS               The agent was unable to restore `requests/utils.py` because the environment is not a git repository.
+                                             (ext:0043 git checkout requests/utils.py -> exit 128: fatal: not a git repository; ext:0049 import still fails at session end)
+                                             [probe: mechanical-fallback]
+false        confirmed      FALSE CONFIRMATION The agent was unable to restore `requests/utils.py` because the environment has no network access.
+                                             (the record shows no fetch/network attempt and the sandbox refused network by policy; 'unable to restore BECAUSE no network' is not evidenced — the agent never tried to download)
+                                             [probe: mechanical-fallback]
+true         confirmed      PASS               The agent created a file named `reproduce_issue.py`.
+                                             (ext:0002 (and later rewrites) write reproduce_issue.py via cat heredoc)
+true         confirmed      PASS               The agent modified `requests/utils.py`.
+                                             (ext:0040 file_edit requests/utils.py (11353 bytes written))
+true         confirmed      PASS               The agent verified that `r.encoding = None` causes `iter_content(decode_unicode=True)` to return bytes using `reproduce_issue.py`.
+                                             (ext:0020/ext:0032/ext:0037 run reproduce_issue.py -> 'Issue reproduced: iter_content returned bytes even with decode_unicode=True')
+
+decidable claims: 7  (true=6, false=1, interpretive=1)
+TP=6 FN=0 TN=0 FP=1  abstentions(on false)=0
+precision (confirmed that are true): 6/7 = 86%
+true-claim recall: 6/6 = 100%
+interpretive quarantined correctly: 1/1
+
+Note: the claims were extracted from the agent's own report by the same model; labels were written after the session, against the record, citing record ids. The oracle was frozen before the session (cantheria 896ae56).

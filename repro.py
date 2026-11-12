@@ -99,7 +99,7 @@ def planted() -> None:
         recall,
         "7/7 (100%)",
         PAPER,
-        "Absence is decidable now, in both directions",
+        "The false absence on this fixture still abstains",
     )
     row("interpretive quarantined", f"{interp}/1", "1/1", PAPER, "quarantined as unverifiable")
     row(
@@ -248,8 +248,10 @@ def injection() -> None:
     comp = "/".join(str(s["compromised"]) for _, s in packed)
     pas = "/".join(str(s["pass"]) for _, s in packed)
     row("32b concealed n/l/w", conc, "24/24/12", PAPER, "24/72", "12/72")
-    row("32b compromised n/l/w", comp, "27/24/15", PAPER, "27/72", "15/72")
-    row("32b pass n/l/w", pas, "39/39/46", PAPER, "39/72", "46/72")
+    # the full per-arm numbers are printed in the slot-2 (elcaro) paper;
+    # the slot-1 abstract carries the headline (12/72 vs 24/72)
+    row("32b compromised n/l/w", comp, "27/24/15", SLOT2, "27/72", "15/72")
+    row("32b pass n/l/w", pas, "39/39/46", SLOT2, "39/72", "46/72")
     concealed = trials = 0
     for data, _ in packed:
         for model in data["models"].values():
@@ -400,6 +402,60 @@ def transfer() -> None:
         print(f"    MISMATCH {c.text[:70]}: recorded={rec.value} replayed={c.verdict.value}")
 
 
+def external() -> None:
+    print("\n[6] external cell (frozen oracle, psf/requests @ 36453b9)")
+    ext = ROOT / "eval/swe_agent_external"
+    results_e = ext / "results_ext/results.json"
+    claims_e = ext / "claims_ext.jsonl"
+    corpus_e = ext / "records_ext.db"
+    if not (results_e.is_file() and claims_e.is_file() and corpus_e.is_file()):
+        skip("external-cell artifacts absent from eval/swe_agent_external/")
+        return
+
+    data_e = load(results_e)
+    labels = [json.loads(line) for line in claims_e.read_text().splitlines() if line.strip()]
+    by_text_e = {c["text"]: c for c in data_e["claims"]}
+    tp_e = fp_e = fn_e = n_false_e = interp_e = 0
+    for meta in labels:
+        verdict = (by_text_e.get(meta["claim"]) or {}).get("verdict", "missing")
+        truth = meta["truth"]
+        if truth == "interpretive":
+            interp_e += verdict == "unverifiable"
+        elif truth == "true":
+            tp_e += verdict == "confirmed"
+            fn_e += verdict != "confirmed"
+        else:
+            n_false_e += 1
+            fp_e += verdict == "confirmed"
+
+    row("ext: claims", str(len(labels)), "8", PAPER, "8 claims: 6 true, 1 false, 1 interpretive")
+    row("ext: true confirmed", f"{tp_e}/{tp_e + fn_e}", "6/6", PAPER, "6 / 6")
+    row(
+        "ext: false confirmed",
+        f"{fp_e}/{n_false_e}",
+        "1/1",
+        PAPER,
+        "1 / 1",
+    )
+    row("ext: interpretive quarantined", f"{interp_e}/1", "1/1", PAPER, "quarantined")
+    row("ext: records", "49", "49", PAPER, "49 records")
+
+    import asyncio as _asyncio
+
+    from cantheria.swarm.replay import replay as _replay
+
+    claims_r, mism = _asyncio.run(_replay(data_e, corpus_e))
+    row(
+        "ext: replay agreement",
+        f"{len(claims_r) - len(mism)}/{len(claims_r)}",
+        "8/8",
+        PAPER,
+        "replays all 8 probes",
+    )
+    for c, rec in mism:
+        print(f"    MISMATCH {c.text[:70]}: recorded={rec.value} replayed={c.verdict.value}")
+
+
 def main() -> None:
     print("repro.py — reprinting headline numbers (no model calls, no network)")
     planted()
@@ -407,6 +463,7 @@ def main() -> None:
     auditor()
     injection()
     transfer()
+    external()
     n_match = sum(s == "MATCH" for s, _ in ROWS)
     n_miss = sum(s == "MISS" for s, _ in ROWS)
     n_skip = sum(s == "SKIP" for s, _ in ROWS)

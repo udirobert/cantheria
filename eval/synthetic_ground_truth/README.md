@@ -27,17 +27,21 @@ means true. This eval plants the answers.
 - `baseline_rag.py` — foil 2: per-claim keyword-retrieved evidence packs
   (what a RAG fact-checker sees at real scale), 3 runs for judge variance.
 
-## Interim results (2026-11-08, SIE chat Qwen3.8-27B)
+## Shipped result (`results.json`, the run `repro.py` scores)
 
-Cantheria (`runs/synthetic-eval/audit2`, 18 llm calls / 24 probe runs):
+Gemma re-run. 28 model calls, 56 probe executions. This is the table to quote.
 
 | metric | value |
 |---|---|
-| true claims confirmed | 6/7 (the miss: true absence — structural) |
-| false claims confirmed (FP) | **0/7 — no false confirmations** |
-| false claims dismissed | 2/7 |
-| false claims abstained (`unverifiable`) | 5/7 — drafter declined to probe fabricated specifics |
+| true claims confirmed | **7/7**, including the sealed-vault true absence |
+| false claims confirmed (FP) | **0/7** |
+| false claims dismissed | **6/7** |
+| false claims abstained (`unverifiable`) | **1/7** — "No agent posted in the ops room on 2026-06-05." |
 | interpretive quarantined | 1/1 |
+
+The older Qwen run is still in `results_baseline_qwen.json` (18 model calls, 24 probe executions): 6/7 true confirmed, the miss a true absence; 2/7 false dismissed; 5/7 false abstained. `repro.py` also replays that file. It is not the headline.
+
+## Older foil, measured on the Qwen sheet (2026-11-08)
 
 Full-context LLM baseline (3 runs): ~14–15/15 aligned with truth per run —
 near-perfect *because everything fit in context*. Its verdicts carry no
@@ -51,29 +55,20 @@ decidable-true claims, contradicted **all 7 decidable-false claims**
 interpretive claim — and abstained on the Ghost claim in 2/3 runs.
 ~13–14/15 aligned with truth per run, **0 false confirmations**.
 
-Honest read: on 53 records the retrieval-limited judge is *better* than
-Cantheria at dismissing fabricated claims (it said `contradicted` where we
-abstained). Cantheria's remaining edges are the ones this eval cannot
-show at toy scale: probes are precise predicates, not fuzzy retrieval +
-judgment — at 3.6M records the judge's evidence pack is only as good as
-keyword recall, while a probe either lands or doesn't, with receipts.
-Plus determinism (judge verdicts flip run to run; probes replay
-identically) and the journal. The eval's real product is documenting
-where each system's boundary sits.
+Honest read, against that Qwen sheet: the retrieval-limited judge dismissed fabricated claims where Cantheria abstained. The shipped Gemma re-run dismisses 6 of 7 false claims and still abstains on the false absence, which the RAG foil contradicted. The RAG foil abstained on the true absence that the Gemma re-run confirms.
 
 ## Known limitations this eval documents
 
-1. **Absence claims on empty windows are unconfirmable.** `_eval_expect`
-   treats `max_rows: 0` + 0 rows as failure and the oracle dismisses on
-   0 rows — a true absence can never reach `confirmed`. Documented, not
-   yet fixed.
-2. **Drafter abstention.** When every claim term scores zero corpus hits,
-   the drafter tends to decline (`{"query": ""}`) → `unverifiable`. For
-   fabricated claims the honest verdict is `dismissed` (the record lacks
-   the evidence); abstention is safe but less useful. The mechanical
-   fallback probe is *not* applied on drafter-declined claims — extending
-   it is possible but risky (a vocab probe on a fabricated claim can
-   match unrelated rows and false-confirm).
+1. **Absence is not settled in both directions.** The shipped run
+   confirms the planted empty-room absence (sealed-vault, zero rows) and
+   abstains on the false absence (ops, 2026-06-05). Confirming one empty
+   room is not a general absence decider. The live cell's true absence
+   ("did not modify any test files") was dismissed.
+2. **The older run abstained on fabricated claims.** In
+   `results_baseline_qwen.json`, five of seven false claims came back
+   `unverifiable` because the drafter declined. The Gemma re-run
+   dismisses six of those seven and still abstains on the false absence.
+   Abstaining is safe. It is not a dismissal.
 3. **Tiny corpus.** 53 records is a unit test, not a benchmark. The eval
    proves the plumbing end-to-end and exposes boundary behavior; it does
    not estimate field accuracy.
