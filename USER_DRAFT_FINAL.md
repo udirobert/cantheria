@@ -58,6 +58,8 @@ The mapping is direct, and I would rather give it as sentences than a second tab
 
 Why this matters for post-training a small open model into a reliable agent: the signals these recipes train on are, underneath, the agent's account of what it did. A loop that climbs on unchecked accounts learns what a fixed bug sounds like. The check is what turns the reward into a fact about the repository.
 
+The competition has released a graph-and-embedding dataset of code. The follow-up I would run is the same claim probes over those representations, so a claim about a symbol, a caller, or an edit is checked against the graph and the embeddings, with interpretive sentences still left unverifiable.
+
 ## 4. The transfer cell
 
 This is the cell that decides how the paper reads, so I will give it the numbers and the caveats.
