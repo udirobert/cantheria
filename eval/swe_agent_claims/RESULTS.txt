@@ -1,4 +1,4 @@
-results: runs/swe-agent/audit10/results.json
+results: eval/swe_agent_claims/results.json
 llm_calls=26 probe_runs=42
 
 truth        verdict        ok                 claim
