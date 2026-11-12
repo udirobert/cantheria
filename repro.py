@@ -44,8 +44,12 @@ def load(path: Path):
 
 def planted() -> None:
     print("\n[1] probe pipeline / planted truth")
-    results = ROOT / "runs/synthetic-eval/audit2/results.json"
+    # the shipped copies first: runs/ is gitignored, so a judge who clones
+    # the repo has these, not the working directory
+    results = ROOT / "eval/synthetic_ground_truth/results.json"
     claims_p = ROOT / "eval/synthetic_ground_truth/claims.jsonl"
+    if not results.is_file():
+        results = ROOT / "runs/synthetic-eval/audit2/results.json"
     if not results.is_file() or not claims_p.is_file():
         skip(f"missing {results} or {claims_p}")
         return
@@ -109,7 +113,9 @@ def planted() -> None:
     named = "all clear for deploy" if "all clear for deploy" in attr else (attr or "(none)")
     row("attribution-miss named", named, "all clear for deploy", PAPER, "all clear for deploy")
     row("planted claims", str(len(order)), "15", PAPER, "15 claims")
-    db = ROOT / "runs/synthetic-eval/records.db"
+    db = ROOT / "eval/synthetic_ground_truth/records.db"
+    if not db.is_file():
+        db = ROOT / "runs/synthetic-eval/records.db"
     if not db.is_file():
         skip(f"planted records db absent: {db}")
         return
@@ -124,7 +130,12 @@ def village() -> None:
     tried = [ROOT / "runs/village/audit5/results.json", ROOT / "demo/audit5/results.json"]
     path = next((p for p in tried if p.is_file()), None)
     if path is None:
-        skip("village results absent; tried " + ", ".join(str(p) for p in tried))
+        skip(
+            "village results absent - the corpus is 3.6M rows and does not fit in git. "
+            "Get the public demo asset and unpack it here: "
+            "curl -LO https://github.com/udirobert/cantheria/releases/download/"
+            "v1.0.1/cantheria-demo.tar.gz && tar xzf cantheria-demo.tar.gz"
+        )
         return
     ctr = Counter(c.get("verdict") for c in load(path)["claims"])
     conf, dis, unv = ctr["confirmed"], ctr["dismissed"], ctr["unverifiable"]
@@ -151,7 +162,10 @@ def auditor() -> None:
     print("\n[3] auditor")
     reports = sorted(LEMMA.glob("*/results/audit_report.json")) if LEMMA.is_dir() else []
     if not reports:
-        skip(f"lemma audit reports absent under {LEMMA}")
+        skip(
+            f"lemma audit reports absent under {LEMMA} - the sibling repo. "
+            "Clone it next to this one: git clone https://github.com/udirobert/lemma"
+        )
         return
     ctr: Counter[str] = Counter()
     for path in reports:
@@ -203,7 +217,10 @@ def auditor() -> None:
 def injection() -> None:
     print("\n[4] injection benchmark")
     if not ELCARO.is_dir():
-        skip(f"elcaro lexsi-eval absent: {ELCARO}")
+        skip(
+            f"elcaro lexsi-eval absent: {ELCARO} - the sibling repo. "
+            "Clone it next to this one: git clone https://github.com/udirobert/elcaro"
+        )
         return
     packed = []
     for name in ARMS:
