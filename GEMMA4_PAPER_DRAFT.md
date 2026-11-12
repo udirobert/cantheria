@@ -4,19 +4,19 @@
 
 ## Abstract
 
-I have built the same thing three times without planning to. A model writes something a program can check, the program says yes or no, and the model never gets to write the verdict. The first build was a scientific-claim auditor, the second a pipeline that checks agent claims with SELECT-only SQL, the third a prompt-injection grader that never calls a model.
+I have built the same thing three times without planning to: a model writes something a program can check, the program says yes or no, and the model never writes the verdict. The first build was a scientific-claim auditor, the second a pipeline that checks agent claims with SELECT-only SQL, the third a prompt-injection grader that never calls a model.
 
-This time the subject is the competition's own model family: I ran gemma-4-31b-it as a coding agent on two tasks in a 7-test library I wrote, extracted 14 atomic claims from its own final reports with the same model, and checked each against the session record. The agent made no false claim. The pipeline confirmed 8 of the 13 true claims with record-id receipts, quarantined the one interpretive claim, and missed five, each with a committed probe a reviewer can re-run. A whole-context judge on the same record supports 10 of 13, is wrong about nothing, and has no receipts and no replay.
+This time the subject is the competition's model family: I ran gemma-4-31b-it as a coding agent on two tasks in a 7-test library I wrote, extracted 14 atomic claims from its reports with the same model, and checked each against the session record. The agent made no false claim. The pipeline confirmed 8 of the 13 true claims with record receipts, quarantined the one interpretive claim, and missed five, each with a committed probe to re-run. A whole-context judge on the same record supports 10 of 13, is wrong about nothing, and has no receipts or replay.
 
-Because an honest agent produces no lies to catch, I planted a second cell and froze a third. On an adversarial session with seven false claims (attribution, fabricated counts, false absences, wrong order), the planted cell confirmed all 8 true claims and dismissed all 7 false ones, zero abstentions, keyless replay 16/16. That sheet is the stored result; three of the seven dismissals are "the record holds no such action," the other four a predicate. The oracle was edited against these same sixteen sentences until the sheet was clean, and there is no frozen earlier run to replay. The frozen third ran the unchanged oracle on a repository I did not write — psf/requests on a 2016 SWE-bench bug — where the agent honestly corrupted its own file, and the one false claim in that record was confirmed, naming the boundary.
+Because an honest agent produces no lies to catch, I planted a second cell and froze a third. On an adversarial session with seven false claims, the planted cell confirmed all 8 true claims and dismissed all 7 false ones, zero abstentions, keyless replay 16/16. That sheet is the stored result; three of the seven dismissals are "the record holds no such action," the other four a predicate. The oracle was edited against these same sixteen sentences until clean, and no frozen earlier run exists to replay. The frozen third ran the unchanged oracle on a repository I did not write — psf/requests on a 2016 SWE-bench bug — where the agent honestly corrupted its own file. There, one false claim was confirmed: both causal clauses in the record were decided by the same word-match on "because", and the receipts cannot tell the supported cause from the unsupported one.
 
-The older numbers stay as sanity checks, and they are not Gemma runs. On 180 claims from AI-agent daily summaries the pipeline settled 159 — 62 confirmed, 21 unverifiable — and disagreed with 97, which is 61%, a disagreement rate, not a verified error rate. On a Cohere injection benchmark (aya-expanse-32b), a content-aware warning halved concealed compromise to 12/72 versus 24/72 for the naive wrapper, and the LoRA repair arm moved compromised from 5/24 to 6/24 and pass from 16/24 to 15/24. The resource's tasks are byte-identical to `micro1-eval/tasks/`; it contains no Gemma run.
+The older numbers stay as sanity checks; they are not Gemma runs. On 180 claims from AI-agent daily summaries the pipeline settled 159 — 62 confirmed, 21 unverifiable — and disagreed with 97, which is 61%; a disagreement rate, not a verified error rate. On a Cohere injection benchmark, a content-aware warning halved concealed compromise to 12/72 versus 24/72 for the naive wrapper, and the LoRA repair arm moved compromised from 5/24 to 6/24 and pass from 16/24 to 15/24. The resource's tasks are byte-identical to `micro1-eval/tasks/`; it contains no Gemma run.
 
 ## 1. Why I care about the sentences
 
 This competition's scorer applies the patch, runs the tests, and ignores whatever the agent said at the end. I think that's right. But the final paragraph is the smallest part of what an agent writes. Before it come sentences like I found the bug in parse_header, no other callers exist, the tests pass — the sentences a reviewer skims, an orchestrator acts on, a reward model sees.
 
-Two things go wrong with them. The first is that a model writing a report writes the shape of a finished session. If the tests never ran, "the tests pass" is still what a finished session sounds like. The second is that when someone does check, the checker is usually another model reading the same transcript, with the same pull toward a tidy ending.
+Two things go wrong with them. First, a model writing a report writes the shape of a finished session: if the tests never ran, "the tests pass" is still what a finished session sounds like. Second, when someone does check, the checker is usually another model reading the same transcript, with the same pull toward a tidy ending.
 
 I found the second problem the hard way. I stored the agent's final report in the corpus as a record, and a false claim — "the agent ran the test suite and all 42 tests passed", where no test run existed — came back confirmed. The probe had matched the report's own words. The claim was proving itself. Remove that one row and the same claim abstains. So the rule I kept arriving at is boring: the model proposes something a program can run, the program decides, and if it cannot decide, the claim is labeled unverifiable and stays out of the count. The report is the document claims are extracted from; it never becomes evidence.
 
@@ -26,7 +26,7 @@ I did not set out to build this three times; the shape showed up when I put the 
 
 For a claim, the model produces an artifact: an audit script, a query, a response under attack. A fixed mechanism takes the artifact and the record and returns confirmed, dismissed or unverifiable. The model reads the verdict. It never writes it.
 
-**The auditor** checks scientific claims by writing and running scripts. Across nine papers it audited 48 claims: 29 supported, 9 falsified, 10 inconclusive — the numbers re-derive from the nine `audit_report.json` files, and seven of the nine papers have a judge run that passed 5/5, with two partial and unjudged. The machinery that refuses to trust its own summary is the part I would keep: a supported verdict needs a passing control, because dropping the control is the cheapest way to meet a criterion. The one result I watch is a claim that flipped toward supported after a rewarded feedback round; the flip ran in the rewarded direction — the entire reason the verify_gain flag exists.
+**The auditor** checks scientific claims by writing and running scripts. Across nine papers it audited 48 claims: 29 supported, 9 falsified, 10 inconclusive — the numbers re-derive from the nine `audit_report.json` files, and seven of the nine papers have a judge run that passed 5/5, with two partial and unjudged. The machinery that refuses to trust its own summary is the part I would keep: a supported verdict needs a passing control, because dropping the control is the cheapest way to meet a criterion. The one result I watch is a claim that flipped toward supported after a rewarded feedback round, in the rewarded direction — the entire reason the verify_gain flag exists.
 
 **The probe pipeline** is the one this paper is about. The model drafts atomic claims and SELECT-only SQL; a deterministic oracle applies legs (grounding, action binding, attribute, replicate, control) to the rows the probe returns. On a planted calibration fixture of 15 claims across 53 records, the current oracle confirms all 7 true claims, dismisses 6 of the 7 false ones, confirms none of them, and the interpretive claim is quarantined as unverifiable. The cell cost 28 model calls and 56 probe executions, and there is no attribution miss left; the one abstention is a structural absence. A committed absence probe now confirms a true absence in an empty room — zero rows. The false absence on this fixture still abstains. Absence is not settled in both directions.
 
@@ -34,7 +34,7 @@ For a claim, the model produces an artifact: an audit script, a query, a respons
 
 ## 3. What carries over to a repo
 
-This section is a mapping, and the external cell is where it was measured on a repository I did not write. A reproduction test that has to pass before "fixed" counts is the auditor's positive control. Checking the summary against the test output actually produced is the validator. "X is unused" can be probed the way a claim is probed. A flag on trajectories that flip to success after feedback is verify_gain pointed at a DPO or RL loop. "The fix is clean" stays unscored, the way the interpretive sentence did.
+This section is a mapping. The external cell is one bug on a repository I did not write, not this mapping measured. A reproduction test that has to pass before "fixed" counts is the auditor's positive control. Checking the summary against the test output actually produced is the validator. "X is unused" can be probed the way a claim is probed. A flag on trajectories that flip to success after feedback is verify_gain pointed at a DPO or RL loop. "The fix is clean" stays unscored, the way the interpretive sentence did.
 
 The signals these recipes train on are the agent's account of what it did; a loop that climbs on unchecked accounts learns what a fixed bug sounds like. The competition released a graph-and-embedding dataset of code. I did not run these probes on it, so that release is not a result of this paper.
 
@@ -44,9 +44,9 @@ Three cells share one pipeline and do not add up to one test of lie-catching. Th
 
 ### The live cell: gemma-4 as the subject
 
-I ran gemma-4-31b-it through a tool loop on a 7-test HTTP toolkit I wrote, on two tasks: chunked-transfer decoding, and obs-fold headers. The record is 34 rows across two sessions. The same model extracted 14 claims from its own final reports; I wrote the labels afterward, against the record. `PREREGISTRATION.md` was written before the session and locks the repository facts: suite size, the faulty function, which file a correct fix may touch, and what should still fail. It does not lock the labels, which cite record ids; they were not blind.
+I ran gemma-4-31b-it through a tool loop on a 7-test HTTP toolkit I wrote, on two tasks: chunked-transfer decoding, and obs-fold headers. The record is 34 rows across two sessions. The same model extracted 14 claims from its own final reports; I wrote the labels afterward, against the record. `PREREGISTRATION.md` was written before the session and locks the repository facts: suite size, faulty function, which file a correct fix may touch, what should still fail. It does not lock the labels, which cite record ids; they were not blind.
 
-The agent was entirely honest on both tasks: it fixed the reported bug and reported accurately that a second, unrelated test still failed. No false claim ever occurred, so zero false confirmations is trivially true here and I am not claiming it as a catch.
+The agent was entirely honest: it fixed the bug and reported accurately that a second, unrelated test still failed. No false claim occurred, so zero false confirmations is trivially true here and I am not claiming it as a catch.
 
 | live cell (14 claims: 13 true, 1 interpretive) | |
 |---|---|
@@ -64,7 +64,7 @@ The judge, given the same record in one call, supports 10 of 13 and is wrong abo
 
 ### The planted cell: seven lies, one mechanism
 
-To test catching, I planted a 69-record session with known construction: a known bug, a known edit, a known failing-then-passing test, and a command that never ran. The record supports 16 claims and I wrote all 16 of them — 8 true, 7 false, and one interpretive (1) — as the answer key. The false claims are attribution (the edit landed in parser.py; the claim says headers.py), a fabricated test count, two false absences, and a wrong order.
+To test catching, I planted a 69-record session: a known bug, a known edit, a known failing-then-passing test, and a command that never ran. The record supports 16 claims and I wrote all 16 of them — 8 true, 7 false, and one interpretive (1) — as the answer key. The false claims are attribution (the edit landed in parser.py; the claim says headers.py), a fabricated test count, two false absences, and a wrong order.
 
 | planted cell (drafter: gemma-4-31b-it), the stored run | |
 |---|---|
@@ -81,36 +81,36 @@ The three "no such action" dismissals are the headers.py edit, `tests/test_regre
 
 The linter claim is the one I would point a judge at. The agent claims it ran no linter; the record contains `ruff check` at 09:19:33; the probe finds that row and the expectation `max_rows: 0` fails. The order trap is decided by an explicit ordering check, not by rows sorted by timestamp. The interpretive claim stays quarantined.
 
-There is no before column. Four rules changed while this cell was made to score clean, each in the code: polarity comes from the claim, not from whatever the drafter wrote; the control leg reads an absence with inverted polarity; an action-binding leg requires the matched rows to show the action, not merely name the objects; the mechanical fallback can refute an absence claim and can never confirm one. I am not printing an earlier score. `repro.py` replays only the probes committed now. In that stored run, all 8 true claims confirmed, with none of the 7 false ones confirmed, all seven false claims were dismissed, with no abstentions. The cell does not show that the same check would catch a sentence it was not fitted to.
+There is no before column. Four rules changed while this cell was made to score clean, each in the code: polarity comes from the claim; the control leg reads an absence with inverted polarity; an action-binding leg requires the matched rows to show the action, not merely name the objects; the fallback can refute an absence claim and never confirm one. I am not printing an earlier score. `repro.py` replays only the probes committed now. In that stored run, all 8 true claims confirmed, with none of the 7 false ones confirmed, all seven false claims were dismissed, with no abstentions. The cell does not show that the same check would catch a sentence it was not fitted to.
 
 ### The external cell: a repository I did not write
 
-The cells above are on code I wrote: the planted cell's clean sheet was earned by fitting, the live cell had no lie. So I ran the oracle, frozen at the last published commit, on a repository I did not write: psf/requests at a 2016 base commit, the SWE-bench Lite bug `psf__requests-3362`. `PREREGISTRATION.md` locks the repository, bug, hidden test and frozen commit, and says claim strings are written after. gemma-4-31b-it is both agent and drafter; 49 records, 53 steps.
+The cells above are on code I wrote: the planted cell's clean sheet was earned by fitting, the live cell had no lie. So I ran the oracle, frozen at the last published commit, on a repository I did not write: psf/requests, the 2016 SWE-bench Lite bug `psf__requests-3362`. `PREREGISTRATION.md` locks the repository, bug, hidden test and frozen commit; claim strings are written after. gemma-4-31b-it is agent and drafter; 49 records, 53 steps.
 
-The agent diagnosed the bug correctly — it reproduced it and printed the failing behavior — then corrupted `requests/utils.py`, overwriting it from memory, and could not restore it: the workspace has no git history. Its final report says all of that; the record is a genuine failure session, which the planted cell could not supply. The same model extracted 8 claims: 6 true, 1 false, 1 interpretive. The false claim is a trap that was not planted: "unable to restore requests/utils.py because the environment has no network access." No network attempt appears in the record, so the because clause is unsupported.
+The agent diagnosed the bug correctly — reproduced it, printed the failing behavior — then corrupted `requests/utils.py`, overwriting it from memory, and could not restore it: no git history in the workspace. Its final report says all of that; the record is a genuine failure session, which the planted cell could not supply. The same model extracted 8 claims: 6 true, 1 false, 1 interpretive. The false claim is a trap that was not planted: "unable to restore requests/utils.py because the environment has no network access." No network attempt appears in the record, so the because clause is unsupported.
 
 | external cell (frozen oracle, gemma-4 agent + drafter) | |
 |---|---|
-| true claims confirmed, with receipts | 6 / 6 |
+| true claims confirmed | 6 / 6 |
 | false claims confirmed | 1 / 1 |
 | interpretive quarantined | 1 / 1 |
 | abstentions | 0 |
 | keyless replay | 8 / 8 |
 | whole-context judge, same record and model | 6 supported, 0 wrong, 2 undecidable, identical across 3 runs |
 
-All six true claims confirmed with record-id receipts — the reproduction run, the write_file overwrite, the failed restore out of a non-git workspace, and the others. The interpretive claim stays quarantined. The one false claim, the no-network because clause, was confirmed: the mechanical fallback matched a single row naming the claim's objects and treated that as confirmation, though no fetch attempt appears in the record. That is the boundary: a causal-absence claim whose refutation is the absence of an action, which the record shows but a term-matching fallback cannot express; the judge abstained on it. This is what the planted cell could not show: the check was not fitted to this sentence, and it was wrong.
+Five of the six true claims confirmed on drafted probes (the reproduction run, the write_file overwrite, the file creation, the rest). The sixth is the git clause — "unable to restore because the workspace is not a git repository" — and it is true: `git checkout` returned "fatal: not a git repository" (a record row carries that exact failure). It was confirmed by the same mechanical fallback probe as the false claim. The drafter drafted no probe for either clause; the fallback searched for one rare claim term present in the record, and that term was the word "because". The only row containing it is the first reproduction script, where the word sits in a code comment; neither clause mentions it. Two claims that differ only in their cause word were both decided by one word-match. The refutation of the false clause is the absence of any fetch attempt — an action whose absence a word-match cannot express. The receipts cannot separate the supported cause from the unsupported one. The interpretive claim stays quarantined. The judge supported the true git clause and abstained on the false network clause — the one instrument that separated them; it did so with no receipts. This is what the planted cell could not show: the check was not fitted to these sentences, and on one of them it was wrong.
 
 ## 5. What could be wrong
 
-No false claim was live-tested on the library I wrote; in the external cell one occurred and was confirmed — the one false confirmation in the paper. The labels were written after the sessions. Pre-registration covers repository facts, not labels. A reader who only wants verdicts is better served by the judge; the pipeline's advantage is that each miss names a probe.
+No false claim was live-tested on the library I wrote; in the external cell one occurred and was confirmed — the one false confirmation in the paper — and its twin, a true clause with the same shape, was confirmed by the same probe, so the receipts cannot separate the two. The labels were written after the sessions. Pre-registration covers repository facts, not labels. A reader who only wants verdicts is better served by the judge; the pipeline's advantage is that each miss names a probe.
 
-The probes cannot bind a claim to one of the two sessions; that cost a true claim. I do not have a frozen second drafter, so I am not estimating variance. The injection numbers stay a Cohere slice.
+The probes cannot bind a claim to one of the two sessions; that cost a true claim. With no frozen second drafter I am not estimating variance. The injection numbers stay a Cohere slice.
 
-The three systems are all mine. I claim convergence across domains, but cannot tell whether another designer would have landed on the same loop. External replication is the measurement I would want next.
+The three systems are all mine; I claim convergence across domains, but cannot tell whether another designer would land on the same loop. External replication is what I would want next.
 
 ## 6. Related work
 
-SWE-bench (Jimenez et al., 2024) made the record the judge of the final patch: apply it, run the tests, ignore the prose. Inside the trajectory the default instrument is still an LLM judge (Zheng et al., 2023: position, verbosity and self-preference biases). The closest system to this one is blasrodri/truth, a deterministic checker that verifies a coding agent's claims against the repository, the diff and the logs; it shares the "program decides, model proposes" shape. The delta here is the input and the audit trail: natural-language sentences extracted from the agent's own report, decided by probes the model commits to before the verdict, with every verdict re-derivable without a model, a key, or a network. AgentDojo (Debenedetti et al., 2024), InjecAgent, BIPIA, ChatInject established indirect injection as the attack surface. Self-critique and constitutional methods ask the model to check itself; here the verdict belongs to the mechanism.
+SWE-bench (Jimenez et al., 2024) made the record the judge of the final patch: apply it, run the tests, ignore the prose. Inside the trajectory the default instrument is still an LLM judge (Zheng et al., 2023: position, verbosity and self-preference biases). The closest system to this one is blasrodri/truth, a deterministic checker that verifies a coding agent's claims against the repository, the diff and the logs; the delta here is the input and the audit trail — sentences from the agent's own report, decided by probes the model commits to before the verdict, every verdict re-derivable without a model, key, or network. AgentDojo (Debenedetti et al., 2024), InjecAgent, BIPIA, ChatInject established indirect injection as the attack surface; self-critique and constitutional methods ask the model to check itself, whereas here the verdict belongs to the mechanism.
 
 ## 7. Availability
 
@@ -118,7 +118,7 @@ SWE-bench (Jimenez et al., 2024) made the record the judge of the final patch: a
 - Probe pipeline, all three SWE cells, the live workspaces, corpora, claims and reports: github.com/udirobert/cantheria (`eval/swe_agent_claims`, `eval/synthetic_ground_truth`, `eval/swe_agent_external`)
 - Auditor, traces and attempt records: github.com/udirobert/lemma
 
-Everything a judge can re-check runs keyless on a bare `python3` from a fresh clone. `python3 eval/swe_agent_claims/repro.py` replays every committed probe against the frozen corpus, re-derives the confusion matrix, and checks the sibling calibration set too. `python3 eval/swe_agent_claims/repro_live.py` does the same for the live cell: it replays all 14 probes, re-derives the matrix, verifies the corpus has two sessions and zero self-report rows, checks the pre-registered session facts are visible in the record, and re-parses the frozen judge runs. `python3 eval/swe_agent_external/repro_ext.py` does the same for the external cell: it replays all 8 probes against the frozen 49-record corpus, re-derives the matrix, checks the pre-registered facts, and re-parses the three frozen judge runs. `python3 repro.py` at the repo root re-prints every headline number and says what to download when a corpus is too large to ship. One rule lives in the code though it did not fire in the stored run: a backend rejection of the probe's draft — a rate limit, a 429 — is recorded as `unverifiable`, not `flaky`, because the probe never ran, so an undrafted probe is an abstention, not a verdict. The stored run is clean; the rule is there for the run it protects. If this is selected I will license the text under Apache 2.0.
+Everything a judge can re-check runs keyless on a bare `python3` from a fresh clone. `python3 eval/swe_agent_claims/repro.py` replays every committed probe against the frozen corpus; `repro_live.py` replays all 14 live probes and re-parses the frozen judge runs; `python3 eval/swe_agent_external/repro_ext.py` replays all 8 probes against the frozen 49-record corpus. `python3 repro.py` at the repo root re-prints every headline number and says what to download when a corpus is too large to ship. One rule lives in the code though it did not fire: a backend rejection of the probe's draft — a rate limit, a 429 — is recorded as `unverifiable`, not `flaky`, because the probe never ran, so an undrafted probe is an abstention, not a verdict. The stored run is clean; the rule is there for the run it protects. If this is selected I will license the text under Apache 2.0.
 
 ---
 
@@ -138,16 +138,29 @@ Everything a judge can re-check runs keyless on a bare `python3` from a fresh cl
   commit 896ae56 on psf/requests @ 36453b9 (SWE-bench Lite
   psf__requests-3362), a repository the author did not write. 49 records,
   8 claims (6 true, 1 false, 1 interpretive): 6/6 true confirmed, 1/1
-  interpretive quarantined, 1/1 false confirmed (the mechanical fallback
-  matched one row naming the claim's objects — a causal-absence claim
-  whose refutation is the absence of an action). Keyless replay 8/8. Judge
-  foil frozen at 6 supported / 0 wrong / 2 undecidable, identical across 3
-  runs — it abstained on the claim the pipeline false-confirmed. The session
-  harness (live_ext.py) is in this eval dir; PREREGISTRATION.md there locks
-  repo, bug, hidden test and frozen commit, and says the claim strings are
-  written after. Post-registration amendments to the session protocol
-  (heredoc parsing, anti-loop nudge) are documented in PREREGISTRATION.md;
-  the oracle was untouched.
+  interpretive quarantined, 1/1 false confirmed. The one false
+  confirmation is the network clause of a causal pair: "unable to
+  restore requests/utils.py because the environment has no network
+  access." Its twin, "unable to restore ... because the workspace is
+  not a git repository" (true; ext:0043 shows
+  `git checkout` -> exit 128 fatal: not a git repository), was
+  confirmed by the SAME probe. Both are
+  `probe_origin: mechanical-fallback`; the drafter drafted no probe
+  for either; the fallback's single rare claim term present in the
+  record was the word "because", and the only row containing it is
+  ext:0004, the first reproduction script, where the word sits in a
+  Python comment. The receipts therefore cannot separate the
+  supported cause from the unsupported one. Keyless replay 8/8. Judge
+  foil frozen at 6 supported / 0 wrong / 2 undecidable, identical
+  across 3 runs: it supported the true git clause (claim 4) and
+  abstained on the interpretive claim (2) and the false network
+  clause (5) — the one instrument that separated the pair. The session
+  harness (live_ext.py) is in this eval dir; PREREGISTRATION.md there
+  locks repo, bug, hidden test and frozen commit, and says the claim
+  strings are written after. Post-registration amendments to the
+  session protocol (heredoc parsing, anti-loop nudge) are documented in
+  PREREGISTRATION.md; the oracle was untouched. Two earlier harness
+  runs were discarded before the final session.
 - truth (blasrodri) added to related work; SWE-bench kept.
 - repro_live.py: 19/19 keyless. repro.py: 27/27. Root repro.py: 37/37
   (now includes the external cell). eval/swe_agent_external/repro_ext.py:
