@@ -52,3 +52,20 @@ session, whatever it is.
 - The claim labels: written AFTER the session, against the record, each
   citing record ids — as in the live cell. This pre-registration covers
   repository facts only, and says so.
+
+## Post-registration amendments (session harness only; oracle still frozen)
+
+- Two early runs (before this amendment) were invalidated, both by
+  session-harness parsing defects, not by the agent: (1) the
+  `run_command` parser dropped the body of a `cat <<EOF` heredoc, so the
+  agent's reproduction script was created empty and the agent re-ran it
+  ~24 times, never reaching the fix; (2) the same parser left a repeated
+  marker line as the script's first line, so the script failed with
+  `NameError: name 'cat'`. The harness was fixed to rebuild any heredoc
+  into one canonical command and the run restarted from a pristine
+  workspace.
+- The session harness now sends a one-line nudge when the agent re-runs
+  the identical command three times in a row (deterministic output, no
+  new evidence). This is a session-protocol guard, not an oracle change;
+  the frozen mechanism (cantheria 896ae56) is untouched, and any nudge
+  the agent receives is part of the session as recorded.

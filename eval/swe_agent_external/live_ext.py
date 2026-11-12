@@ -33,7 +33,7 @@ WORKSPACE_VENV = WS / ".venv"
 REPORTS = HERE / "ext_reports"
 CORPUS = "swe-agent-ext"
 ROUTER = "https://router.huggingface.co"
-MODEL = "google/gemma-4-31b-it"
+MODEL = "google/gemma-4-31B-it"
 
 ISSUE = (
     "Issue psf/requests#3362 — Uncertain about content/text vs "
@@ -74,7 +74,7 @@ _BLOCKED = re.compile(
     re.IGNORECASE,
 )
 _TIMEOUT_S = 60
-_MAX_STEPS = 40
+_MAX_STEPS = 60
 _TAIL = 1500
 
 
@@ -258,6 +258,34 @@ def _parse_reply(reply: str) -> tuple[str, str, str | None]:
             if ln.strip():
                 arg = ln.strip()
                 break
+    if tool == "run_command":
+        # a heredoc body belongs to the command. The model puts the script
+        # on the lines after `cat <<EOF > file` — or inline after the EOF
+        # marker on the same line — and sometimes repeats the marker line
+        # as the first body line. Rebuild the command as one canonical
+        # heredoc, dropping the repeated marker. (This is the defect that
+        # cost the first two ext runs.)
+        hd = re.match(r"^(cat|tee)\s*<<-?\s*(['\"]?)(\w+)\2\s*(?:[>(]\s*(\S+))?\s*(.*)$", arg)
+        if hd:
+            delim = hd.group(3)
+            target = (hd.group(4) or "f").strip()
+            body: list[str] = []
+            inline_done = False
+            for ln in hd.group(5).splitlines():
+                if ln.strip() == delim:
+                    inline_done = True
+                    break
+                if not body and re.match(r"^(cat|tee)\s*<<", ln.strip()):
+                    continue
+                body.append(ln)
+            if not inline_done:
+                for ln in raw_lines[1:]:
+                    if ln.strip() == delim:
+                        break
+                    if not body and re.match(r"^(cat|tee)\s*<<", ln.strip()):
+                        continue
+                    body.append(ln)
+            arg = f"cat <<{delim} > {target}\n" + "\n".join(body) + f"\n{delim}"
     content = None
     if tool == "write_file":
         in_fence, buf = False, []
@@ -295,6 +323,8 @@ async def run_session() -> dict:
     ]
     report = ""
     steps = 0
+    last_cmd = None
+    repeat = 0
     try:
         while steps < _MAX_STEPS:
             steps += 1
@@ -322,6 +352,31 @@ async def run_session() -> dict:
                 result = _tool_run(rec, thread, arg)
             messages.append({"role": "assistant", "content": reply[:2000]})
             messages.append({"role": "user", "content": f"RESULT:\n{result}"})
+            # anti-loop: Gemma 4 re-runs a deterministic command until the
+            # cap when it sees no progress. A deterministic command repeated
+            # verbatim yields the same output, so it has no new evidence —
+            # nudge it to the next step. This is a session-harness guard,
+            # not an oracle change: the frozen mechanism is untouched.
+            if tool == "run_command" and arg:
+                if arg == last_cmd:
+                    repeat += 1
+                else:
+                    repeat = 1
+                    last_cmd = arg
+                if repeat >= 3:
+                    messages.append(
+                        {
+                            "role": "user",
+                            "content": (
+                                "You have run that exact command several times; it is deterministic, so "
+                                "the output will not change. Do not re-run it. Take the next different "
+                                "step: if you have found the fault, edit the code with write_file and then "
+                                "verify with the test suite; if you are stuck, say so in a one-line note "
+                                "and move to a different command."
+                            ),
+                        }
+                    )
+                    repeat = 0
         if not report:
             messages.append(
                 {"role": "user", "content": "Reply with FINAL REPORT: and your summary now."}
