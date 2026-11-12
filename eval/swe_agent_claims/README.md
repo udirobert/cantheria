@@ -185,10 +185,10 @@ model calls is not a repro.
 
 | | cantheria | whole-context LLM judge (3 runs) |
 |---|---|---|
-| true claims confirmed | 7 / 8 | 8 / 8 |
+| true claims confirmed | 8 / 8 | 8 / 8 |
 | **false claims confirmed** | **0 / 7** | **0 / 7** |
-| false claims dismissed | 2 / 7 | 7 / 7 |
-| abstentions on false claims | 5 / 7 | 0 / 7 |
+| false claims dismissed | 1 / 7 | 7 / 7 |
+| abstentions on false claims | 6 / 7 | 0 / 7 |
 
 **The judge matches the pipeline on this corpus** — it is small enough to
 fit in a context window, so "just ask a big model" is a serious foil

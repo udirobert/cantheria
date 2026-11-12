@@ -15,11 +15,11 @@ enter you here.
       placeholders for both outcomes is ready at
       `eval/swe_agent_claims/PENDING_FILL.md` — the editor substitutes
       from `NUMBERS.md` only; nothing gets invented.
-      **RESOLVED 2026-11-12 13:0x UTC — the numbers exist.** The eval ran
-      (`eval/swe_agent_claims/NUMBERS.md`, commit `eb50031`): 69-record
-      planted session, 16 claims (8 true / 7 false / 1 interpretive),
-      7/8 true confirmed, **0/7 false confirmed**, 2 dismissed, 5 abstained,
-      1/1 interpretive quarantined, 16/16 keyless replay.
+      **RESOLVED 2026-11-12 — the numbers exist.** The eval ran
+      (`eval/swe_agent_claims/NUMBERS.md`): 69-record planted session,
+      16 claims (8 true / 7 false / 1 interpretive), **8/8 true confirmed**,
+      **0/7 false confirmed**, 1 dismissed, 6 abstained, 1/1 interpretive
+      quarantined, 16/16 keyless replay.
       `SUBMISSION_TEXT.md` regenerated from the draft body: **2,817 words,
       zero `【PENDING】` markers**. The fill kept the honest framing — the
       headline is *zero false confirmations*, and §4 says the whole-context

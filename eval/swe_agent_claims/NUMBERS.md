@@ -22,7 +22,7 @@ Reproduce: `uv run python eval/swe_agent_claims/score.py runs/swe-agent/audit10/
 | replay agreement (no model, no key) | 16 / 16 |
 
 **Headline, stated honestly:** on a planted coding-agent session, the pipeline
-confirmed 7 of 8 true claims and **confirmed none of the 7 false claims**.
+confirmed 8 of 8 true claims and **confirmed none of the 7 false claims**.
 Five of those seven abstained — the drafter declined claims it could not
 decide — so this is *zero false confirmations*, not *all false claims
 caught*. Abstentions are honest; a false confirmation would not be.
