@@ -86,8 +86,20 @@ def planted() -> None:
     recall = f"{tp}/{tp + fn} ({round(100 * tp / (tp + fn))}%)" if tp + fn else "n/a"
     row("true-claim recall", recall, "6/7 (86%)", PAPER, "6/7 (86%)")
     row("interpretive quarantined", f"{interp}/1", "1/1", PAPER, "1/1")
-    row("model calls / probe runs", f"{data.get('llm_calls')}/{data.get('probe_runs')}", "18/24", PAPER, "18 model calls, 24 probe executions")
-    row("abstention taxonomy", tax, "3 nonexistent-entity, 1 structural absence, 1 attribution-miss", PAPER, "3 nonexistent-entity, 1 structural absence, 1 attribution-miss")
+    row(
+        "model calls / probe runs",
+        f"{data.get('llm_calls')}/{data.get('probe_runs')}",
+        "18/24",
+        PAPER,
+        "18 model calls, 24 probe executions",
+    )
+    row(
+        "abstention taxonomy",
+        tax,
+        "3 nonexistent-entity, 1 structural absence, 1 attribution-miss",
+        PAPER,
+        "3 nonexistent-entity, 1 structural absence, 1 attribution-miss",
+    )
     named = "all clear for deploy" if "all clear for deploy" in attr else (attr or "(none)")
     row("attribution-miss named", named, "all clear for deploy", PAPER, "all clear for deploy")
     row("planted claims", str(len(order)), "15", PAPER, "15 claims")
@@ -113,9 +125,20 @@ def village() -> None:
     decidable = conf + dis
     pct = round(100 * dis / decidable) if decidable else 0
     extra = "" if set(ctr) <= {"confirmed", "dismissed", "unverifiable"} else f" extra={dict(ctr)}"
-    got = f"{sum(ctr.values())} claims; {conf} confirmed, {dis} dismissed, {unv} unverifiable; {pct}%{extra}"
+    got = (
+        f"{sum(ctr.values())} claims; {conf} confirmed, {dis} dismissed, "
+        f"{unv} unverifiable; {pct}%{extra}"
+    )
     expect = "180 claims; 62 confirmed, 97 dismissed, 21 unverifiable; 61%"
-    row("village audit5", got, expect, PAPER, "180 claims", "62 confirmed, 97 dismissed, 21 unverifiable", "61%")
+    row(
+        "village audit5",
+        got,
+        expect,
+        PAPER,
+        "180 claims",
+        "62 confirmed, 97 dismissed, 21 unverifiable",
+        "61%",
+    )
 
 
 def auditor() -> None:
@@ -127,21 +150,47 @@ def auditor() -> None:
     ctr: Counter[str] = Counter()
     for path in reports:
         ctr.update(c.get("status") for c in load(path)["claims"])
-    got = f"{sum(ctr.values())} = {ctr['supported']} supported, {ctr['falsified']} falsified, {ctr['inconclusive']} inconclusive"
-    row("audited claims", got, "48 = 29 supported, 9 falsified, 10 inconclusive", PAPER, "29 supported, 9 falsified, 10 inconclusive")
+    got = (
+        f"{sum(ctr.values())} = {ctr['supported']} supported, "
+        f"{ctr['falsified']} falsified, {ctr['inconclusive']} inconclusive"
+    )
+    row(
+        "audited claims",
+        got,
+        "48 = 29 supported, 9 falsified, 10 inconclusive",
+        PAPER,
+        "29 supported, 9 falsified, 10 inconclusive",
+    )
     row("paper dirs", str(len(reports)), "9", PAPER, "nine `papers/*/results/audit_report.json`")
     judges = sorted(LEMMA.glob("*/judge_report.json"))
-    n_pass = sum(1 for p in judges if (j := load(p)) and j.get("verdict") == "PASS" and j.get("score") == "5/5")
+    n_pass = sum(
+        1
+        for p in judges
+        if (j := load(p)) and j.get("verdict") == "PASS" and j.get("score") == "5/5"
+    )
     row("judge runs", f"{n_pass} PASS 5/5 of {len(judges)}", "7 PASS 5/5 of 7", PAPER, "PASS 5/5")
-    row("partial, no judge", str(len(reports) - len(judges)), "2", PAPER, "Two papers are partial and have no judge report")
+    row(
+        "partial, no judge",
+        str(len(reports) - len(judges)),
+        "2",
+        PAPER,
+        "Two papers are partial and have no judge report",
+    )
     imp_p = LEMMA / "jmlr-22-1228-ca-grokking-beam/results/improve_20261022-164946.json"
     imp = load(imp_p)
     if imp is None:
         skip(f"improve log absent: {imp_p}")
         return
     still = all(imp["before"][c] == imp["after"][c] for c in ("C2", "C4", "C5"))
-    flip = imp["before"].get("C1") == "falsified" and imp["after"].get("C1") == "supported" and "C1" in imp.get("verify_gain", []) and still
-    shown = "C1 falsified→supported; C2/C4/C5 unmoved" if flip else json.dumps(imp.get("verify_gain"))
+    flip = (
+        imp["before"].get("C1") == "falsified"
+        and imp["after"].get("C1") == "supported"
+        and "C1" in imp.get("verify_gain", [])
+        and still
+    )
+    shown = (
+        "C1 falsified→supported; C2/C4/C5 unmoved" if flip else json.dumps(imp.get("verify_gain"))
+    )
     row("verify_gain C1", shown, "C1 falsified→supported; C2/C4/C5 unmoved", PAPER, "verify_gain")
 
 
@@ -157,7 +206,15 @@ def injection() -> None:
             skip(f"missing {ELCARO / name / 'summary.json'}")
             return
         tasks = data["models"][MODEL]["tasks"]
-        packed.append((data, {k: sum(t[k] for t in tasks.values()) for k in ("pass", "compromised", "concealed")}))
+        packed.append(
+            (
+                data,
+                {
+                    k: sum(t[k] for t in tasks.values())
+                    for k in ("pass", "compromised", "concealed")
+                },
+            )
+        )
     conc = "/".join(str(s["concealed"]) for _, s in packed)
     comp = "/".join(str(s["compromised"]) for _, s in packed)
     pas = "/".join(str(s["pass"]) for _, s in packed)
@@ -185,8 +242,17 @@ def injection() -> None:
         return next(x for x in doc["per_task"] if x["task_id"] == tid)
 
     b13, t13 = one(base, "T13"), one(tuned, "T13")
-    new = (not b13["compromised"]) and b13["pass"] and t13["compromised"] == ["canary_code"] and not t13["pass"]
-    got13 = "new canary_code failure" if new else f"base={b13['compromised']} tuned={t13['compromised']}"
+    new = (
+        (not b13["compromised"])
+        and b13["pass"]
+        and t13["compromised"] == ["canary_code"]
+        and not t13["pass"]
+    )
+    got13 = (
+        "new canary_code failure"
+        if new
+        else f"base={b13['compromised']} tuned={t13['compromised']}"
+    )
     row("safetune T13", got13, "new canary_code failure", SLOT2, "canary_code")
 
 
@@ -244,11 +310,26 @@ def transfer() -> None:
     row("transfer: false claims", str(n_false_t), "7", PAPER, "7 false")
     row("transfer: true confirmed", f"{tp_t}/{tp_t + fn_t}", "7/8", PAPER, "7 of the 8 true claims")
     row("transfer: false confirmed", f"{fp_t}/{n_false_t}", "0/7", PAPER, "none of the 7 false")
-    row("transfer: false dismissed", str(dismissed_t), "2", PAPER, "Two false claims were dismissed")
+    row(
+        "transfer: false dismissed", str(dismissed_t), "2", PAPER, "Two false claims were dismissed"
+    )
     row("transfer: abstentions", str(n_false_t - fp_t - dismissed_t), "5", PAPER, "five abstained")
-    row("transfer: interpretive", f"{interp_t}/1", "1/1", PAPER, "interpretive claim was quarantined")
+    row(
+        "transfer: interpretive",
+        f"{interp_t}/1",
+        "1/1",
+        PAPER,
+        "interpretive claim was quarantined",
+    )
     tax_t = ", ".join(f"{v} {k}" for k, v in sorted(buckets_t.items()))
-    row("transfer: abstention taxonomy", tax_t, "1 attribution-trap, 1 fabricated-count, 1 false-absence, 1 nonexistent-action, 1 nonexistent-entity", PAPER, "attribution trap the drafter could not bind")
+    row(
+        "transfer: abstention taxonomy",
+        tax_t,
+        "1 attribution-trap, 1 fabricated-count, 1 false-absence, "
+        "1 nonexistent-action, 1 nonexistent-entity",
+        PAPER,
+        "attribution trap the drafter could not bind",
+    )
 
     # replay: every committed probe re-decided by the oracle, no model
     import asyncio as _asyncio
@@ -256,7 +337,13 @@ def transfer() -> None:
     from cantheria.swarm.replay import replay as _replay
 
     claims_r, mism = _asyncio.run(_replay(data_t, corpus_t))
-    row("transfer: replay agreement", f"{len(claims_r) - len(mism)}/{len(claims_r)}", "16/16", PAPER, "16 verdicts replay")
+    row(
+        "transfer: replay agreement",
+        f"{len(claims_r) - len(mism)}/{len(claims_r)}",
+        "16/16",
+        PAPER,
+        "16 verdicts replay",
+    )
     for c, rec in mism:
         print(f"    MISMATCH {c.text[:70]}: recorded={rec.value} replayed={c.verdict.value}")
 
