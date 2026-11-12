@@ -601,32 +601,30 @@ def _query_predicates(query: str) -> set[str]:
     return out
 
 
-def _widened_from(history: list[dict[str, Any]], new: dict[str, Any]) -> bool:
-    """True when this revision dropped a binding predicate that a previous
-    attempt had — i.e. it asks a WEAKER question than the one that came
-    back empty.
+def _widened_from(prev: tuple[int, bool] | None, new_main_rows: int) -> bool:
+    """True when a revision BROADENED a question whose answer was "no
+    evidence in the record".
 
-    A previous attempt that matched nothing is a real answer ("the record
-    holds no such evidence"). Widening the probe to find *something* turns
-    that answer into a false confirmation on an unrelated row, so the
-    oracle must not accept the result.
+    The dangerous case is specific: the previous attempt's main probe
+    RAN and matched ZERO rows — the record genuinely holds nothing for
+    this claim — and this revision matches rows anyway. That can only
+    happen by admitting rows the previous predicate excluded, which is a
+    false confirmation on an unrelated record.
+
+    Two cases are NOT widening and must not be refused:
+
+    - the previous probe ERRORED (malformed SQL, refused query). It never
+      asked the question, so a re-ask that lands is the repair working.
+    - the previous probe DID match rows but was rejected for another
+      reason (its control matched too, or its own expectations failed).
+      A tighter re-ask of that is a legitimate repair.
     """
-    if not history:
+    if prev is None:
         return False
-    prev_q = str(history[-1].get("query") or "")
-    new_q = str(new.get("query") or "")
-    if not prev_q or not new_q:
+    prev_rows, prev_errored = prev
+    if prev_errored:
         return False
-    prev_pred = _query_predicates(prev_q)
-    new_pred = _query_predicates(new_q)
-    if not prev_pred:
-        return False
-    dropped = prev_pred - new_pred
-    # dropping a kind predicate alone is a legitimate repair (the corpus
-    # may express the record under another kind) — what is NOT legitimate
-    # is dropping the CONTENT needle that binds the claim to its object.
-    content_dropped = {p for p in dropped if not p.startswith("kind=")}
-    return bool(content_dropped)
+    return prev_rows == 0 and new_main_rows > 0
 
 
 def _fallback_probe(claim: Claim, db_path: Path | str) -> Probe | None:
@@ -766,6 +764,7 @@ async def audit_claim(
     _normalize_window(claim)
     hint = schema_hint or _schema_hint(db_path)
     prev: dict = {}
+    prev_probe_holder: list[tuple[int, bool] | None] = [None]
     for attempt in range(PROBE_MAX_ATTEMPTS):
         if budget.spent:
             break
@@ -800,7 +799,9 @@ async def audit_claim(
             return claim
         prev = data
         claim.raw.setdefault("probe_history", []).append(data)
-        widened = _widened_from(claim.raw["probe_history"][:-1], data)
+        # what the PREVIOUS attempt's main probe did — the widening guard
+        # needs to know whether that attempt already found evidence
+        prev_probe = prev_probe_holder[0]
         claim.probe = Probe(
             query=str(data["query"])[:4000],
             expect=_normalize_expect(
@@ -815,8 +816,14 @@ async def audit_claim(
         journal.log(claim, "drafted")
 
         before = budget.probe_runs
+        n_before = len(claim.probes_run)
         claim = await oracle.validate(claim, db_path)
         budget.probe_runs = before + len(claim.probes_run)
+        # the main probe of THIS attempt is the first result it appended
+        if len(claim.probes_run) > n_before:
+            main_res = claim.probes_run[n_before]
+            prev_probe_holder[0] = (main_res.rows, bool(main_res.error))
+        widened = _widened_from(prev_probe, prev_probe_holder[0][0])
         journal.log(claim, claim.verdict.value)
         if claim.verdict in (Verdict.confirmed, Verdict.unverifiable):
             if widened and claim.verdict is Verdict.confirmed:
