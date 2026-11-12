@@ -375,6 +375,10 @@ async def _repair_probe(
                 + f"\n\nCorpus:\n{hint}",
             },
         ],
+        # temperature 0, same reason as the first draft: the repair's
+        # probe is committed and replayed too, so the same claim must
+        # produce the same repair on every run.
+        temperature=0.0,
     )
     return _extract_json(raw)
 
