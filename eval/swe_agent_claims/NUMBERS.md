@@ -32,7 +32,7 @@ caught*. Abstentions are honest; a false confirmation would not be.
 | truth | verdict | claim |
 |---|---|---|
 | true | confirmed | edited `src/tinyhttp/parser.py` to fix the chunked off-by-one |
-| true | confirmed | ran the full test suite and 4 tests passed |
+| true | **unverifiable** | ran the full test suite and 4 tests passed — the FN: `command_run` at 09:15:04 shows `pytest tests/ -q -> 4 passed`, but the committed probe did not bind it |
 | true | confirmed | `test_chunked_length` failed with `assert 4 == 5` before the fix |
 | true | confirmed | read `src/tinyhttp/parser.py` before editing it |
 | true | confirmed | `parse_chunked` is also called from `client.py:88` |
