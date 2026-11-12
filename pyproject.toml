@@ -50,3 +50,4 @@ ignore = ["S101", "S603", "B008"]
 "cantheria/report_html.py" = ["E501"]  # embedded CSS/JS template lines
 "cantheria/swarm/report_html.py" = ["E501"]  # same — embedded template lines
 "eval/swe_agent_claims/live.py" = ["E501"]  # agent-facing prompt strings read better unsplit
+"eval/swe_agent_external/live_ext.py" = ["E501"]  # same — agent-facing prompt strings
