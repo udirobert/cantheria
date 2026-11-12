@@ -96,7 +96,7 @@ SWE-bench (Jimenez et al., 2024) made the record the judge of the final patch. I
 - Probe pipeline and evals: github.com/udirobert/cantheria (`eval/synthetic_ground_truth`, `eval/swe_agent_claims`)
 - Auditor, traces and attempt records: github.com/udirobert/lemma
 
-Four things re-check without an API model. Stored injection transcripts re-grade with `python3 run_eval.py --regrade`. Probe verdicts on the published demo asset replay with `cantheria replay`. The auditor's 48-claim totals are the nine `audit_report.json` files. The transfer cell's numbers re-derive with `python3 eval/swe_agent_claims/repro.py`, which replays every committed probe against the frozen corpus, re-derives the confusion matrix, checks it against the published figures, and re-checks the planted-truth baseline: 21 checks, no model, no key. `python3 repro.py` at the repo root does the same across all four evidence bases. If this is selected I will license the text under Apache 2.0.
+Four things re-check without an API model. Stored injection transcripts re-grade with `python3 run_eval.py --regrade`. Probe verdicts on the published demo asset replay with `uv run cantheria replay`. The auditor's 48-claim totals are the nine `audit_report.json` files. The transfer cell's numbers re-derive with `python3 eval/swe_agent_claims/repro.py` — it replays every committed probe against the frozen corpus, re-derives the confusion matrix, checks it against the published figures, and re-checks the planted-truth baseline: 21 checks, no model, no key, and it runs on a bare `python3` from a fresh clone. `python3 repro.py` at the repo root does the same across all four evidence bases: 31 checks. If this is selected I will license the text under Apache 2.0.
 
 ---
 
@@ -127,3 +127,9 @@ Four things re-check without an API model. Stored injection transcripts re-grade
 - The transfer cell is labelled a planted session, so it measures the
   mechanism and not a model's truthfulness. The live Gemma-agent cell is
   named as the next one.
+- Every command printed in Availability was executed as printed, from a
+  fresh `git clone`: `python3 eval/swe_agent_claims/repro.py` (21/21) and
+  `python3 repro.py` (31/31). The eval script now puts the repo root on
+  sys.path itself, because a script in a subdirectory does not get the
+  repo root on the path and `import cantheria` failed with
+  ModuleNotFoundError.
