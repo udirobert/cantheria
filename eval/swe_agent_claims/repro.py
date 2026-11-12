@@ -24,6 +24,14 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
+# The repo root has to be importable: this script lives in a subdirectory,
+# so `python3 eval/swe_agent_claims/repro.py` puts the SCRIPT's directory on
+# sys.path, not the repo root, and `import cantheria` would fail with a
+# ModuleNotFoundError. Put the root there ourselves so the command works
+# from a fresh clone without `uv run` (pydantic is the only hard dep and
+# `pip install pydantic` is a one-liner).
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 # The shipped copies win: a judge clones the repo and runs this without
 # regenerating anything. runs/ is gitignored, so the eval dir is what ships.
 RUN = HERE
