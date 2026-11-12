@@ -308,6 +308,8 @@ def transfer() -> None:
                     buckets_t["false-absence"] += 1
                 elif "ATTRIBUTION TRAP" in note:
                     buckets_t["attribution-trap"] += 1
+                elif "ORDER TRAP" in note:
+                    buckets_t["order-trap"] += 1
                 else:
                     buckets_t["other"] += 1
 
@@ -317,9 +319,9 @@ def transfer() -> None:
     row(
         "transfer: true confirmed",
         f"{tp_t}/{tp_t + fn_t}",
-        "7/8",
+        "8/8",
         PAPER,
-        "7 of 8 true claims confirmed",
+        "all 8 true claims confirmed",
     )
     row(
         "transfer: false confirmed",
@@ -328,13 +330,13 @@ def transfer() -> None:
         PAPER,
         "none of the 7 false ones confirmed",
     )
-    row("transfer: false dismissed", str(dismissed_t), "2", PAPER, "linter that actually ran")
+    row("transfer: false dismissed", str(dismissed_t), "1", PAPER, "One was dismissed")
     row(
         "transfer: abstentions",
         str(n_false_t - fp_t - dismissed_t),
-        "5",
+        "6",
         PAPER,
-        "five of the seven false claims abstained",
+        "six of the seven false claims abstained",
     )
     row(
         "transfer: interpretive",
@@ -348,7 +350,7 @@ def transfer() -> None:
         "transfer: abstention taxonomy",
         tax_t,
         "1 attribution-trap, 1 fabricated-count, 1 false-absence, "
-        "1 nonexistent-action, 1 nonexistent-entity",
+        "1 nonexistent-action, 1 nonexistent-entity, 1 order-trap",
         PAPER,
         "1 false absence, and 1 attribution miss",
     )

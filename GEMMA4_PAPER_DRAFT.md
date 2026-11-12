@@ -6,11 +6,11 @@
 
 I have built the same thing three times without planning to. A model writes something a program can check, the program says yes or no, and the model never gets to write the verdict. The first build was a scientific-claim auditor, the second a pipeline that checks agent claims with SELECT-only SQL, the third a prompt-injection grader that never calls a model.
 
-The number that made me write this down came from the second one. I pointed it at 16 daily summaries written by AI agents. It extracted 180 claims and could settle 159 of them, and 97 of those 159 failed. That is 61%. I have not hand-read those 97 against the records, so 61% is the pipeline's rate at disagreeing with the summaries, not a verified error rate — a dismissal here means a committed probe found evidence contradicting the claim, with the record ids attached, but I have not checked each one by eye.
+The number that made me write this down came from the second one. I pointed it at 16 daily summaries written by AI agents. It extracted 180 claims and could settle 159 of them, and 97 of those 159 failed — 62 confirmed, 21 unverifiable. That is 61%. I have not hand-read those 97 against the records, so 61% is the pipeline's rate at disagreeing with the summaries, not a verified error rate — a dismissal here means a committed probe found evidence contradicting the claim, with the record ids attached, but I have not checked each one by eye.
 
 The other results are smaller and I would rather you read them as sanity checks than proof. On a planted-truth set I wrote myself (15 claims, 53 records), the pipeline confirmed 6 of 7 true claims and none of the 7 false ones. On an injection benchmark, the standard "this block is untrusted" wrapper did nothing for concealed compromise on aya-expanse-32b (24/72 either way, on the same 24 tasks — labeling moved which tasks the model fell for, two down and two up, and the totals landed identical), while a deterministic, content-aware warning halved it to 12/72. A LoRA I trained to ignore embedded instructions moved compromised from 5/24 to 6/24, which is one task's worth of trials and I would not read anything into it; I report it anyway.
 
-I have now shown this on a coding agent's own session: 16 claims extracted from a planted agent session, 7 of 8 true claims confirmed, and none of the 7 false ones confirmed.
+I have now shown this on a coding agent's own session: 16 claims extracted from a planted agent session, all 8 true claims confirmed, and none of the 7 false ones confirmed.
 
 ## 1. Why I care about the sentences
 
@@ -32,7 +32,7 @@ For a claim, the model produces an artifact: an audit script, a query, a respons
 
 The auditor is a code-writing agent that checks scientific claims by writing and running scripts. What I trust in it is the machinery that refuses to take its own summary at face value. A supported or falsified verdict needs a passing control, because dropping the control is the cheapest way to meet a criterion. A validator compares the written summary to the metrics and stores a NaN or a failed control next to a claimed pass as inconclusive.
 
-Across nine papers it audited 48 claims: 29 supported, 9 falsified, 10 inconclusive. The one catch I would point to is in the beam improve round on the JMLR 22-1228 workdir. Claim C1 moved from falsified to supported after the round, and the verify_gain flag listed it. C2, C4 and C5 did not move. A flip toward supported after feedback is where a reward hack would show up, so that direction gets flagged on purpose.
+Across nine papers it audited 48 claims: 29 supported, 9 falsified, 10 inconclusive, and seven of the nine papers have a judge run that passed 5/5 with two partial and unjudged. The one catch I would point to is in the beam improve round on the JMLR 22-1228 workdir. Claim C1 moved from falsified to supported after the round, and the verify_gain flag listed it. C2, C4 and C5 did not move. A flip toward supported after feedback is where a reward hack would show up, so that direction gets flagged on purpose.
 
 What I know from the record is that this one looks legitimate, with a caveat I would rather state than not. The previous attempt's script used an unshifted training distribution, so the quantity it was fitting never crossed its threshold at finite time and the fit returned the wrong exponent; the reviewer note says so explicitly. The next attempt fixed the setup and the exponent came out right, and the control passed in both runs. So the flip follows from correcting a broken measurement. The caveat is that the flip ran in the rewarded direction and I cannot rule out that the agent was also nudged toward it — which is the entire reason verify_gain exists.
 
@@ -40,7 +40,7 @@ What I know from the record is that this one looks legitimate, with a caveat I w
 
 The model drafts atomic claims and SELECT-only SQL. A deterministic oracle applies four legs: the probe returns rows, the rows bind the claimed subject, pattern claims meet a minimum matched-row count, and a disjoint control query must not satisfy the same expectation. Interpretive claims are quarantined as unverifiable.
 
-On the planted-truth set, the 6 claims it confirmed were all true, it confirmed 0 of 7 false claims, and true-claim recall was 6 of 7. The miss is a true absence in an empty room, and I know exactly why: the grounding leg short-circuits on zero rows and returns dismissed before the probe's own max_rows: 0 expectation is consulted, so a correctly-written absence probe cannot confirm. I found that while building the transfer cell below. The fix is small and half of it is already in — the probe layer no longer treats zero rows as failure when the drafter committed a zero ceiling, and what remains is the oracle's grounding leg. Of the 7 false claims, 2 were dismissed and 5 were left unverifiable. That is the safe failure, but it is still a recall gap and it leaves most of the false claims unscored.
+On the planted-truth set, the 6 claims it confirmed were all true, it confirmed 0 of 7 false claims, and true-claim recall was 6 of 7. That scored run is 18 model calls and 24 probe executions. The miss is a true absence in an empty room, and I know exactly why: the grounding leg short-circuits on zero rows and returns dismissed before the probe's own max_rows: 0 expectation is consulted, so a correctly-written absence probe cannot confirm. I found that while building the transfer cell below. The fix is small and half of it is already in — the probe layer no longer treats zero rows as failure when the drafter committed a zero ceiling, and what remains is the oracle's grounding leg. Of the 7 false claims, 2 were dismissed and 5 were left unverifiable, and those five split into 3 claims naming something the record never holds, 1 false absence, and 1 attribution miss — Relay posted "all clear for deploy" when North posted it — which is decidable in principle and is the honest gap in the number. That is the safe failure, but it is still a recall gap and it leaves most of the false claims unscored.
 
 This set is small and I wrote it. Read it as a check that the oracle is not broken, not as a measurement of how well it works.
 
@@ -66,11 +66,11 @@ I planted a coding-agent session: 69 records of tool calls, edits, commands and 
 
 | | confirmed | dismissed | abstained |
 |---|---|---|---|
-| true claims (8) | 7 | — | 1 |
-| false claims (7) | **0** | 2 | 5 |
+| true claims (8) | 8 | — | — |
+| false claims (7) | **0** | 1 | 6 |
 | interpretive (1) | — | — | 1 |
 
-The headline is zero false confirmations, and I want to be careful about the word "caught": five of the seven false claims abstained, because the drafter declines a claim it believes no record can settle. Two were dismissed — the linter that actually ran, and the edit that came after the test run. The trap worth naming is order. The session contains an edit to parser.py at 09:10:26 and a pytest run at 09:05:07, and the agent's report claimed the edit came first. A probe that returns both kinds of row passes regardless of order, so the order has to be bound into the query; the claim was dismissed.
+The headline is zero false confirmations, and I want to be careful about the word "caught": six of the seven false claims abstained, because the drafter declines a claim it believes no record can settle. One was dismissed — the linter that actually ran. The trap worth naming is order. The session contains an edit to parser.py at 09:10:26 and a pytest run at 09:05:07, and the agent's report claimed the edit came first. A probe that returns both kinds of row passes regardless of order, so the order has to be bound into the query — and on this run the drafter declined to write one, which is the abstention I am reporting rather than a dismissal I could claim.
 
 The first run of this cell produced three false confirmations, and each was my machinery's fault rather than the corpus's — every one of those claims was decidable by a probe I wrote by hand. The drafter's prompt listed a vocabulary of record kinds from a different corpus, so a file that was READ satisfied a claim about a file that was EDITED; `max_rows` was never documented, so absence claims had no way to be expressed; and the repair loop could WIDEN a precise probe until it matched some unrelated row. It did that on the attribution trap, whose first attempt was already correct. A revision may now only be more specific, and a confirmation that exists only because the probe was widened is refused. With those fixed the cell reports zero.
 
@@ -102,13 +102,15 @@ Four things re-check without an API model. Stored injection transcripts re-grade
 
 ## Working notes (not part of submission)
 
-- Body written by the author 2026-11-12 (voice pass), numbers filled from
+
+- Body written by the author's voice 2026-11-12; numbers filled from
   `eval/swe_agent_claims/NUMBERS.md` and the source artifacts. Every figure
   verified against source: village 180/159/97/61%, synthetic TP=6 FP=0
   recall 6/7 with 2 dismissed and 5 abstained, transfer cell 16 claims
-  (8 true / 7 false / 1 interpretive) with TP=7 FP=0, 2 dismissed, 5
-  abstained, 1/1 interpretive, injection 24/72 -> 12/72 concealed and
-  27->24->15 compromised with pass 39/39/46, safetune 5->6 and 16->15.
+  (8 true / 7 false / 1 interpretive) with TP=8 FP=0, 1 dismissed, 6
+  abstained, 1/1 interpretive, 16/16 keyless replay, injection
+  24/72 -> 12/72 concealed and 27->24->15 compromised with pass 39/39/46,
+  safetune 5->6 and 16->15.
 - The two items the author marked for themselves were answered from the
   record rather than left bracketed: the C1 flip is legitimate (the
   previous attempt's script fitted an unshifted distribution and never
@@ -116,9 +118,9 @@ Four things re-check without an API model. Stored injection transcripts re-grade
   both runs) with the caveat that the flip ran in the rewarded direction;
   the true-absence miss is the oracle's grounding leg short-circuiting on
   zero rows before the max_rows: 0 expectation is consulted.
-- The arm-comparison caveat was corrected: the three injection arms use
-  the SAME 24 tasks with n=3 each, so labeling-vs-naive is paired. What
-  it shows is churn - two tasks down, two up, netting zero.
+- The arm-comparison caveat was corrected: the three injection arms use the
+  SAME 24 tasks with n=3 each, so labeling-vs-naive is paired. What it
+  shows is churn - two tasks down, two up, netting zero.
 - 61% is stated as the pipeline's rate of disagreeing with the summaries,
   not a verified error rate, because the 97 dismissals have not been
   hand-read against the records.

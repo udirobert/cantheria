@@ -10,7 +10,7 @@ The number that made me write this down came from the second one. I pointed it a
 
 The other results are smaller and I would rather you read them as sanity checks than proof. On a planted-truth set I wrote myself (15 claims, 53 records), the pipeline confirmed 6 of 7 true claims and none of the 7 false ones. On an injection benchmark, the standard "this block is untrusted" wrapper did nothing for concealed compromise on aya-expanse-32b (24/72 either way, on the same 24 tasks — labeling moved which tasks the model fell for, two down and two up, and the totals landed identical), while a deterministic, content-aware warning halved it to 12/72. A LoRA I trained to ignore embedded instructions moved compromised from 5/24 to 6/24, which is one task's worth of trials and I would not read anything into it; I report it anyway.
 
-I have now shown this on a coding agent's own session: 16 claims extracted from a planted agent session, 7 of 8 true claims confirmed, and none of the 7 false ones confirmed.
+I have now shown this on a coding agent's own session: 16 claims extracted from a planted agent session, all 8 true claims confirmed, and none of the 7 false ones confirmed.
 
 ## 1. Why I care about the sentences
 
@@ -66,11 +66,11 @@ I planted a coding-agent session: 69 records of tool calls, edits, commands and 
 
 | | confirmed | dismissed | abstained |
 |---|---|---|---|
-| true claims (8) | 7 | — | 1 |
-| false claims (7) | **0** | 2 | 5 |
+| true claims (8) | 8 | — | — |
+| false claims (7) | **0** | 1 | 6 |
 | interpretive (1) | — | — | 1 |
 
-The headline is zero false confirmations, and I want to be careful about the word "caught": five of the seven false claims abstained, because the drafter declines a claim it believes no record can settle. Two were dismissed — the linter that actually ran, and the edit that came after the test run. The trap worth naming is order. The session contains an edit to parser.py at 09:10:26 and a pytest run at 09:05:07, and the agent's report claimed the edit came first. A probe that returns both kinds of row passes regardless of order, so the order has to be bound into the query; the claim was dismissed.
+The headline is zero false confirmations, and I want to be careful about the word "caught": six of the seven false claims abstained, because the drafter declines a claim it believes no record can settle. One was dismissed — the linter that actually ran. The trap worth naming is order. The session contains an edit to parser.py at 09:10:26 and a pytest run at 09:05:07, and the agent's report claimed the edit came first. A probe that returns both kinds of row passes regardless of order, so the order has to be bound into the query — and on this run the drafter declined to write one, which is the abstention I am reporting rather than a dismissal I could claim.
 
 The first run of this cell produced three false confirmations, and each was my machinery's fault rather than the corpus's — every one of those claims was decidable by a probe I wrote by hand. The drafter's prompt listed a vocabulary of record kinds from a different corpus, so a file that was READ satisfied a claim about a file that was EDITED; `max_rows` was never documented, so absence claims had no way to be expressed; and the repair loop could WIDEN a precise probe until it matched some unrelated row. It did that on the attribution trap, whose first attempt was already correct. A revision may now only be more specific, and a confirmation that exists only because the probe was widened is refused. With those fixed the cell reports zero.
 

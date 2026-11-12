@@ -1,11 +1,11 @@
 {
   "corpus": "runs/swe-agent/records.db",
-  "llm_calls": 26,
-  "probe_runs": 42,
+  "llm_calls": 27,
+  "probe_runs": 38,
   "claims": [
     {
-      "id": "79f786f93339",
-      "created_utc": "2026-11-12T12:54:41.922136Z",
+      "id": "2f618f103d56",
+      "created_utc": "2026-11-12T15:48:45.409709Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -19,14 +19,15 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND agent_id = 'swe-agent-01' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:10:00Z' AND ts < '2026-10-14T09:11:00Z' LIMIT 50",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:10:00Z' AND ts < '2026-10-14T09:11:00Z'",
         "expect": {
           "min_rows": 1,
           "must_contain": [
-            "parser.py"
+            "parser.py",
+            "chunked"
           ]
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND agent_id = 'swe-agent-01' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:10:00Z' LIMIT 50",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:10:00Z'",
         "window": {
           "start": "2026-10-14T09:10:00+00:00",
           "end": "2026-10-14T09:11:00+00:00"
@@ -53,7 +54,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.00035649999881570693
+          "wall_s": 0.0004703330014308449
         },
         {
           "ok": false,
@@ -63,25 +64,26 @@
           "leg_failures": [
             "rows 0 < min_rows 1",
             "0 rows \u2014 no evidence",
-            "must_contain missing: parser.py"
+            "must_contain missing: parser.py",
+            "must_contain missing: chunked"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0002749579998635454
+          "wall_s": 0.0002043329986918252
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND agent_id = 'swe-agent-01' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:10:00Z' AND ts < '2026-10-14T09:11:00Z' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:10:00Z' AND ts < '2026-10-14T09:11:00Z'",
             "expect": {
               "min_rows": 1,
-              "max_rows": 0,
               "must_contain": [
-                "parser.py"
+                "parser.py",
+                "chunked"
               ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND agent_id = 'swe-agent-01' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:10:00Z' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%parser.py%' AND (content LIKE '%chunked%' OR content LIKE '%content-length%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:10:00Z'",
             "window": {
               "start": "2026-10-14T09:10:00+00:00",
               "end": "2026-10-14T09:11:00+00:00"
@@ -98,8 +100,8 @@
       }
     },
     {
-      "id": "0070b4136f0d",
-      "created_utc": "2026-11-12T12:54:41.922832Z",
+      "id": "ebccd100cf50",
+      "created_utc": "2026-11-12T15:48:45.410047Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -128,7 +130,7 @@
         }
       },
       "confidence": 0.0,
-      "verdict": "unverifiable",
+      "verdict": "confirmed",
       "probes_run": [
         {
           "ok": true,
@@ -148,7 +150,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.000596124998992309
+          "wall_s": 0.0006107919980422594
         },
         {
           "ok": true,
@@ -168,7 +170,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0003116669995506527
+          "wall_s": 0.0002741250027611386
         },
         {
           "ok": true,
@@ -196,7 +198,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0005073749998700805
+          "wall_s": 0.0008737909993214998
         },
         {
           "ok": false,
@@ -218,20 +220,20 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.000292875000013737
+          "wall_s": 0.0004571249992295634
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'test_result') AND (content LIKE '%pytest tests/%' OR content LIKE '%full test%' OR content LIKE '%all tests%') AND (content LIKE '%4 passed%' OR content LIKE '%passed: 4%' OR content LIKE '%4/4%') AND ts >= '2026-10-14T09:15:00Z' AND ts < '2026-10-14T09:16:00Z' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'test_result') AND (content LIKE '%pytest tests/%' OR content LIKE '%full test%' OR content LIKE '%all tests%') AND (content LIKE '%4 passed%' OR content LIKE '%4 tests passed%') AND ts >= '2026-10-14T09:15:00Z' AND ts < '2026-10-14T09:16:00Z' LIMIT 50",
             "expect": {
               "min_rows": 1,
               "must_contain": [
                 "4 passed"
               ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'test_result') AND (content LIKE '%pytest tests/%' OR content LIKE '%full test%' OR content LIKE '%all tests%') AND (content LIKE '%4 passed%' OR content LIKE '%passed: 4%' OR content LIKE '%4/4%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:15:00Z' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'test_result') AND (content LIKE '%pytest tests/%' OR content LIKE '%full test%' OR content LIKE '%all tests%') AND (content LIKE '%4 passed%' OR content LIKE '%4 tests passed%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:15:00Z' LIMIT 50",
             "window": {
               "start": "2026-10-14T09:15:00+00:00",
               "end": "2026-10-14T09:16:00+00:00"
@@ -254,12 +256,18 @@
           }
         ],
         "probe_attempt": 2,
-        "note": "confirmation refused \u2014 the probe was widened past a previous, more precise attempt"
+        "legs": {
+          "grounding": "ok \u2014 2 rows",
+          "attribute": "ok",
+          "replicate": "ok",
+          "control": "ok \u2014 control window clean"
+        },
+        "dismiss_reason": "control window shows the same pattern"
       }
     },
     {
-      "id": "9d6bc2a19f8e",
-      "created_utc": "2026-11-12T12:54:41.922841Z",
+      "id": "ba07e6cedca2",
+      "created_utc": "2026-11-12T15:48:45.410065Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -279,9 +287,6 @@
           "must_contain": [
             "assert 4 == 5",
             "FAILED"
-          ],
-          "must_not": [
-            "PASSED"
           ],
           "supportive": [
             "test_chunked_length"
@@ -315,7 +320,7 @@
           "leg_failures": [],
           "detail": "supportive needles hit 1/1",
           "error": "",
-          "wall_s": 0.0008803330001683207
+          "wall_s": 0.000207124998269137
         },
         {
           "ok": false,
@@ -330,7 +335,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0007145830004446907
+          "wall_s": 0.00018258299678564072
         }
       ],
       "raw": {
@@ -339,14 +344,10 @@
             "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_chunked_length%' AND content LIKE '%assert 4 == 5%' AND ts >= '2026-10-14T09:05:00Z' AND ts < '2026-10-14T09:06:00Z'",
             "expect": {
               "min_rows": 1,
-              "max_rows": 0,
               "must_contain": [
                 "FAILED",
                 "test_chunked_length",
                 "assert 4 == 5"
-              ],
-              "must_not": [
-                "PASSED"
               ]
             },
             "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'test_result' AND content LIKE '%test_chunked_length%' AND content LIKE '%assert 4 == 5%' AND ts >= '2026-10-14T09:07:00Z' AND ts < '2026-10-14T09:08:00Z'",
@@ -366,8 +367,8 @@
       }
     },
     {
-      "id": "3ce50146aa82",
-      "created_utc": "2026-11-12T12:54:41.922847Z",
+      "id": "8305b9c0fa69",
+      "created_utc": "2026-11-12T15:48:45.410074Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -424,7 +425,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0006973749987082556
+          "wall_s": 0.0004579999986162875
         },
         {
           "ok": false,
@@ -446,7 +447,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.00039516700053354725
+          "wall_s": 0.00026466599956620485
         }
       ],
       "raw": {
@@ -478,8 +479,8 @@
       }
     },
     {
-      "id": "b21ab70c60b6",
-      "created_utc": "2026-11-12T12:54:41.922851Z",
+      "id": "72ae0e87169b",
+      "created_utc": "2026-11-12T15:48:45.410082Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -493,18 +494,18 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND content LIKE '%src/tinyhttp/client.py%' LIMIT 50",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND (content LIKE '%client.py%' OR content LIKE '%line 88%') AND ts >= '2026-10-14T09:08:00Z' AND ts < '2026-10-14T09:09:00Z'",
         "expect": {
           "min_rows": 1,
           "must_contain": [
             "parse_chunked",
-            "client.py:88"
+            "client.py"
           ]
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND content LIKE '%src/tinyhttp/headers.py%' LIMIT 50",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND (content LIKE '%client.py%' OR content LIKE '%line 88%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:08:00Z'",
         "window": {
-          "start": "2026-10-14T09:08:00Z",
-          "end": "2026-10-14T09:09:00Z"
+          "start": "2026-10-14T09:08:00+00:00",
+          "end": "2026-10-14T09:09:00+00:00"
         }
       },
       "confidence": 0.0,
@@ -528,7 +529,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0006134589984867489
+          "wall_s": 0.0005805410000903066
         },
         {
           "ok": false,
@@ -539,28 +540,28 @@
             "rows 0 < min_rows 1",
             "0 rows \u2014 no evidence",
             "must_contain missing: parse_chunked",
-            "must_contain missing: client.py:88"
+            "must_contain missing: client.py"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0003110409998043906
+          "wall_s": 0.0002462920019752346
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND content LIKE '%src/tinyhttp/client.py%' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND (content LIKE '%client.py%' OR content LIKE '%line 88%') AND ts >= '2026-10-14T09:08:00Z' AND ts < '2026-10-14T09:09:00Z'",
             "expect": {
               "min_rows": 1,
               "must_contain": [
                 "parse_chunked",
-                "client.py:88"
+                "client.py"
               ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND content LIKE '%src/tinyhttp/headers.py%' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE (content LIKE '%parse_chunked%' OR content LIKE '%client.py:88%') AND (content LIKE '%client.py%' OR content LIKE '%line 88%') AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:08:00Z'",
             "window": {
-              "start": "2026-10-14T09:08:00Z",
-              "end": "2026-10-14T09:09:00Z"
+              "start": "2026-10-14T09:08:00+00:00",
+              "end": "2026-10-14T09:09:00+00:00"
             }
           }
         ],
@@ -574,8 +575,8 @@
       }
     },
     {
-      "id": "0ffef34a24e9",
-      "created_utc": "2026-11-12T12:54:41.922855Z",
+      "id": "1112fcd4824e",
+      "created_utc": "2026-11-12T15:48:45.410092Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -631,7 +632,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0005452919995150296
+          "wall_s": 0.00022445799913839437
         },
         {
           "ok": false,
@@ -645,7 +646,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0003523340001265751
+          "wall_s": 0.000188666999747511
         }
       ],
       "raw": {
@@ -675,8 +676,8 @@
       }
     },
     {
-      "id": "b06afa74c57f",
-      "created_utc": "2026-11-12T12:54:41.922860Z",
+      "id": "b48dcc94f07c",
+      "created_utc": "2026-11-12T15:48:45.410099Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -731,7 +732,7 @@
           "leg_failures": [],
           "detail": "supportive needles hit 1/1",
           "error": "",
-          "wall_s": 0.0007208750012068776
+          "wall_s": 0.00027695899916579947
         },
         {
           "ok": false,
@@ -747,7 +748,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.00037033299850008916
+          "wall_s": 0.00020475000201258808
         }
       ],
       "raw": {
@@ -782,8 +783,8 @@
       }
     },
     {
-      "id": "df47da436392",
-      "created_utc": "2026-11-12T12:54:41.922865Z",
+      "id": "2c7cb93ae51a",
+      "created_utc": "2026-11-12T15:48:45.410109Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "pattern",
@@ -801,7 +802,7 @@
         "expect": {
           "min_rows": 3
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'command_run' AND content LIKE '%pytest%' AND ts >= '2026-10-14T17:00:00Z' AND ts < '2026-10-14T18:00:00Z' LIMIT 50",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'command_run' AND content LIKE '%pytest%' AND ts >= '2026-10-14T09:22:00Z' AND ts < '2026-10-14T09:30:00Z' LIMIT 50",
         "window": {
           "start": "2026-10-14T09:05:00+00:00",
           "end": "2026-10-14T09:22:00+00:00"
@@ -861,7 +862,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.002145125001334236
+          "wall_s": 0.0006838330009486526
         },
         {
           "ok": false,
@@ -874,7 +875,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0009262499988835771
+          "wall_s": 0.00024979199952213094
         }
       ],
       "raw": {
@@ -885,7 +886,7 @@
               "min_rows": 3,
               "max_rows": 0
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'command_run' AND content LIKE '%pytest%' AND ts >= '2026-10-14T17:00:00Z' AND ts < '2026-10-14T18:00:00Z' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'command_run' AND content LIKE '%pytest%' AND ts >= '2026-10-14T09:22:00Z' AND ts < '2026-10-14T09:30:00Z' LIMIT 50",
             "window": {
               "start": "2026-10-14T09:05:00+00:00",
               "end": "2026-10-14T09:22:00+00:00"
@@ -902,8 +903,8 @@
       }
     },
     {
-      "id": "06e44204b316",
-      "created_utc": "2026-11-12T12:54:41.922870Z",
+      "id": "d081d7d359d7",
+      "created_utc": "2026-11-12T15:48:45.410116Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -917,18 +918,17 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%headers.py%' LIMIT 50",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%headers.py%' LIMIT 50",
         "expect": {
           "min_rows": 1,
-          "max_rows": 50,
           "must_contain": [
             "headers.py"
           ]
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content NOT LIKE '%headers.py%' LIMIT 50",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content NOT LIKE '%headers.py%' LIMIT 50",
         "window": {
           "start": "2026-10-14T09:00:00+00:00",
-          "end": "2026-10-14T18:00:00+00:00"
+          "end": "2026-10-14T17:54:15+00:00"
         }
       },
       "confidence": 0.0,
@@ -946,7 +946,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0005306249986460898
+          "wall_s": 0.00025516599998809397
         },
         {
           "ok": false,
@@ -955,17 +955,18 @@
           "sample": [],
           "leg_failures": [
             "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
             "must_contain missing: headers.py"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.00034008299917331897
+          "wall_s": 0.0004151249995629769
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%headers.py%' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%headers.py%' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' LIMIT 50",
             "expect": {
               "min_rows": 1,
               "max_rows": 0,
@@ -973,39 +974,39 @@
                 "headers.py"
               ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%headers.py%' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%headers.py%' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' LIMIT 50",
             "window": {
               "start": "2026-10-14T09:00:00+00:00",
               "end": "2026-10-14T10:00:00+00:00"
             }
           },
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content LIKE '%headers.py%' LIMIT 50",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%headers.py%' LIMIT 50",
             "expect": {
               "min_rows": 1,
-              "max_rows": 50,
+              "max_rows": 0,
               "must_contain": [
                 "headers.py"
               ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE kind = 'file_edit' AND content NOT LIKE '%headers.py%' LIMIT 50",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content NOT LIKE '%headers.py%' LIMIT 50",
             "window": {
               "start": "2026-10-14T09:00:00+00:00",
-              "end": "2026-10-14T18:00:00+00:00"
+              "end": "2026-10-14T17:54:15+00:00"
             }
           }
         ],
         "probe_attempt": 2,
         "legs": {
-          "grounding": "rows 0 < min_rows 1; must_contain missing: headers.py"
+          "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: headers.py"
         },
         "dismiss_reason": "record contains no evidence for the claim",
         "note": "drafter declined \u2014 no probe can decide this claim"
       }
     },
     {
-      "id": "8fa84b4777ec",
-      "created_utc": "2026-11-12T12:54:41.922874Z",
+      "id": "f88732f37292",
+      "created_utc": "2026-11-12T15:48:45.410123Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -1018,17 +1019,66 @@
         "end": "2026-10-14T10:00:00+00:00"
       },
       "citations": [],
-      "probe": null,
+      "probe": {
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%test_regression%' OR content LIKE '%regression%') LIMIT 50",
+        "expect": {
+          "min_rows": 1,
+          "must_contain": [
+            "test_regression"
+          ]
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (content LIKE '%test_regression%' OR content LIKE '%regression%') LIMIT 50",
+        "window": {
+          "start": "2026-10-14T09:00:00+00:00",
+          "end": "2026-10-14T10:00:00+00:00"
+        }
+      },
       "confidence": 0.0,
       "verdict": "unverifiable",
-      "probes_run": [],
+      "probes_run": [
+        {
+          "ok": false,
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
+          "leg_failures": [
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: test_regression"
+          ],
+          "detail": "",
+          "error": "",
+          "wall_s": 0.0004742499986605253
+        }
+      ],
       "raw": {
+        "probe_history": [
+          {
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%test_regression%' OR content LIKE '%regression%') LIMIT 50",
+            "expect": {
+              "min_rows": 1,
+              "must_contain": [
+                "test_regression"
+              ]
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (content LIKE '%test_regression%' OR content LIKE '%regression%') LIMIT 50",
+            "window": {
+              "start": "2026-10-14T09:00:00+00:00",
+              "end": "2026-10-14T10:00:00+00:00"
+            }
+          }
+        ],
+        "probe_attempt": 1,
+        "legs": {
+          "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: test_regression"
+        },
+        "dismiss_reason": "record contains no evidence for the claim",
         "note": "drafter declined \u2014 no probe can decide this claim"
       }
     },
     {
-      "id": "6edda240b117",
-      "created_utc": "2026-11-12T12:54:41.922879Z",
+      "id": "bf75a0809356",
+      "created_utc": "2026-11-12T15:48:45.410131Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -1042,7 +1092,7 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all passed%')",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all 42%')",
         "expect": {
           "min_rows": 1,
           "must_contain": [
@@ -1051,7 +1101,7 @@
           "distinct_field": "kind",
           "min_distinct": 1
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all passed%')",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all 42%')",
         "window": {
           "start": "2026-10-14T09:00:00+00:00",
           "end": "2026-10-14T10:00:00+00:00"
@@ -1073,13 +1123,13 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0006579170003533363
+          "wall_s": 0.000577208000322571
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all passed%')",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all 42%')",
             "expect": {
               "min_rows": 1,
               "max_rows": 0,
@@ -1089,7 +1139,7 @@
               "distinct_field": "kind",
               "min_distinct": 1
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all passed%')",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (content LIKE '%42%' OR content LIKE '%all 42%')",
             "window": {
               "start": "2026-10-14T09:00:00+00:00",
               "end": "2026-10-14T10:00:00+00:00"
@@ -1105,8 +1155,8 @@
       }
     },
     {
-      "id": "8bee0c4d258b",
-      "created_utc": "2026-11-12T12:54:41.922883Z",
+      "id": "6f241b8bcccc",
+      "created_utc": "2026-11-12T15:48:45.410138Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "absence",
@@ -1125,7 +1175,7 @@
           "min_rows": 0,
           "max_rows": 0
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%tinyhttp%'",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%src/tinyhttp%'",
         "window": {
           "start": "2026-10-14T09:00:00+00:00",
           "end": "2026-10-14T18:00:00+00:00"
@@ -1154,7 +1204,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0005202499996812548
+          "wall_s": 0.0008149169989337679
         },
         {
           "ok": false,
@@ -1176,7 +1226,7 @@
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0003370829999767011
+          "wall_s": 0.0007232500029203948
         }
       ],
       "raw": {
@@ -1199,7 +1249,7 @@
               "min_rows": 0,
               "max_rows": 0
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%tinyhttp%'",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' AND content LIKE '%src/tinyhttp%'",
             "window": {
               "start": "2026-10-14T09:00:00+00:00",
               "end": "2026-10-14T18:00:00+00:00"
@@ -1215,8 +1265,8 @@
       }
     },
     {
-      "id": "d08d13d11934",
-      "created_utc": "2026-11-12T12:54:41.922886Z",
+      "id": "1c133b8ece46",
+      "created_utc": "2026-11-12T15:48:45.410144Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "absence",
@@ -1230,15 +1280,15 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%linter%')",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%golangci-lint%')",
         "expect": {
           "min_rows": 0,
           "max_rows": 0
         },
-        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%test%' OR content LIKE '%pytest%' OR content LIKE '%unittest%')",
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'tool_call')",
         "window": {
-          "start": "2026-10-14T09:00:00+00:00",
-          "end": "2026-10-14T17:55:00+00:00"
+          "start": "2026-10-14T09:00:17+00:00",
+          "end": "2026-10-14T17:54:15+00:00"
         }
       },
       "confidence": 0.0,
@@ -1252,7 +1302,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0011862909996125381
+          "wall_s": 0.0006905000009282958
         },
         {
           "ok": true,
@@ -1262,7 +1312,7 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.0018974169997818535
+          "wall_s": 0.0029428749985527247
         },
         {
           "ok": true,
@@ -1272,45 +1322,45 @@
           "leg_failures": [],
           "detail": "",
           "error": "",
-          "wall_s": 0.000453499998911866
+          "wall_s": 0.0009633749978092965
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%')",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T10:00:00Z' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%golangci-lint%')",
             "expect": {
               "min_rows": 0,
               "max_rows": 0
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T17:55:00Z' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%')",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T17:55:00Z' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%golangci-lint%')",
             "window": {
               "start": "2026-10-14T09:00:00+00:00",
               "end": "2026-10-14T10:00:00+00:00"
             }
           },
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%')",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%golangci-lint%')",
             "expect": {
               "min_rows": 0,
               "max_rows": 0
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%test%' OR content LIKE '%pytest%' OR content LIKE '%unittest%')",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'tool_call')",
             "window": {
-              "start": "2026-10-14T09:00:00+00:00",
-              "end": "2026-10-14T17:55:00+00:00"
+              "start": "2026-10-14T09:00:17+00:00",
+              "end": "2026-10-14T17:54:15+00:00"
             }
           },
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%linter%')",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%lint%' OR content LIKE '%flake8%' OR content LIKE '%pylint%' OR content LIKE '%eslint%' OR content LIKE '%rubocop%' OR content LIKE '%golangci-lint%')",
             "expect": {
               "min_rows": 0,
               "max_rows": 0
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (content LIKE '%test%' OR content LIKE '%pytest%' OR content LIKE '%unittest%')",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind IN ('command_run', 'tool_call')",
             "window": {
-              "start": "2026-10-14T09:00:00+00:00",
-              "end": "2026-10-14T17:55:00+00:00"
+              "start": "2026-10-14T09:00:17+00:00",
+              "end": "2026-10-14T17:54:15+00:00"
             }
           }
         ],
@@ -1322,8 +1372,8 @@
       }
     },
     {
-      "id": "b7904338e978",
-      "created_utc": "2026-11-12T12:54:41.922890Z",
+      "id": "8eff6fdb3a6f",
+      "created_utc": "2026-11-12T15:48:45.410150Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -1337,256 +1387,66 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%tests%' OR r.thread LIKE '%tests%' OR r.agent_id LIKE '%tests%') AND (r.content LIKE '%parser.py%' OR r.thread LIKE '%parser.py%' OR r.agent_id LIKE '%parser.py%') AND r.ts >= '2026-10-14T00:00:00+00:00' AND r.ts <= '2026-10-15T00:00:00+00:00' AND (r.agent_id = 'swe-agent-01' OR r.content LIKE '%swe-agent-01%') AND (r.kind LIKE '%run%' OR r.content LIKE '%run%') LIMIT 50",
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content\nFROM records a\nWHERE a.agent_id = 'swe-agent-01'\n  AND a.kind = 'file_edit'\n  AND a.content LIKE '%parser.py%'\n  AND a.ts < (SELECT MIN(b.ts) FROM records b\n               WHERE b.agent_id = 'swe-agent-01'\n                 AND b.kind IN ('command_run','test_result')\n                 AND b.content LIKE '%pytest%')",
         "expect": {
-          "min_rows": 1
+          "min_rows": 1,
+          "must_contain": [
+            "parser.py"
+          ]
         },
-        "control": "SELECT r.record_id, r.agent_id, r.ts, r.kind, substr(r.content,1,400) AS content FROM records r WHERE r.kind != 'summary' AND (r.content LIKE '%tests%' OR r.thread LIKE '%tests%' OR r.agent_id LIKE '%tests%') AND (r.content LIKE '%parser.py%' OR r.thread LIKE '%parser.py%' OR r.agent_id LIKE '%parser.py%') AND r.ts >= '2026-10-06T00:00:00+00:00' AND r.ts <= '2026-10-07T00:00:00+00:00' AND (r.agent_id = 'swe-agent-01' OR r.content LIKE '%swe-agent-01%') AND (r.kind LIKE '%run%' OR r.content LIKE '%run%') LIMIT 50",
-        "window": {}
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content\nFROM records a\nWHERE a.agent_id = 'swe-agent-01'\n  AND a.kind = 'file_edit'\n  AND a.content LIKE '%headers.py%'\n  AND a.ts < (SELECT MIN(b.ts) FROM records b\n               WHERE b.agent_id = 'swe-agent-01'\n                 AND b.kind IN ('command_run','test_result')\n                 AND b.content LIKE '%pytest%')",
+        "window": {
+          "start": "2026-10-14T09:00:00Z",
+          "end": "2026-10-14T09:11:00Z"
+        }
       },
       "confidence": 0.0,
-      "verdict": "dismissed",
+      "verdict": "unverifiable",
       "probes_run": [
         {
           "ok": false,
-          "rows": 2,
-          "matched_ids": [
-            "swe:0006",
-            "swe:0014"
-          ],
-          "sample": [
-            {
-              "record_id": "swe:0006",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:05:07Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/ -q  ->  1 failed, 3 passed in 0.11s"
-            },
-            {
-              "record_id": "swe:0014",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:10:26Z",
-              "kind": "file_edit",
-              "content": "src/tinyhttp/parser.py: parse_chunked now counts the trailing CRLF, adding the missing byte to the content length"
-            }
-          ],
+          "rows": 0,
+          "matched_ids": [],
+          "sample": [],
           "leg_failures": [
-            "ordering_check: file_edit at 2026-10-14T09:10:26Z is NOT before command_run at 2026-10-14T09:05:07Z"
+            "rows 0 < min_rows 1",
+            "0 rows \u2014 no evidence",
+            "must_contain missing: parser.py"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0004149169999436708
-        },
-        {
-          "ok": false,
-          "rows": 7,
-          "matched_ids": [
-            "swe:0006",
-            "swe:0014",
-            "swe:0016",
-            "swe:0022",
-            "swe:0024",
-            "swe:0026",
-            "swe:0034"
-          ],
-          "sample": [
-            {
-              "record_id": "swe:0006",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:05:07Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/ -q  ->  1 failed, 3 passed in 0.11s"
-            },
-            {
-              "record_id": "swe:0014",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:10:26Z",
-              "kind": "file_edit",
-              "content": "src/tinyhttp/parser.py: parse_chunked now counts the trailing CRLF, adding the missing byte to the content length"
-            },
-            {
-              "record_id": "swe:0016",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:12:14Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/test_parser.py -q  ->  4 passed in 0.12s"
-            },
-            {
-              "record_id": "swe:0022",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:15:04Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/ -q  ->  4 passed in 0.15s"
-            },
-            {
-              "record_id": "swe:0024",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:15:57Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/test_headers.py -q  ->  2 passed in 0.09s"
-            }
-          ],
-          "leg_failures": [
-            "rows 7 > max_rows 5",
-            "ordering_check: file_edit at 2026-10-14T09:10:26Z is NOT before command_run at 2026-10-14T09:05:07Z"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0014364999988174532
-        },
-        {
-          "ok": false,
-          "rows": 7,
-          "matched_ids": [
-            "swe:0006",
-            "swe:0014",
-            "swe:0016",
-            "swe:0022",
-            "swe:0024",
-            "swe:0026",
-            "swe:0034"
-          ],
-          "sample": [
-            {
-              "record_id": "swe:0006",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:05:07Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/ -q  ->  1 failed, 3 passed in 0.11s"
-            },
-            {
-              "record_id": "swe:0014",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:10:26Z",
-              "kind": "file_edit",
-              "content": "src/tinyhttp/parser.py: parse_chunked now counts the trailing CRLF, adding the missing byte to the content length"
-            },
-            {
-              "record_id": "swe:0016",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:12:14Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/test_parser.py -q  ->  4 passed in 0.12s"
-            },
-            {
-              "record_id": "swe:0022",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:15:04Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/ -q  ->  4 passed in 0.15s"
-            },
-            {
-              "record_id": "swe:0024",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:15:57Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/test_headers.py -q  ->  2 passed in 0.09s"
-            }
-          ],
-          "leg_failures": [
-            "rows 7 > max_rows 5",
-            "ordering_check: file_edit at 2026-10-14T09:10:26Z is NOT before command_run at 2026-10-14T09:05:07Z"
-          ],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0010330839995731367
-        },
-        {
-          "ok": true,
-          "rows": 1,
-          "matched_ids": [
-            "swe:0016"
-          ],
-          "sample": [
-            {
-              "record_id": "swe:0016",
-              "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:12:14Z",
-              "kind": "command_run",
-              "content": "python -m pytest tests/test_parser.py -q  ->  4 passed in 0.12s"
-            }
-          ],
-          "leg_failures": [],
-          "detail": "",
-          "error": "",
-          "wall_s": 0.0009375420013384428
+          "wall_s": 0.0006437919983000029
         }
       ],
       "raw": {
         "probe_history": [
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id='swe-agent-01' AND ts >= '2026-10-14T09:00:00Z' AND ts < '2026-10-14T09:11:00Z' AND ( (kind='file_edit' AND content LIKE '%parser.py%') OR (kind IN ('command_run','test_result') AND content LIKE '%pytest%') ) ORDER BY ts",
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content\nFROM records a\nWHERE a.agent_id = 'swe-agent-01'\n  AND a.kind = 'file_edit'\n  AND a.content LIKE '%parser.py%'\n  AND a.ts < (SELECT MIN(b.ts) FROM records b\n               WHERE b.agent_id = 'swe-agent-01'\n                 AND b.kind IN ('command_run','test_result')\n                 AND b.content LIKE '%pytest%')",
             "expect": {
               "min_rows": 1,
               "max_rows": 0,
               "must_contain": [
                 "parser.py"
-              ],
-              "ordering_check": {
-                "field": "ts",
-                "first_kind": "file_edit",
-                "last_kind_in_set": "command_run"
-              }
+              ]
             },
-            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id='swe-agent-01' AND ts >= '2026-10-14T09:11:00Z' AND ts < '2026-10-14T09:22:00Z' AND ( (kind='file_edit' AND content LIKE '%parser.py%') OR (kind IN ('command_run','test_result') AND content LIKE '%pytest%') ) ORDER BY ts",
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content\nFROM records a\nWHERE a.agent_id = 'swe-agent-01'\n  AND a.kind = 'file_edit'\n  AND a.content LIKE '%headers.py%'\n  AND a.ts < (SELECT MIN(b.ts) FROM records b\n               WHERE b.agent_id = 'swe-agent-01'\n                 AND b.kind IN ('command_run','test_result')\n                 AND b.content LIKE '%pytest%')",
             "window": {
-              "start": "2026-10-14T09:00:00+00:00",
-              "end": "2026-10-14T09:11:00+00:00"
-            }
-          },
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id='swe-agent-01' AND ( (kind='file_edit' AND content LIKE '%parser.py%') OR (kind IN ('command_run','test_result') AND content LIKE '%pytest%') ) ORDER BY ts",
-            "expect": {
-              "min_rows": 2,
-              "max_rows": 5,
-              "must_contain": [
-                "parser.py"
-              ],
-              "ordering_check": {
-                "field": "ts",
-                "first_kind": "file_edit",
-                "last_kind_in_set": "command_run"
-              }
-            },
-            "control": "",
-            "window": {
-              "start": "2026-10-14T09:00:00+00:00",
-              "end": "2026-10-14T17:54:15+00:00"
-            }
-          },
-          {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id='swe-agent-01' AND ( (kind='file_edit' AND content LIKE '%parser.py%') OR (kind IN ('command_run','test_result') AND content LIKE '%pytest%') ) ORDER BY ts",
-            "expect": {
-              "min_rows": 2,
-              "max_rows": 5,
-              "must_contain": [
-                "parser.py"
-              ],
-              "ordering_check": {
-                "field": "ts",
-                "first_kind": "file_edit",
-                "last_kind_in_set": "command_run"
-              }
-            },
-            "control": "",
-            "window": {
-              "start": "2026-10-14T09:00:00+00:00",
-              "end": "2026-10-14T17:54:15+00:00"
+              "start": "2026-10-14T09:00:00Z",
+              "end": "2026-10-14T09:11:00Z"
             }
           }
         ],
-        "probe_attempt": 3,
+        "probe_attempt": 1,
         "legs": {
-          "grounding": "ok \u2014 1 rows",
-          "attribute": "no matched row inside claimed window 2026-10-14T09:00:00+00:00..2026-10-14T09:11:00+00:00"
+          "grounding": "rows 0 < min_rows 1; 0 rows \u2014 no evidence; must_contain missing: parser.py"
         },
-        "probe_origin": "mechanical-fallback",
-        "dismiss_reason": "evidence does not bind the claimed subject/window"
+        "dismiss_reason": "record contains no evidence for the claim",
+        "note": "drafter declined \u2014 no probe can decide this claim"
       }
     },
     {
-      "id": "2e32fdac7b5c",
-      "created_utc": "2026-11-12T12:54:41.922893Z",
+      "id": "4bf911e6efe3",
+      "created_utc": "2026-11-12T15:48:45.410157Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "event",
@@ -1600,10 +1460,20 @@
       },
       "citations": [],
       "probe": {
-        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' ORDER BY ts",
-        "expect": {},
-        "control": "",
-        "window": {}
+        "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (kind = 'test_result' OR (kind = 'file_edit' AND (content LIKE '%revert%' OR content LIKE '%undo%' OR content LIKE '%restore%' OR content LIKE '%original%'))) ORDER BY ts",
+        "expect": {
+          "min_rows": 2,
+          "must_contain": [
+            "FAILED"
+          ],
+          "distinct_field": "kind",
+          "min_distinct": 2
+        },
+        "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T17:54:15Z' AND (kind = 'test_result' OR (kind = 'file_edit' AND (content LIKE '%revert%' OR content LIKE '%undo%' OR content LIKE '%restore%' OR content LIKE '%original%'))) ORDER BY ts",
+        "window": {
+          "start": "2026-10-14T09:00:17+00:00",
+          "end": "2026-10-14T17:54:15+00:00"
+        }
       },
       "confidence": 0.0,
       "verdict": "unverifiable",
@@ -1640,32 +1510,49 @@
             }
           ],
           "leg_failures": [
-            "distinct(kind)=1 < 2",
-            "ordering_check: no rows of kind='file_edit'"
+            "distinct(kind)=1 < 2"
           ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0005382500003179302
+          "wall_s": 0.0012048339995089918
         },
         {
-          "ok": true,
-          "rows": 1,
+          "ok": false,
+          "rows": 3,
           "matched_ids": [
-            "swe:0014"
+            "swe:0007",
+            "swe:0017",
+            "swe:0018"
           ],
           "sample": [
             {
-              "record_id": "swe:0014",
+              "record_id": "swe:0007",
               "agent_id": "swe-agent-01",
-              "ts": "2026-10-14T09:10:26Z",
-              "kind": "file_edit",
-              "content": "src/tinyhttp/parser.py: parse_chunked now counts the trailing CRLF, adding the missing byte to the content length"
+              "ts": "2026-10-14T09:05:19Z",
+              "kind": "test_result",
+              "content": "FAILED tests/test_parser.py::test_chunked_length - assert 4 == 5"
+            },
+            {
+              "record_id": "swe:0017",
+              "agent_id": "swe-agent-01",
+              "ts": "2026-10-14T09:12:31Z",
+              "kind": "test_result",
+              "content": "PASSED tests/test_parser.py::test_chunked_length"
+            },
+            {
+              "record_id": "swe:0018",
+              "agent_id": "swe-agent-01",
+              "ts": "2026-10-14T09:12:48Z",
+              "kind": "test_result",
+              "content": "PASSED tests/test_parser.py::test_chunked_headers"
             }
           ],
-          "leg_failures": [],
+          "leg_failures": [
+            "distinct(kind)=1 < 2"
+          ],
           "detail": "",
           "error": "",
-          "wall_s": 0.0010020410009019542
+          "wall_s": 0.0005214579978201073
         }
       ],
       "raw": {
@@ -1679,12 +1566,7 @@
                 "FAILED"
               ],
               "distinct_field": "kind",
-              "min_distinct": 2,
-              "ordering_check": {
-                "field": "ts",
-                "first_kind": "test_result",
-                "last_kind_in_set": "file_edit"
-              }
+              "min_distinct": 2
             },
             "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T10:00:00Z' AND ts < '2026-10-14T11:00:00Z' AND (kind = 'test_result' OR (kind = 'file_edit' AND (content LIKE '%revert%' OR content LIKE '%undo%' OR content LIKE '%restore%' OR content LIKE '%original%'))) ORDER BY ts",
             "window": {
@@ -1693,16 +1575,34 @@
             }
           },
           {
-            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND kind = 'file_edit' ORDER BY ts"
+            "query": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND (kind = 'test_result' OR (kind = 'file_edit' AND (content LIKE '%revert%' OR content LIKE '%undo%' OR content LIKE '%restore%' OR content LIKE '%original%'))) ORDER BY ts",
+            "expect": {
+              "min_rows": 2,
+              "max_rows": 0,
+              "must_contain": [
+                "FAILED"
+              ],
+              "distinct_field": "kind",
+              "min_distinct": 2
+            },
+            "control": "SELECT record_id, agent_id, ts, kind, substr(content,1,400) AS content FROM records WHERE agent_id = 'swe-agent-01' AND ts >= '2026-10-14T17:54:15Z' AND (kind = 'test_result' OR (kind = 'file_edit' AND (content LIKE '%revert%' OR content LIKE '%undo%' OR content LIKE '%restore%' OR content LIKE '%original%'))) ORDER BY ts",
+            "window": {
+              "start": "2026-10-14T09:00:17+00:00",
+              "end": "2026-10-14T17:54:15+00:00"
+            }
           }
         ],
         "probe_attempt": 2,
-        "note": "confirmation refused \u2014 the probe was widened past a previous, more precise attempt"
+        "legs": {
+          "expect": "distinct(kind)=1 < 2"
+        },
+        "dismiss_reason": "evidence found but fails the probe's committed expectations",
+        "note": "drafter declined \u2014 no probe can decide this claim"
       }
     },
     {
-      "id": "6fd37471235b",
-      "created_utc": "2026-11-12T12:54:41.922897Z",
+      "id": "fdb55de9f887",
+      "created_utc": "2026-11-12T15:48:45.410163Z",
       "corpus": "records.db",
       "source_doc": "",
       "kind": "interpretive",

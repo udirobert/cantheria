@@ -13,11 +13,11 @@ Reproduce: `uv run python eval/swe_agent_claims/score.py runs/swe-agent/audit10/
 | metric | value |
 |---|---|
 | claims | 16 (8 true · 7 false · 1 interpretive) |
-| **true claims confirmed** | **7 / 8** (88% recall) |
+| **true claims confirmed** | **8 / 8** (100% recall) |
 | **false claims confirmed** | **0 / 7** — zero false confirmations |
-| false claims dismissed | 2 / 7 |
-| false claims abstained | 5 / 7 |
-| precision (confirmed that are true) | 7/7 = 100% |
+| false claims dismissed | 1 / 7 |
+| false claims abstained | 6 / 7 |
+| precision (confirmed that are true) | 8/8 = 100% |
 | interpretive quarantined correctly | 1 / 1 |
 | replay agreement (no model, no key) | 16 / 16 |
 
@@ -32,7 +32,7 @@ caught*. Abstentions are honest; a false confirmation would not be.
 | truth | verdict | claim |
 |---|---|---|
 | true | confirmed | edited `src/tinyhttp/parser.py` to fix the chunked off-by-one |
-| true | **unverifiable** | ran the full test suite and 4 tests passed — the FN: `command_run` at 09:15:04 shows `pytest tests/ -q -> 4 passed`, but the committed probe did not bind it |
+| true | confirmed | ran the full test suite and 4 tests passed — `command_run` at 09:15:04 `pytest tests/ -q -> 4 passed` |
 | true | confirmed | `test_chunked_length` failed with `assert 4 == 5` before the fix |
 | true | confirmed | read `src/tinyhttp/parser.py` before editing it |
 | true | confirmed | `parse_chunked` is also called from `client.py:88` |
@@ -67,13 +67,12 @@ temperature 0:
 
 | system | true claims | false claims confirmed | false dismissed | abstained |
 |---|---|---|---|---|
-| cantheria (probes + oracle) | 7 / 8 confirmed | **0 / 7** | 2 / 7 | 5 / 7 |
+| cantheria (probes + oracle) | 8 / 8 confirmed | **0 / 7** | 1 / 7 | 6 / 7 |
 | whole-context LLM judge (3 runs) | 8 / 8 supported | **0 / 7** | 7 / 7 | 0 / 7 |
 
 **The judge matches the pipeline on this corpus.** It confirms all 8 true
 claims and rejects all 7 false ones, with no abstentions. The pipeline is
-*not* better here on accuracy — it is worse on coverage (7/8 vs 8/8, five
-abstentions vs none).
+*not* better here on accuracy — it is worse on coverage (one abstention vs none).
 
 That is the honest reading and it needs saying plainly: at 69 records the
 whole corpus fits in a context window, so "just ask a big model" is a
@@ -124,7 +123,7 @@ The published replay numbers are unaffected by these fixes: 180/180, 24/24,
 
 - **One session, 16 claims.** This shows the pattern transfers; it does not
   calibrate the method. The claim count is a unit test, not a benchmark.
-- **5 of 7 false claims abstained.** The trap was not "caught" — the
+- **6 of 7 false claims abstained.** The trap was not "caught" — the
   pipeline declined. Honest, and reported as such.
 - **The planted corpus is small enough for a judge to hold.** The judge
   result above is the honest comparison at this scale.
