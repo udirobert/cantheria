@@ -13,8 +13,11 @@ repos:
           - .secrets.baseline
           # Findings/journals/pocs live under runs/ and carry random payload
           # strings; scanning them would train us to blind-skip the hook.
+          # The eval dir's results.json and journal.jsonl are the same
+          # class of artifact — record ids are hashes, and the scanner
+          # reads them as high-entropy hex secrets.
           - --exclude-files
-          - '(^runs/|^\.venv/|uv\.lock$|\.secrets\.baseline$|\.npy$)'
+          - '(^runs/|^\.venv/|uv\.lock$|\.secrets\.baseline$|\.npy$|^eval/.*/(results\.json|journal\.jsonl)$)'
 
   # ── Ruff — lint + format ─────────────────────────────────────────────────────
   - repo: https://github.com/astral-sh/ruff-pre-commit
